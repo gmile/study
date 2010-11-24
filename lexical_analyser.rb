@@ -35,7 +35,8 @@ class Parser
   }
 
   ERROR = {
-    :input_missing => 'Input string is not given'
+    :input_missing => 'Input string is not given',
+    :unknown_token => 'Given token is unknown'
   }
 
   def initialize string = nil
