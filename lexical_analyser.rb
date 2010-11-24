@@ -23,6 +23,7 @@ class Parser
   ]
 
   FILTERS = {
+    :real_values  => '\d+[.]\d+',
     :operations  => '[/+*()]',
     :user_data   => '\w+',
     :strings     => "\'.*?\'",   # /'\w+'/

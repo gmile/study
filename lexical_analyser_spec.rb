@@ -32,11 +32,17 @@ describe Parser do
     @parser.divide
     @parser.output.should == ['x', ':=', "'Hello world!'"]
   end
-  
+
   it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
     @parser.input = "x := 'Hello' + dear + 'world!'"
     @parser.divide
     @parser.output.should == ['x', ':=', "'Hello'", '+', "dear", '+', "'world!'"]
+  end
+
+  it "should parse strings with real values: x := 2.3 + 4.6" do
+    @parser.input = "x := 2.3 + 4.6"
+    @parser.divide
+    @parser.output.should == ['x', ':=', "2.3", '+', "4.6"]
   end
 
   it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
