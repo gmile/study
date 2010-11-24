@@ -27,11 +27,11 @@ class Parser
   ]
 
   FILTERS = {
-    :numbers     => '\d+[.]?\d+',
     :operations  => '[/+*()]',
-    :user_data   => '\w+',
     :strings     => "\'.*?\'",
     :assignement => ':=',
+    :numbers     => '\d+[.]?\d+',
+    :user_data   => '\w+'
   }
 
   ERROR = {
