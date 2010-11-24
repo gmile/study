@@ -33,10 +33,16 @@ describe Parser do
     @parser.output.should == ['x', ':=', "'Hello world!'"]
   end
   
-  it "should parse strings as strings: x := 'Hello' + ' dear ' + 'world!'" do
+  it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
     @parser.input = "x := 'Hello' + dear + 'world!'"
     @parser.divide
-    @parser.output.should == ['x', ':=', "'Hello'", '+', "' dear '", '+', "'world!'"]
+    @parser.output.should == ['x', ':=', "'Hello'", '+', "dear", '+', "'world!'"]
+  end
+
+  it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
+    @parser.input = "x := 'Hello' + 'dear' + 'world!'"
+    @parser.divide
+    @parser.output.should == ['x', ':=', "'Hello'", '+', "'dear'", '+', "'world!'"]
   end
 
   it "string should be valid: x := 'Hello world!'" do
