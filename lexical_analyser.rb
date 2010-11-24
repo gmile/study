@@ -70,11 +70,10 @@ class Parser
       ERROR[:input_missing]
     end
   end
-  
+
   def divide
     unless @input.nil?
       filter = Regexp.new(FILTERS.values.join('|'))
-
       @output = @input.scan filter
     else
       ERROR[:input_missing]

@@ -26,7 +26,7 @@ describe Parser do
   it "should return an error if no input string given" do
     @parser.divide.should == Parser::ERROR[:input_missing]
   end
-  
+
   it "should parse strings as strings: x := 'Hello world!'" do
     @parser.input = "x := 'Hello world!'"
     @parser.divide
