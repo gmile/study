@@ -25,7 +25,7 @@ class Parser
   FILTERS = {
     :operations  => '[/+*()]',
     :user_data   => '\w+',
-    :strings     => "\'.*\'",
+    :strings     => "\'.*?\'",   # /'\w+'/
     :assignement => ':=',
   }
 
