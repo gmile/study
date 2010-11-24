@@ -56,4 +56,19 @@ describe Parser do
     @parser.divide
     @parser.valid?.should be_true
   end
+
+  context 'Tokenization' do
+    it "should correctly tokenize: x := 2.3 + 4.6" do
+      @parser.input = "x := 2.3 + 4.6"
+      @parser.divide
+      @parser.tokenize
+      @parser.output.map { |token| token.pair }.should == [
+        ['User data',   'x'  ],
+        ['Assignement', ':=' ],
+        ['Number',      '2.3'],
+        ['Operation',   '+'  ],
+        ['Number',      '4.6']
+      ]
+    end
+  end
 end
