@@ -79,5 +79,18 @@ describe Parser do
         ['Number',      '4.6']
       ]
     end
+
+    it "should correctly tokenize reserved words: if x = 5 then" do
+      @parser.input = "if x = 5 then"
+      @parser.divide
+      @parser.tokenize
+      @parser.output.map { |token| [token.type, token.value] }.should == [
+        ['Reserved word', 'if'],
+        ['User data', 'x'],
+        ['Equality', '='],
+        ['Number', '5'  ],
+        ['Reserved word', 'then']
+      ]
+    end
   end
 end
