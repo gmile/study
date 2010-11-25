@@ -45,7 +45,7 @@ describe Parser do
     @parser.output.should == ['x', ':=', "2.3", '+', "4.6"]
   end
 
-  it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
+  it "should parse strings as strings: x := 'Hello' + 'dear' + 'world!'" do
     @parser.input = "x := 'Hello' + 'dear' + 'world!'"
     @parser.divide
     @parser.output.should == ['x', ':=', "'Hello'", '+', "'dear'", '+', "'world!'"]
