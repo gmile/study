@@ -62,7 +62,7 @@ describe Parser do
       @parser.input = "x := 2.3 + 4.6"
       @parser.divide
       @parser.tokenize
-      @parser.output.map { |token| token.pair }.should == [
+      @parser.output.map { |token| [token.type, token.value] }.should == [
         ['User data',   'x'  ],
         ['Assignement', ':=' ],
         ['Number',      '2.3'],

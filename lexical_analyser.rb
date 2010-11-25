@@ -2,13 +2,9 @@ class Token
   attr_reader :type
   attr_reader :value
 
-  def initialize string, value
-    @type  = string
+  def initialize type, value
+    @type  = type
     @value = value
-  end
-
-  def pair
-    [@type, @value]
   end
 end
 
