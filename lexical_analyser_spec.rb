@@ -58,6 +58,15 @@ describe Parser do
   end
 
   context 'Tokenization' do
+    it "should correctly tokenize all reserved words" do
+      for word in Parser::RESERVED_WORDS
+        @parser.input = word
+        @parser.divide
+        @parser.tokenize
+        @parser.output.first.type.should == 'Reserved word'
+      end
+    end
+
     it "should correctly tokenize: x := 2.3 + 4.6" do
       @parser.input = "x := 2.3 + 4.6"
       @parser.divide
