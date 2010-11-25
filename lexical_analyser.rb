@@ -26,7 +26,8 @@ class Parser
     :operations  => '[/+*()]',
     :strings     => "\'.*?\'",
     :assignement => ':=',
-    :numbers     => '\d+[.]?\d+',
+    :equality    => '=',
+    :numbers     => '\d+[.]?\d+|\d',
     :user_data   => '\w+'
   }
 
