@@ -43,14 +43,18 @@ class Parser
 
   def tokenize
     @output.each_with_index do |token, index|
-      token = case token
-      when RESERVED_WORDS.any? { |word| token == word } then 'Reserved word'
-      when /#{FILTERS[:numbers]}/     then 'Number'
-      when /#{FILTERS[:operations]}/  then 'Operation'
-      when /#{FILTERS[:user_data]}/   then 'User data'
-      when /#{FILTERS[:strings]}/     then 'String'
-      when /#{FILTERS[:assignement]}/ then 'Assignement'
-      else ERROR[:unknown_token]
+      token = if RESERVED_WORDS.include?(token)
+        'Reserved word'
+      else
+        case token
+        when /#{FILTERS[:numbers]}/     then 'Number'
+        when /#{FILTERS[:operations]}/  then 'Operation'
+        when /#{FILTERS[:user_data]}/   then 'User data'
+        when /#{FILTERS[:strings]}/     then 'String'
+        when /#{FILTERS[:assignement]}/ then 'Assignement'
+        when /#{FILTERS[:equality]}/    then 'Equality'
+        else ERROR[:unknown_token]
+        end
       end
 
       @output[index] = Token.new(token, @output[index])
