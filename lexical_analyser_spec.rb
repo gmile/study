@@ -57,6 +57,36 @@ describe Parser do
     @parser.valid?.should be_true
   end
 
+  it "string should be valid: if a > b then" do
+    @parser.input = "if a > b then"
+    @parser.divide
+    @parser.output.should == ['if', 'a', '>', 'b', 'then']
+  end
+
+  it "string should be valid: if a >= b then" do
+    @parser.input = "if a >= b then"
+    @parser.divide
+    @parser.output.should == ['if', 'a', '>=', 'b', 'then']
+  end
+
+  it "string should be valid: if a < b then" do
+    @parser.input = "if a < b then"
+    @parser.divide
+    @parser.output.should == ['if', 'a', '<', 'b', 'then']
+  end
+
+  it "string should be valid: if a <= b then" do
+    @parser.input = "if a <= b then"
+    @parser.divide
+    @parser.output.should == ['if', 'a', '<=', 'b', 'then']
+  end
+
+  it "string should be valid: if a <> b then" do
+    @parser.input = "if a <> b then"
+    @parser.divide
+    @parser.output.should == ['if', 'a', '<>', 'b', 'then']
+  end
+
   context 'Tokenization' do
     it "should correctly tokenize all reserved words" do
       for word in Parser::RESERVED_WORDS
