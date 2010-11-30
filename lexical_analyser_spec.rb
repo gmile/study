@@ -77,46 +77,54 @@ describe Parser do
     @parser.valid?.should be_true
   end
 
-  it "string should be valid: if a > b then" do
-    @parser.input = "if a > b then"
-    @parser.divide
-    @parser.output.should == ['if', 'a', '>', 'b', 'then']
-  end
+  context 'Inequalities' do
+    it "string should be valid: if a > b then" do
+      @parser.input = "if a > b then"
+      @parser.divide
+      @parser.output.should == ['if', 'a', '>', 'b', 'then']
+    end
 
-  it "string should be valid: if a >= b then" do
-    @parser.input = "if a >= b then"
-    @parser.divide
-    @parser.output.should == ['if', 'a', '>=', 'b', 'then']
-  end
+    it "string should be valid: if a >= b then" do
+      @parser.input = "if a >= b then"
+      @parser.divide
+      @parser.output.should == ['if', 'a', '>=', 'b', 'then']
+    end
 
-  it "string should be valid: if a < b then" do
-    @parser.input = "if a < b then"
-    @parser.divide
-    @parser.output.should == ['if', 'a', '<', 'b', 'then']
-  end
+    it "string should be valid: if a < b then" do
+      @parser.input = "if a < b then"
+      @parser.divide
+      @parser.output.should == ['if', 'a', '<', 'b', 'then']
+    end
 
-  it "string should be valid: if a <= b then" do
-    @parser.input = "if a <= b then"
-    @parser.divide
-    @parser.output.should == ['if', 'a', '<=', 'b', 'then']
-  end
+    it "string should be valid: if a <= b then" do
+      @parser.input = "if a <= b then"
+      @parser.divide
+      @parser.output.should == ['if', 'a', '<=', 'b', 'then']
+    end
 
-  it "string should be valid: if a <> b then" do
-    @parser.input = "if a <> b then"
-    @parser.divide
-    @parser.output.should == ['if', 'a', '<>', 'b', 'then']
-  end
+    it "string should be valid: if a <> b then" do
+      @parser.input = "if a <> b then"
+      @parser.divide
+      @parser.output.should == ['if', 'a', '<>', 'b', 'then']
+    end
 
-  it "string should be valid: if (a <> b) and (var = 5) then" do
-    @parser.input = "if (a <> b) and (var = 5) then"
-    @parser.divide
-    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
-  end
+    it "string should be valid: if (a <> b) and (var = 5) then" do
+      @parser.input = "if (a <> b) and (var = 5) then"
+      @parser.divide
+      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
+    end
 
-  it "string should be valid: if (a <> b) or (var = 5) then" do
-    @parser.input = "if (a <> b) or (var = 5) then"
-    @parser.divide
-    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'then']
+    it "string should be valid: if (a <> b) or (var = 5) then" do
+      @parser.input = "if (a <> b) or (var = 5) then"
+      @parser.divide
+      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'then']
+    end
+
+    it "string should be valid: if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then" do
+      @parser.input = "if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then"
+      @parser.divide
+      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'and', '(', 'x', '<=', '12.45', ')', 'or', '(', 'string', '=', "'lalala'", ')', 'then']
+    end
   end
 
   it "string should be valid: if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then" do
