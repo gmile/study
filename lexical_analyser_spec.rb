@@ -97,10 +97,18 @@ describe Parser do
     @parser.output.should == ['x', ':=', "'Hello'", '+', "'dear'", '+', "'world!'"]
   end
 
-  it "string should be valid: x := 'Hello world!'" do
-    @parser.input = "x := 'Hello world!'"
-    @parser.divide
-    @parser.valid?.should be_true
+  context 'Validity' do
+    it "string should be valid: x := 'Hello world!'" do
+      @parser.input = "x := 'Hello world!'"
+      @parser.divide
+      @parser.valid?.should be_true
+    end
+
+    it "should parse strings as strings: 1231231231 + 32.1231231213" do
+      @parser.input = "1231231231 + .1231231213"
+      @parser.divide
+      @parser.valid?.should be_false
+    end
   end
 
   context 'Inequalities' do
