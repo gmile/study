@@ -23,7 +23,7 @@ class Parser
   ]
 
   FILTERS = {
-    :operations  => '[/+*()]',
+    :operations  => '[/+\-*()]',
     :strings     => "\'.*?\'",
     :assignement => ':=',
     :qualities   => '<>|<=|>=|=|>|<',
