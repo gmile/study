@@ -127,10 +127,10 @@ describe Parser do
     end
   end
 
-  it "string should be valid: if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then" do
-    @parser.input = "if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then"
+  it "should parse inline comments" do
+    @parser.input = "{ this is a comment line }"
     @parser.divide
-    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'and', '(', 'x', '<=', '12.45', ')', 'or', '(', 'string', '=', "'lalala'", ')', 'then']
+    @parser.output.should == ['{ this is a comment line }']
   end
 
   context 'Tokenization' do
