@@ -87,6 +87,24 @@ describe Parser do
     @parser.output.should == ['if', 'a', '<>', 'b', 'then']
   end
 
+  it "string should be valid: if (a <> b) and (var = 5) then" do
+    @parser.input = "if (a <> b) and (var = 5) then"
+    @parser.divide
+    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
+  end
+
+  it "string should be valid: if (a <> b) or (var = 5) then" do
+    @parser.input = "if (a <> b) or (var = 5) then"
+    @parser.divide
+    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'then']
+  end
+
+  it "string should be valid: if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then" do
+    @parser.input = "if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then"
+    @parser.divide
+    @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'and', '(', 'x', '<=', '12.45', ')', 'or', '(', 'string', '=', "'lalala'", ')', 'then']
+  end
+
   context 'Tokenization' do
     it "should correctly tokenize all reserved words" do
       for word in Parser::RESERVED_WORDS
