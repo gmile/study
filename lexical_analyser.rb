@@ -23,12 +23,13 @@ class Parser
   ]
 
   FILTERS = {
-    :operations  => '[/+\-*()]',
-    :strings     => "\'.*?\'",
-    :assignement => ':=',
-    :qualities   => '<>|<=|>=|=|>|<',
-    :numbers     => '\d+[.]?\d+|\d',
-    :user_data   => '\w+'
+    :operations  => [0, '[/+\-*()]'],
+    :strings     => [1, "\'.*?\'"],
+    :comments    => [2, '\{.*\}'],
+    :assignement => [3, ':='],
+    :qualities   => [4, '<>|<=|>=|=|>|<'],
+    :numbers     => [5, '\d+[.]?\d+|\d+'],
+    :user_data   => [6, '\w+']
   }
 
   ERROR = {
@@ -47,12 +48,12 @@ class Parser
         'Reserved word'
       else
         case token
-        when /#{FILTERS[:numbers]}/     then 'Number'
-        when /#{FILTERS[:operations]}/  then 'Operation'
-        when /#{FILTERS[:user_data]}/   then 'User data'
-        when /#{FILTERS[:strings]}/     then 'String'
-        when /#{FILTERS[:assignement]}/ then 'Assignement'
-        when /#{FILTERS[:equality]}/    then 'Equality'
+        when /#{FILTERS[:numbers].last}/     then 'Number'
+        when /#{FILTERS[:operations].last}/  then 'Operation'
+        when /#{FILTERS[:user_data].last}/   then 'User data'
+        when /#{FILTERS[:strings].last}/     then 'String'
+        when /#{FILTERS[:assignement].last}/ then 'Assignement'
+        when /#{FILTERS[:qualities].last}/   then 'Equality'
         else ERROR[:unknown_token]
         end
       end
@@ -74,7 +75,7 @@ class Parser
 
   def divide
     unless @input.nil?
-      filter = Regexp.new(FILTERS.values.join('|'))
+      filter = Regexp.new(FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }.join('|'))
       @output = @input.scan filter
     else
       ERROR[:input_missing]
