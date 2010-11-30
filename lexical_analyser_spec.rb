@@ -8,13 +8,33 @@ describe Parser do
   it "should parse: x := 2 + 3" do
     @parser.input = 'x := 2 + 3'
     @parser.divide
-    @parser.output.should == ['x', ':=', '2', '+', '3']
+    @parser.tokenize
+    @parser.output.map { |token| [token.type, token.value] }.should == [
+      ['User data',   'x' ],
+      ['Assignement', ':='],
+      ['Number',      '2' ],
+      ['Operation',   '+' ],
+      ['Number',      '3' ]
+    ]
   end
 
   it "should parse: var_a := var_b + (5 + 10)/23" do
     @parser.input = 'var_a := var_b + (5 + 10)/23'
     @parser.divide
-    @parser.output.should == ['var_a', ':=', 'var_b', '+', '(', '5', '+', '10', ')', '/', '23']
+    @parser.tokenize
+    @parser.output.map { |token| [token.type, token.value] }.should == [
+      ['User data',   'var_a'],
+      ['Assignement', ':='   ],
+      ['User data',   'var_b'],
+      ['Operation',   '+'    ],
+      ['Operation',   '('    ],
+      ['Number',      '5'    ],
+      ['Operation',   '+'    ],
+      ['Number',      '10'   ],
+      ['Operation',   ')'    ],
+      ['Operation',   '/'    ],
+      ['Number',      '23'   ]
+    ]
   end
 
   it "should parse: x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'" do
