@@ -28,8 +28,9 @@ class Parser
     :comments    => [2, '\{.*\}'],
     :assignement => [3, ':='],
     :qualities   => [4, '<>|<=|>=|=|>|<'],
-    :numbers     => [5, '\d+[.]?\d+|\d+'],
-    :user_data   => [6, '\w+']
+    :numbers     => [5, '\d+\.\d+|\d+'],
+    :user_data   => [6, '\w+'],
+    :num_todo    => [7, '[^0*](.*[^0*$])']
   }
 
   ERROR = {
