@@ -48,12 +48,13 @@ class Parser
         'Reserved word'
       else
         case token
-        when /#{FILTERS[:numbers].last}/     then 'Number'
         when /#{FILTERS[:operations].last}/  then 'Operation'
-        when /#{FILTERS[:user_data].last}/   then 'User data'
         when /#{FILTERS[:strings].last}/     then 'String'
+        when /#{FILTERS[:comments].last}/    then 'Comment'
         when /#{FILTERS[:assignement].last}/ then 'Assignement'
         when /#{FILTERS[:qualities].last}/   then 'Equality'
+        when /#{FILTERS[:numbers].last}/     then 'Number'
+        when /#{FILTERS[:user_data].last}/   then 'User data'
         else ERROR[:unknown_token]
         end
       end
