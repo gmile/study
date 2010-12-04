@@ -61,7 +61,7 @@ describe Parser do
     end
 
     it "should get rid of trailing and leading spaces: 00012345678900 + 000.123456789000" do
-      @parser.input = "000123456789000 + 000.1231231213000"
+      @parser.input = "000123456789000 + 000.123456789000"
       @parser.divide
       @parser.output.should == ['123456789000', '+', '0.123456789']
     end
