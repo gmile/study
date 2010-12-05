@@ -61,8 +61,10 @@ class Parser
           when /#{FILTERS[:strings].last}/     then 'String'
           when /#{FILTERS[:comments].last}/    then 'Comment'
           when /#{FILTERS[:assignement].last}/ then 'Assignement'
+          when /#{FILTERS[:semi].last}/        then 'Semi'
           when /#{FILTERS[:qualities].last}/   then 'Equality'
           when /#{FILTERS[:numbers].last}/     then 'Number'
+          when /#{FILTERS[:bitter_end].last}/  then 'Reserved word'
           when /#{FILTERS[:user_data].last}/   then 'User data'
           else ERROR[:unknown_token]
           end
