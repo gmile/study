@@ -196,11 +196,11 @@ describe Parser do
   context 'Coordinates' do
     it 'should correctly set coodinates' do
       @parser.input = <<-eos
-      for i := 1 to 20 do
-      begin
-        s := 10;
-      end
-      eos
+for i := 1 to 20 do
+begin
+  s := 10; s := 12; s := 14;
+end
+eos
 
       @parser.divide
       @parser.tokenize
