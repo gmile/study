@@ -36,7 +36,7 @@ class Parser
     :semi        => [4, '[;:]'],
     :qualities   => [5, '<>|<=|>=|=|>|<'],
     :numbers     => [6, '\d+\.\d+|\d+'],
-    :bitter_end  => [7, 'end\.'],
+    :bitter_end  => [7, 'end\.'],          #TODO: refactor me to where I should belong
     :user_data   => [8, '\w+']
   }
 
