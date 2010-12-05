@@ -31,7 +31,8 @@ class Parser
     :strings     => [1, "\'.*?\'"],
     :comments    => [2, '\{.*\}'],
     :assignement => [3, ':='],
-    :qualities   => [4, '<>|<=|>=|=|>|<'],
+    :semi        => [4, '[;:]'],
+    :qualities   => [5, '<>|<=|>=|=|>|<'],
     :numbers     => [6, '\d+\.\d+|\d+'],
     :user_data   => [7, '\w+']
   }
