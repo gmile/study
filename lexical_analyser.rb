@@ -46,7 +46,7 @@ class Parser
   }
 
   def initialize string = nil
-    @input = string
+    @input  = string
     @output = []
   end
 
