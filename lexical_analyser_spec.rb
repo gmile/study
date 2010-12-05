@@ -193,6 +193,36 @@ describe Parser do
     end
   end
 
+  context 'Coordinates' do
+    it 'should correctly set coodinates' do
+      @parser.input = <<-eos
+      for i := 1 to 20 do
+      begin
+        s := 10;
+      end
+      eos
+
+      @parser.divide
+      @parser.tokenize
+
+      @parser.output.flatten.map { |token| [token.value, token.x, token.y] }.should == [
+        ['for',    0, 0],
+        ['i',      3, 0],
+        [':=',     5, 0],
+        ['1',      8, 0],
+        ['to',    10, 0],
+        ['20',    13, 0],
+        ['do',    16, 0],
+        ['begin',  0, 1],
+        ['s',      2, 2],
+        [':=',     4, 2],
+        ['10',     7, 2],
+        [';',      9, 2],
+        ['end',    0, 3]
+      ]
+    end
+  end
+
   context 'Multiline' do
     it 'should correctly parse a full multiline program' do
       source_code = <<-eos
