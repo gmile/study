@@ -216,7 +216,7 @@ describe Parser do
       @parser.input = source_code
       @parser.divide
 
-      @parser.output.should == [
+      @parser.output.flatten.should == [
         'uses', 'crt', ';',
         'var',
         'my_var_1', ':', 'integer', ';',
