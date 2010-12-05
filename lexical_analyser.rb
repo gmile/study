@@ -34,7 +34,8 @@ class Parser
     :semi        => [4, '[;:]'],
     :qualities   => [5, '<>|<=|>=|=|>|<'],
     :numbers     => [6, '\d+\.\d+|\d+'],
-    :user_data   => [7, '\w+']
+    :bitter_end  => [7, 'end\.'],
+    :user_data   => [8, '\w+']
   }
 
   ERROR = {
