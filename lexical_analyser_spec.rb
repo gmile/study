@@ -206,7 +206,7 @@ describe Parser do
         begin
           clrscr;
 
-          my_var_1 = 12
+          my_var_1 = 12;
           while my_var_1 <> 0 do
             dec(my_var_1);
           end
