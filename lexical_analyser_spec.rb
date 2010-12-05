@@ -215,8 +215,21 @@ describe Parser do
 
       @parser.input = source_code
       @parser.divide
-      @parser.tokenize
 
+      @parser.output.should == [
+        'uses', 'crt', ';',
+        'var',
+        'my_var_1', ':', 'integer', ';',
+        'my_var_2', ':', 'real', ';',
+        'x', ':', 'string', ';',
+        'begin',
+        'clrscr', ';',
+        'my_var_1', '=', '12', ';',
+        'while', 'my_var_1', '<>', '0', 'do',
+        'dec', '(', 'my_var_1', ')', ';',
+        'end',
+        'end.'
+      ]
       # assert should be here
     end
   end
