@@ -1,10 +1,12 @@
 class Token
   attr_reader :type
-  attr_reader :value
+  attr_reader :value, :x, :y
 
-  def initialize type, value
-    @type  = type
-    @value = value
+  def initialize params
+    @type  = params[:type]
+    @value = params[:value]
+    @x     = params[:x]
+    @y     = params[:y]
   end
 end
 
@@ -49,7 +51,7 @@ class Parser
   end
 
   def tokenize
-    @output.each do |line|
+    @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
         item = if RESERVED_WORDS.include?(item)
           'Reserved word'
@@ -66,7 +68,12 @@ class Parser
           end
         end
 
-        line[index] = Token.new(item, line[index])
+        line[index] = Token.new({
+          :type  => item,
+          :value => line[index],
+          :x     => index,
+          :y     => line_number
+        })
       end
     end
   end
@@ -85,7 +92,9 @@ class Parser
   def divide
     unless @input.nil?
       filter = Regexp.new(FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }.join('|'))
-      @output << @input.scan(filter)
+      @input.each_line do |line|
+        @output << line.scan(filter)
+      end
     else
       ERROR[:input_missing]
     end
