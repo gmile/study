@@ -70,12 +70,16 @@ class Parser
           end
         end
 
+        value = line[index]
+
         line[index] = Token.new({
           :type  => item,
-          :value => line[index],
-          :x     => index,
+          :value => value,
+          :x     => @lines[line_number].index(line[index]),
           :y     => line_number
         })
+
+        @lines[line_number][value] = ' '*value.size
       end
     end
   end
@@ -93,8 +97,11 @@ class Parser
 
   def divide
     unless @input.nil?
+      @lines = []
+      @input.each_line {|line| @lines << line}
+
       filter = Regexp.new(FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }.join('|'))
-      @input.each_line do |line|
+      @lines.each do |line|
         @output << line.scan(filter)
       end
     else
