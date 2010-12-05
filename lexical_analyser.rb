@@ -95,6 +95,10 @@ class Parser
     end
   end
 
+  # Refactor the division method someday
+  # make division without a @lines-proxy
+  # see 'case' from tokenize. Any ideas?
+
   def divide
     unless @input.nil?
       @lines = []
