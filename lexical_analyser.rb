@@ -22,6 +22,10 @@ class Parser
     'else'
   ]
 
+  def output
+    @output.size > 1 ? @output : @output.flatten
+  end
+
   FILTERS = {
     :operations  => [0, '[/+\-*()]'],
     :strings     => [1, "\'.*?\'"],
@@ -43,29 +47,31 @@ class Parser
   end
 
   def tokenize
-    @output.each_with_index do |token, index|
-      token = if RESERVED_WORDS.include?(token)
-        'Reserved word'
-      else
-        case token
-        when /#{FILTERS[:operations].last}/  then 'Operation'
-        when /#{FILTERS[:strings].last}/     then 'String'
-        when /#{FILTERS[:comments].last}/    then 'Comment'
-        when /#{FILTERS[:assignement].last}/ then 'Assignement'
-        when /#{FILTERS[:qualities].last}/   then 'Equality'
-        when /#{FILTERS[:numbers].last}/     then 'Number'
-        when /#{FILTERS[:user_data].last}/   then 'User data'
-        else ERROR[:unknown_token]
+    @output.each do |line|
+      line.each_with_index do |item, index|
+        item = if RESERVED_WORDS.include?(item)
+          'Reserved word'
+        else
+          case item
+          when /#{FILTERS[:operations].last}/  then 'Operation'
+          when /#{FILTERS[:strings].last}/     then 'String'
+          when /#{FILTERS[:comments].last}/    then 'Comment'
+          when /#{FILTERS[:assignement].last}/ then 'Assignement'
+          when /#{FILTERS[:qualities].last}/   then 'Equality'
+          when /#{FILTERS[:numbers].last}/     then 'Number'
+          when /#{FILTERS[:user_data].last}/   then 'User data'
+          else ERROR[:unknown_token]
+          end
         end
-      end
 
-      @output[index] = Token.new(token, @output[index])
+        line[index] = Token.new(item, line[index])
+      end
     end
   end
 
   def valid?
     unless @input.nil?
-      x = @output.map{|i| i.include?("'") ? i.delete(' ') : i}.join
+      x = output.map{|i| i.include?("'") ? i.delete(' ') : i}.join
       y = @input.delete(' ')
 
       x == y
@@ -77,7 +83,7 @@ class Parser
   def divide
     unless @input.nil?
       filter = Regexp.new(FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }.join('|'))
-      @output = @input.scan filter
+      @output << @input.scan(filter)
     else
       ERROR[:input_missing]
     end
