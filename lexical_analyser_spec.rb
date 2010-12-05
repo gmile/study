@@ -230,7 +230,6 @@ describe Parser do
         'end',
         'end.'
       ]
-      # assert should be here
     end
   end
 end
