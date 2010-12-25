@@ -1,0 +1,11 @@
+%h2 Hello, world!
+
+%form{ :action => '/', :method => 'get' }
+  %fieldset
+    %textarea{ :name => 'source', :rows => 10, :cols => 80, :value => @output }
+  %input{ :type => 'submit', :value => 'Send' }
+
+- unless @output.nil?
+  - for token in @output.flatten
+    %ul 
+      %li= "#{token.type} + ' ' + #{token.value} + ' ' + #{token.x} + ' ' + #{token.y}"
