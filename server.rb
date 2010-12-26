@@ -10,10 +10,9 @@ end
 
 get '/' do
   @parser = Parser.new(params[:source])
-  
   @parser.divide
   @parser.tokenize
-  
+
   @output = @parser.output
   puts @output
 #  @words = params[:words]
