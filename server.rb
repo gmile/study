@@ -14,7 +14,6 @@ get '/' do
   @parser.tokenize
 
   @output = @parser.output
-  puts @output
-#  @words = params[:words]
+
   haml :index
 end
