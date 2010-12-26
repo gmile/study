@@ -11,7 +11,7 @@
             %fieldset
               %label{ :for => 'source' } Source code:
               %textarea{ :name => 'source', :value => @output }
-            %input{ :type => 'submit', :value => 'Send' }
+            %input{ :type => 'submit', :value => 'Analyse' }
         %td
           - unless output.empty?
             %table#tokens{ :cellspacing => 0 }
