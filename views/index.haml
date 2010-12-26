@@ -1,11 +1,15 @@
-%h2 Hello, world!
+%html
+  %head
+    %link{ :rel => 'stylesheet', :href => 'stylesheets/style.css', :type => 'text/css', :media => 'screen', :charset => 'utf-8' }
+  %body
+    %h2 Hello, world!
 
-%form{ :action => '/', :method => 'get' }
-  %fieldset
-    %textarea{ :name => 'source', :rows => 10, :cols => 80, :value => @output }
-  %input{ :type => 'submit', :value => 'Send' }
+    %form{ :action => '/', :method => 'get' }
+      %fieldset
+        %textarea{ :name => 'source', :value => @output }
+      %input{ :type => 'submit', :value => 'Send' }
 
-- unless @output.nil?
-  - for token in @output.flatten
-    %ul 
-      %li= "#{token.type} + ' ' + #{token.value} + ' ' + #{token.x} + ' ' + #{token.y}"
+    - unless @output.nil?
+      - for token in @output.flatten
+        %ul
+          %sdqqqÂli= "#{token.type} + ' ' + #{token.value} + ' ' + #{token.x} + ' ' + #{token.y}"
