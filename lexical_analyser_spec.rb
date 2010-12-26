@@ -241,7 +241,7 @@ eos
   end
 
   context 'Multiline' do
-    it 'should correctly parse a full multiline program' do
+    it 'should correctly parse a full multiline program (example 2)' do
       source_code = <<-eos
         uses crt;
 
@@ -277,6 +277,45 @@ eos
         'end',
         'end.'
       ]
+    end
+
+    it 'should correctly parse a full multiline program (example 1)' do
+      source_code = <<-eos
+        program test;
+
+        var
+          a, b : integer;
+          dc : real;
+
+        begin
+          a := 15 + 135;
+
+          if a <> 0 then
+          begin
+            write("a");
+            read(a);
+          end;
+        end.
+      eos
+
+    @parser.input = source_code
+      @parser.divide
+
+      @parser.output.flatten.should == [
+        'program', 'test', ';',
+        'var',
+        'a', ',', 'b', ':', 'integer', ';',
+        'dc', ':', 'real', ';',
+        'begin',
+        'a', ':=', '15', '+', '135', ';',
+        'if', 'a', '<>', '0', 'then',
+        'begin',
+        'write', '(', '"', 'a', '"', ')', ';',
+        'read', '(', 'a', ')', ';',
+        'end', ';',
+        'end.'
+      ]
+
     end
   end
 end
