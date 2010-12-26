@@ -13,13 +13,13 @@
               %textarea{ :name => 'source', :value => @output }
             %input{ :type => 'submit', :value => 'Send' }
         %td
-          - unless @output.nil?
+          - unless output.empty?
             %table#tokens{ :cellspacing => 0 }
               %tr
                 %th Type
                 %th Value
                 %th Coodrinates
-              - for token in @output.flatten
+              - for token in output
                 %tr
                   %td.type= token.type
                   %td.value= token.value

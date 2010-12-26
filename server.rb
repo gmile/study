@@ -13,9 +13,7 @@ get '/' do
   @parser.divide
   @parser.tokenize
 
-  @output = @parser.output
-
-  haml :index
+  haml :index, :locals => { :output => @parser.output.flatten }
 end
 
 get '/stylesheets/style.css' do
