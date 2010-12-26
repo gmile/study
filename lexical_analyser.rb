@@ -8,6 +8,10 @@ class Token
     @x     = params[:x]
     @y     = params[:y]
   end
+
+  def undefined?
+    @type == 'Undefined'
+  end
 end
 
 class Parser
@@ -113,6 +117,6 @@ class Parser
   private
 
   def validate
-    @undefined = output.find_all { |token| token.type == 'Undefined' }
+    @undefined = output.find_all { |token| token.undefined? }
   end
 end

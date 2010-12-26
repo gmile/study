@@ -89,6 +89,7 @@ describe Parser do
     it "string should be valid: x := 'Hello world!'" do
       @parser.input = "x := 'Hello world!'"
       @parser.divide
+      @parser.tokenize
       @parser.valid?.should be_true
     end
 
