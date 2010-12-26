@@ -23,4 +23,4 @@
                 %tr{ :class => ('undefined' if token.undefined?) }
                   %td.type= token.type
                   %td.value= token.value
-                  %td.coordinates= "[#{token.x}, #{token.y}]"
+                  %td.coordinates= "[#{token.x.to_s.rjust(2)}, #{token.y}]"
