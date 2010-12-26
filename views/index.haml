@@ -20,7 +20,7 @@
                 %th Value
                 %th Coodrinates
               - for token in output
-                %tr
+                %tr{ :class => ('undefined' if token.undefined?) }
                   %td.type= token.type
                   %td.value= token.value
                   %td.coordinates= "[#{token.x}, #{token.y}]"

@@ -40,6 +40,8 @@ table {
         width: 33.3%
       }
 
+      &.undefined { background-color: #FEE }
+
       &:hover td { background-color: #EEE }
     }
   }
