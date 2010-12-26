@@ -26,7 +26,7 @@ class Parser
     'and',      'repeat', 'while',
     'true',     'false',  'procedure',
     'function', 'if',     'then',
-    'else'
+    'else',     'program'
   ]
 
   def output
