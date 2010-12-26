@@ -87,10 +87,6 @@ class Parser
     end
   end
 
-  def validate
-    @undefined = output.find_all { |token| token.type == 'Undefined' }
-  end
-
   def valid?
     validate
     @undefined.empty?
@@ -112,5 +108,11 @@ class Parser
     else
       ERROR[:input_missing]
     end
+  end
+
+  private
+
+  def validate
+    @undefined = output.find_all { |token| token.type == 'Undefined' }
   end
 end
