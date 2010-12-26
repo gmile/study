@@ -3,14 +3,24 @@
     %link{ :rel => 'stylesheet', :href => 'stylesheets/style.css', :type => 'text/css', :media => 'screen', :charset => 'utf-8' }
     %meta{ :'http-equiv' => 'content-type', :content => 'text/html; charset=utf-8' }
   %body
-    %h2 Hello, world!
-
-    %form{ :action => '/', :method => 'get' }
-      %fieldset
-        %textarea{ :name => 'source', :value => @output }
-      %input{ :type => 'submit', :value => 'Send' }
-
-    - unless @output.nil?
-      - for token in @output.flatten
-        %ul
-          %sdqqqÂli= "#{token.type} + ' ' + #{token.value} + ' ' + #{token.x} + ' ' + #{token.y}"
+    %h2#lab-title Лаботарная работа №1 — Лексический анализатор
+    %table#content{ :cellspacing => 0 }
+      %tr
+        %td
+          %form{ :action => '/', :method => 'get' }
+            %fieldset
+              %label{ :for => 'source' } Source code:
+              %textarea{ :name => 'source', :value => @output }
+            %input{ :type => 'submit', :value => 'Send' }
+        %td
+          - unless @output.nil?
+            %table#tokens{ :cellspacing => 0 }
+              %tr
+                %th Type
+                %th Value
+                %th Coodrinates
+              - for token in @output.flatten
+                %tr
+                  %td.type= token.type
+                  %td.value= token.value
+                  %td.coordinates= "[#{token.x}, #{token.y}]"
