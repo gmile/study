@@ -298,7 +298,7 @@ eos
         end.
       eos
 
-    @parser.input = source_code
+      @parser.input = source_code
       @parser.divide
 
       @parser.output.flatten.should == [
