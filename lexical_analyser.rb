@@ -13,6 +13,7 @@ end
 class Parser
   attr_writer :input
   attr_reader :output
+  attr_reader :undefined
 
   RESERVED_WORDS = [
     'const',    'var',    'uses',
@@ -37,7 +38,8 @@ class Parser
     :qualities   => [5, '<>|<=|>=|=|>|<'],
     :numbers     => [6, '\d+\.\d+|\d+'],
     :bitter_end  => [7, 'end\.'],          #TODO: refactor me to where I should belong
-    :user_data   => [8, '\w+']
+    :user_data   => [8, '\w+'],
+    :undefined   => [9, '[^ \t\r\n\v\f]']
   }
 
   ERROR = {
@@ -66,6 +68,7 @@ class Parser
           when /#{FILTERS[:numbers].last}/     then 'Number'
           when /#{FILTERS[:bitter_end].last}/  then 'Reserved word'
           when /#{FILTERS[:user_data].last}/   then 'User data'
+          when /#{FILTERS[:undefined].last}/   then 'Undefined'
           else ERROR[:unknown_token]
           end
         end
@@ -84,15 +87,13 @@ class Parser
     end
   end
 
-  def valid?
-    unless @input.nil?
-      x = output.map{|i| i.include?("'") ? i.delete(' ') : i}.join
-      y = @input.delete(' ')
+  def validate
+    @undefined = output.find_all { |token| token.type == 'Undefined' }
+  end
 
-      x == y
-    else
-      ERROR[:input_missing]
-    end
+  def valid?
+    validate
+    @undefined.empty?
   end
 
   # Refactor the division method someday

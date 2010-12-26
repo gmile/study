@@ -92,9 +92,17 @@ describe Parser do
       @parser.valid?.should be_true
     end
 
-    it "should parse strings as strings: 1231231231 + 32.1231231213" do
-      @parser.input = "1231231231 + .1231231213"
+    it "should not be valid: 123456 + .789" do
+      @parser.input = "123456 + .789"
       @parser.divide
+      @parser.tokenize
+      @parser.valid?.should be_false
+    end
+
+    it "should not be valid: 123456 + 789." do
+      @parser.input = "123456 + 789."
+      @parser.divide
+      @parser.tokenize
       @parser.valid?.should be_false
     end
   end
