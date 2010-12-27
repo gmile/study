@@ -38,9 +38,9 @@ class Parser
   end
 
   FILTERS = {
-    :operations  => [0, '[/+\-*()]'],
-    :strings     => [1, "\'.*?\'"],
-    :comments    => [2, '\{.*\}'],
+    :comments    => [0, '\{*.*\}'],
+    :operations  => [1, '[/+\-*()]'],
+    :strings     => [2, "\'.*?\'"],
     :assignement => [3, ':='],
     :semi        => [4, '[;:]'],
     :qualities   => [5, '<>|<=|>=|=|>|<'],
@@ -67,9 +67,9 @@ class Parser
           'Reserved word'
         else
           case item
+          when /#{FILTERS[:comments].last}/    then 'Comment'
           when /#{FILTERS[:operations].last}/  then 'Operation'
           when /#{FILTERS[:strings].last}/     then 'String'
-          when /#{FILTERS[:comments].last}/    then 'Comment'
           when /#{FILTERS[:assignement].last}/ then 'Assignement'
           when /#{FILTERS[:semi].last}/        then 'Semi'
           when /#{FILTERS[:qualities].last}/   then 'Equality'
