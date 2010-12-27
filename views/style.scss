@@ -41,8 +41,9 @@ table {
       }
 
       &.undefined { background-color: #FEE }
+      &.comment   { color: #CCC }
 
-      &:hover td { background-color: #EEE }
+      &:hover td  { background-color: #EEE }
     }
   }
 }

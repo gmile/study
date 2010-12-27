@@ -12,6 +12,10 @@ class Token
   def undefined?
     @type == 'Undefined'
   end
+
+  def comment?
+    @type == 'Comment'
+  end
 end
 
 class Parser
