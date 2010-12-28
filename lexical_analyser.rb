@@ -39,15 +39,16 @@ class Parser
 
   FILTERS = {
     :comments    => [0, '\{*.*\}'],
-    :operations  => [1, '[/+\-*()]'],
-    :strings     => [2, "\'.*?\'"],
-    :assignement => [3, ':='],
-    :semi        => [4, '[;:]'],
-    :qualities   => [5, '<>|<=|>=|=|>|<'],
-    :numbers     => [6, '\d+\.\d+|\d+'],
-    :bitter_end  => [7, 'end\.'],          #TODO: refactor me to where I should belong
-    :user_data   => [8, '\w+'],
-    :undefined   => [9, '[^ \t\r\n\v\f]']
+    :brackets    => [1, '[()]'],
+    :operations  => [2, '[/+\-*]'],
+    :strings     => [3, "\'.*?\'"],
+    :assignement => [4, ':='],
+    :semi        => [5, '[;:]'],
+    :qualities   => [6, '<>|<=|>=|=|>|<'],
+    :numbers     => [7, '\d+\.\d+|\d+'],
+    :bitter_end  => [8, 'end\.'],          #TODO: refactor me to where I should belong
+    :user_data   => [9, '\w+'],
+    :undefined   => [10, '[^ \t\r\n\v\f]']
   }
 
   ERROR = {
@@ -68,6 +69,7 @@ class Parser
         else
           case item
           when /#{FILTERS[:comments].last}/    then 'Comment'
+          when /#{FILTERS[:brackets].last}/    then 'Bracket'
           when /#{FILTERS[:operations].last}/  then 'Operation'
           when /#{FILTERS[:strings].last}/     then 'String'
           when /#{FILTERS[:assignement].last}/ then 'Assignement'
