@@ -27,11 +27,11 @@ describe Parser do
       ['Assignement', ':='   ],
       ['User data',   'var_b'],
       ['Operation',   '+'    ],
-      ['Operation',   '('    ],
+      ['Bracket',     '('    ],
       ['Number',      '5'    ],
       ['Operation',   '+'    ],
       ['Number',      '10'   ],
-      ['Operation',   ')'    ],
+      ['Bracket',     ')'    ],
       ['Operation',   '/'    ],
       ['Number',      '23'   ]
     ]
