@@ -53,6 +53,12 @@ describe Parser do
     @parser.output.should == ['x', ':=', "'Hello world!'"]
   end
 
+  it "should parse arrays: x := a[3]" do
+    @parser.input = "x := a[3]"
+    @parser.divide
+    @parser.output.should == ['x', ':=', 'a', '[', '3', ']']
+  end
+
   context 'Numbers' do
     it "should parse numbers: 123456789 + 12.3456789" do
       @parser.input = "123456789 + 12.3456789"
