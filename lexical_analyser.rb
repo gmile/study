@@ -44,23 +44,43 @@ class Parser
     'with',        'xor',            'or'
   ]
 
+  TYPES = {
+    :ordinar => [
+      'integer',  'shortint', 'smallint',
+      'longint',  'longword', 'int64',
+      'byte',     'word',     'cardinal',
+      'qword',    'bytebool',
+      'wordbool', 'longbool', 'char'
+    ],
+    :real => [
+      'real',     'single',   'double',
+      'exteded',  'comp',     'comp',
+      'currency'
+    ],
+    :boolean => 'boolean',
+    :string  => 'string'
+  }
+
   def output
     @output.size > 1 ? @output : @output.flatten
   end
 
   FILTERS = {
-    :comments    => [0,  '\{*.*\}'],
-    :brackets    => [1,  '[()]'],
-    :operations  => [2,  '[/+\-*]'],
-    :strings     => [3,  "\'.*?\'"],
-    :assignement => [4,  ':='],
-    :semi        => [5,  '[;:]'],
-    :qualities   => [6,  '<>|<=|>=|=|>|<'],
-    :numbers     => [7,  '\d+\.\d+|\d+'],
-    :bitter_end  => [8,  'end\.'],          #TODO: refactor me to where I should belong
-    :boolean     => [9,  'true|false'],
-    :user_data   => [10, '\w+'],
-    :undefined   => [11, '[^ \t\r\n\v\f]']
+    :comments     => [1,  '\{*.*\}'],
+    :brackets     => [2,  '[()]'],
+    :operations   => [3,  '[/+\-*]'],
+    :strings      => [4,  "\'.*?\'"],
+    :assignement  => [5,  ':='],
+    :semi         => [6,  '[;:]'],
+    :qualities    => [7,  '<>|<=|>=|=|>|<'],
+    :numbers      => [8,  '\d+\.\d+|\d+'],
+    :bitter_end   => [9,  'end\.'],          #TODO: refactor me to where I should belong
+    :type_ordinar => [10, TYPES[:ordinar].join('|')],
+    :type_real    => [11, TYPES[:real].join('|')],
+    :type_boolean => [12, TYPES[:boolean]],
+    :type_string  => [13, TYPES[:string]],
+    :user_data    => [14, '\w+'],
+    :undefined    => [15, '[^ \t\r\n\v\f]']
   }
 
   ERROR = {
