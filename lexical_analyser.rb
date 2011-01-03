@@ -76,29 +76,17 @@ class Parser
   def tokenize
     @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
-        item = if RESERVED_WORDS.include?(item)
+        type = if RESERVED_WORDS.include?(item)
           'Reserved word'
         else
-          case item
-          when /#{FILTERS[:comments].last}/    then 'Comment'
-          when /#{FILTERS[:brackets].last}/    then 'Bracket'
-          when /#{FILTERS[:operations].last}/  then 'Operation'
-          when /#{FILTERS[:strings].last}/     then 'String'
-          when /#{FILTERS[:assignement].last}/ then 'Assignement'
-          when /#{FILTERS[:semi].last}/        then 'Semi'
-          when /#{FILTERS[:qualities].last}/   then 'Equality'
-          when /#{FILTERS[:numbers].last}/     then 'Number'
-          when /#{FILTERS[:bitter_end].last}/  then 'Reserved word'
-          when /#{FILTERS[:user_data].last}/   then 'User data'
-          when /#{FILTERS[:undefined].last}/   then 'Undefined'
-          else ERROR[:unknown_token]
-          end
+          matched_filter = filters.find { |filter| item =~ /#{filter}/ }
+          FILTERS.keys.find { |type| FILTERS[type].last == matched_filter } # remove this hack once migrated to ruby 1.9
         end
 
         value = line[index]
 
         line[index] = Token.new({
-          :type  => item,
+          :type  => type,
           :value => value,
           :x     => @lines[line_number].index(line[index]),
           :y     => line_number
@@ -123,7 +111,7 @@ class Parser
       @lines = []
       @input.each_line {|line| @lines << line}
 
-      filter = Regexp.new(FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }.join('|'))
+      filter = Regexp.new(filters.join('|'))
       @lines.each do |line|
         @output << line.scan(filter)
       end
@@ -133,6 +121,10 @@ class Parser
   end
 
   private
+
+  def filters
+    FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }
+  end
 
   def validate
     @undefined = output.find_all { |token| token.undefined? }
