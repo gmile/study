@@ -24,13 +24,24 @@ class Parser
   attr_reader :undefined
 
   RESERVED_WORDS = [
-    'const',    'var',    'uses',
-    'begin',    'for',    'do',
-    'end',      'not',    'or',
-    'and',      'repeat', 'while',
-    'true',     'false',  'procedure',
-    'function', 'if',     'then',
-    'else',     'program'
+    'absolute',    'and',            'array',
+    'asm',         'begin',          'case',
+    'constructor', 'const',          'destructor',
+    'div',         'downto',         'do',
+    'else',        'end'             'file',
+    'for',         'function',       'goto',
+    'if',          'implementation', 'inherited',
+    'inline',      'interface',      'in',
+    'label',       'mod',            'nil',
+    'not',         'object',         'of',
+    'on',          'operator',       'packed',
+    'procedure',   'program',        'record',
+    'reintroduce', 'repeat',         'self',
+    'set',         'shl',            'shr',
+    'string',      'then',           'to',
+    'type',        'unit',           'until',
+    'uses',        'var',            'while',
+    'with',        'xor',            'or'
   ]
 
   def output
@@ -38,17 +49,18 @@ class Parser
   end
 
   FILTERS = {
-    :comments    => [0, '\{*.*\}'],
-    :brackets    => [1, '[()]'],
-    :operations  => [2, '[/+\-*]'],
-    :strings     => [3, "\'.*?\'"],
-    :assignement => [4, ':='],
-    :semi        => [5, '[;:]'],
-    :qualities   => [6, '<>|<=|>=|=|>|<'],
-    :numbers     => [7, '\d+\.\d+|\d+'],
-    :bitter_end  => [8, 'end\.'],          #TODO: refactor me to where I should belong
-    :user_data   => [9, '\w+'],
-    :undefined   => [10, '[^ \t\r\n\v\f]']
+    :comments    => [0,  '\{*.*\}'],
+    :brackets    => [1,  '[()]'],
+    :operations  => [2,  '[/+\-*]'],
+    :strings     => [3,  "\'.*?\'"],
+    :assignement => [4,  ':='],
+    :semi        => [5,  '[;:]'],
+    :qualities   => [6,  '<>|<=|>=|=|>|<'],
+    :numbers     => [7,  '\d+\.\d+|\d+'],
+    :bitter_end  => [8,  'end\.'],          #TODO: refactor me to where I should belong
+    :boolean     => [9,  'true|false'],
+    :user_data   => [10, '\w+'],
+    :undefined   => [11, '[^ \t\r\n\v\f]']
   }
 
   ERROR = {
