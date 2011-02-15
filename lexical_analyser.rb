@@ -1,27 +1,10 @@
-class Token
-  attr_reader :type
-  attr_reader :value, :x, :y
-
-  def initialize params
-    @type  = params[:type]
-    @value = params[:value]
-    @x     = params[:x]
-    @y     = params[:y]
-  end
-
-  def undefined?
-    @type == 'Undefined'
-  end
-
-  def comment?
-    @type == 'Comment'
-  end
-end
+require 'tokens'
 
 class Parser
+  include Tokens
+
   attr_writer :input
   attr_reader :output
-  attr_reader :undefined
 
   RESERVED_WORDS = [
     'absolute',    'and',            'array',
