@@ -1,6 +1,6 @@
 require_relative 'lexical_analyser'
 
-describe Parser do 
+describe Parser do
   before :each do
     @parser = Parser.new
   end
