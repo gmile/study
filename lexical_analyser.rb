@@ -50,13 +50,13 @@ class Parser
 
   FILTERS = {
     :comments     => [1,  '\{*.*\}'],
-    :brackets     => [2,  '[()]'],
-    :operations   => [3,  '[/+\-*]'],
+    :bracket      => [2,  '[()]'],
+    :operation    => [3,  '[/+\-*]'],
     :strings      => [4,  "\'.*?\'"],
     :assignement  => [5,  ':='],
     :semi         => [6,  '[;:]'],
     :qualities    => [7,  '<>|<=|>=|=|>|<'],
-    :numbers      => [8,  '\d+\.\d+|\d+'],
+    :number       => [8,  '\d+\.\d+|\d+'],
     :bitter_end   => [9,  'end\.'],          #TODO: refactor me to where I should belong
     :type_ordinar => [10, TYPES[:ordinar].join('|')],
     :type_real    => [11, TYPES[:real].join('|')],
@@ -80,7 +80,7 @@ class Parser
     @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
         type = if RESERVED_WORDS.include?(item)
-          'Reserved word'
+          :reserved_word
         else
           matched_filter = filters.find { |filter| item =~ /#{filter}/ }
           FILTERS.keys.find { |type| FILTERS[type].last == matched_filter } # remove this hack once migrated to ruby 1.9
