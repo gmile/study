@@ -110,16 +110,14 @@ class Parser
   # see 'case' from tokenize. Any ideas?
 
   def divide
-    unless @input.nil?
-      @lines = []
-      @input.each_line {|line| @lines << line}
+    return ERROR[:input_missing] if @input.nil?
 
-      filter = Regexp.new(filters.join('|'))
-      @lines.each do |line|
-        @output << line.scan(filter)
-      end
-    else
-      ERROR[:input_missing]
+    @lines = []
+    @input.each_line {|line| @lines << line}
+
+    filter = Regexp.new(filters.join('|'))
+    @lines.each do |line|
+      @output << line.scan(filter)
     end
   end
 
