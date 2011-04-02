@@ -1,4 +1,4 @@
-require 'tokens'
+require_relative 'tokens'
 
 class Parser
   include Tokens

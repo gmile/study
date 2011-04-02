@@ -1,4 +1,4 @@
-require 'lexical_analyser'
+require_relative 'lexical_analyser'
 
 describe Parser do 
   before :each do
