@@ -49,21 +49,21 @@ class Parser
   end
 
   FILTERS = {
-    :comments     => [1,  '\{*.*\}'],
-    :bracket      => [2,  '[()]'],
-    :operation    => [3,  '[/+\-*]'],
-    :strings      => [4,  "\'.*?\'"],
-    :assignement  => [5,  ':='],
-    :semi         => [6,  '[;:]'],
-    :qualities    => [7,  '<>|<=|>=|=|>|<'],
-    :number       => [8,  '\d+\.\d+|\d+'],
-    :bitter_end   => [9,  'end\.'],          #TODO: refactor me to where I should belong
-    :type_ordinar => [10, TYPES[:ordinar].join('|')],
-    :type_real    => [11, TYPES[:real].join('|')],
-    :type_boolean => [12, TYPES[:boolean]],
-    :type_string  => [13, TYPES[:string]],
-    :user_data    => [14, '\w+'],
-    :undefined    => [15, '[^ \t\r\n\v\f]']
+    :comments     => '\{*.*\}',
+    :bracket      => '[()]',
+    :operation    => '[/+\-*]',
+    :strings      => "\'.*?\'",
+    :assignement  => ':=',
+    :semi         => '[;:]',
+    :qualities    => '<>|<=|>=|=|>|<',
+    :number       => '\d+\.\d+|\d+',
+    :bitter_end   => 'end\.',          #TODO: refactor me to where I should belong
+    :type_ordinar => TYPES[:ordinar].join('|'),
+    :type_real    => TYPES[:real].join('|'),
+    :type_boolean => TYPES[:boolean],
+    :type_string  => TYPES[:string],
+    :user_data    => '\w+',
+    :undefined    => '[^ \t\r\n\v\f]'
   }
 
   ERROR = {
@@ -83,7 +83,7 @@ class Parser
           :reserved_word
         else
           matched_filter = filters.find { |filter| item =~ /#{filter}/ }
-          FILTERS.keys.find { |type| FILTERS[type].last == matched_filter } # remove this hack once migrated to ruby 1.9
+          FILTERS.key(matched_filter)
         end
 
         value = line[index]
@@ -124,7 +124,7 @@ class Parser
   private
 
   def filters
-    FILTERS.values.sort{|a,b| a.first <=> b.first}.map{|f| f.last }
+    FILTERS.values
   end
 
   def validate
