@@ -24,8 +24,8 @@ for i in 1..n do
 end
 
 for i in 1..n do
-  x = @r.index { |item| item.values.include?(@a[i]) }
-  @p[[i,1,j]] = true
+  x = @r.index { |item| item.values.include?(@a[i-1]) } + 1
+  @p[[i,1,x]] = true
 end
 
 complex_rules = @r.select { |item| item.values.first.is_a?(Array) }
@@ -41,9 +41,9 @@ for i in 2..n do
         b = @r.index {|item| item.keys.include?(keys.first) } + 1
         c = @r.index {|item| item.keys.include?(keys.last) } + 1
 
-        puts "i = #{i};   j = #{j};   k = #{k}"
-        puts "a = #{a};   b = #{b};   c = #{c}"
-        puts @p[[j, k, b]].inspect + ' '*10 + @p[[j+k, i-k, c]].inspect
+        #puts "i = #{i};   j = #{j};   k = #{k}"
+        #puts "a = #{a};   b = #{b};   c = #{c}"
+        #puts @p[[j, k, b]].inspect + ' '*10 + @p[[j+k, i-k, c]].inspect
 
         @p[[j, i, a]] = true if @p[[j, k, b]] and @p[[j+k, i-k, c]] 
       end
@@ -52,7 +52,11 @@ for i in 2..n do
   end
 end
 
-puts @p.select { |k, v| v == true }.inspect
+for i in @r.size+1-complex_rules.size..@r.size do
+  puts 'success!' if @p[[1,n,i]]
+end
+
+#puts @p.select { |k, v| v == true }.inspect
 
 =begin
   let the input be a string S consisting of n characters: a1 ... an.
@@ -84,3 +88,9 @@ puts @p.select { |k, v| v == true }.inspect
     #end
   #end
 #end
+
+#R1 -> program
+#R2 -> test
+#R3 -> ok
+#R4 -> R5 R3
+#R5 -> R1 R2
