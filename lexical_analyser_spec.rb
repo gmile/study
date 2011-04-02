@@ -10,11 +10,11 @@ describe Parser do
     @parser.divide
     @parser.tokenize
     @parser.output.map { |token| [token.type, token.value] }.should == [
-      ['User data',   'x' ],
-      ['Assignement', ':='],
-      ['Number',      '2' ],
-      ['Operation',   '+' ],
-      ['Number',      '3' ]
+      [:user_data,   'x' ],
+      [:assignement, ':='],
+      [:number,      '2' ],
+      [:operation,   '+' ],
+      [:number,      '3' ]
     ]
   end
 
@@ -23,17 +23,17 @@ describe Parser do
     @parser.divide
     @parser.tokenize
     @parser.output.map { |token| [token.type, token.value] }.should == [
-      ['User data',   'var_a'],
-      ['Assignement', ':='   ],
-      ['User data',   'var_b'],
-      ['Operation',   '+'    ],
-      ['Bracket',     '('    ],
-      ['Number',      '5'    ],
-      ['Operation',   '+'    ],
-      ['Number',      '10'   ],
-      ['Bracket',     ')'    ],
-      ['Operation',   '/'    ],
-      ['Number',      '23'   ]
+      [:user_data,   'var_a'],
+      [:assignement, ':='   ],
+      [:user_data,   'var_b'],
+      [:operation,   '+'    ],
+      [:bracket,     '('    ],
+      [:number,      '5'    ],
+      [:operation,   '+'    ],
+      [:number,      '10'   ],
+      [:bracket,     ')'    ],
+      [:operation,   '/'    ],
+      [:number,      '23'   ]
     ]
   end
 
@@ -177,7 +177,7 @@ describe Parser do
       @parser.tokenize
 
       @parser.output.each do |token|
-        token.type.should ==  'Reserved word'
+        token.type.should == :reserved_word
       end
     end
 
@@ -186,11 +186,11 @@ describe Parser do
       @parser.divide
       @parser.tokenize
       @parser.output.map { |token| [token.type, token.value] }.should == [
-        ['User data',   'x'  ],
-        ['Assignement', ':=' ],
-        ['Number',      '2.3'],
-        ['Operation',   '+'  ],
-        ['Number',      '4.6']
+        [:user_data,   'x'  ],
+        [:assignement, ':=' ],
+        [:number,      '2.3'],
+        [:operation,   '+'  ],
+        [:number,      '4.6']
       ]
     end
 
@@ -199,11 +199,11 @@ describe Parser do
       @parser.divide
       @parser.tokenize
       @parser.output.map { |token| [token.type, token.value] }.should == [
-        ['Reserved word', 'if'],
-        ['User data', 'x'],
-        ['Equality', '='],
-        ['Number', '5'  ],
-        ['Reserved word', 'then']
+        [:reserved_word, 'if'  ],
+        [:user_data,     'x'   ],
+        [:qualities,      '='  ],
+        [:number,        '5'   ],
+        [:reserved_word, 'then']
       ]
     end
   end
