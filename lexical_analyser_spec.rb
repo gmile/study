@@ -206,6 +206,17 @@ describe Parser do
         [:reserved_word, 'then']
       ]
     end
+
+    it "should correctly tokenize reserved words: program test;" do
+      @parser.input = "program test;"
+      @parser.divide
+      @parser.tokenize
+      @parser.output.map { |token| [token.type, token.value] }.should == [
+        [:reserved_word, 'program'],
+        [:user_data,     'test'   ],
+        [:semi,          ';'      ],
+      ]
+    end
   end
 
   context 'Coordinates' do
