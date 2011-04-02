@@ -6,9 +6,8 @@
   { :r1 => 'program'  },
   { :r2 => 'test'     },
   { :r3 => ';'        },
-  { :r4 => [:r1, :r5] },
-  { :r5 => [:r2, :r6] },
-  { :r6 => [:r5, :r3] }
+  { :r4 => [:r5, :r3] },
+  { :r5 => [:r1, :r2] }
 ]
 
 n = @a.size # size of Rules array
@@ -29,20 +28,22 @@ for i in 1..n do
   @p[[i,1,j]] = true
 end
 
-puts @p.select { |k, v| v == true }.inspect
-
 complex_rules = @r.select { |item| item.values.first.is_a?(Array) }
 
 for i in 2..n do
   for j in 1..n-i+1 do
     for k in 1..i-1 do
       for rule in complex_rules
-        a = @r.index {|item| item.keys.include?(rule) }
-        b = @r.index {|item| item.keys.include?(rule.values.first) }
-        c = @r.index {|item| item.keys.include?(rule.values.last) }
+        key = rule.keys.first
+        keys = rule.values.first
 
-        puts "\n"
-        puts "\n"
+        a = @r.index {|item| item.keys.include?(key) } + 1
+        b = @r.index {|item| item.keys.include?(keys.first) } + 1
+        c = @r.index {|item| item.keys.include?(keys.last) } + 1
+
+        puts "i = #{i};   j = #{j};   k = #{k}"
+        puts "a = #{a};   b = #{b};   c = #{c}"
+        puts @p[[j, k, b]].inspect + ' '*10 + @p[[j+k, i-k, c]].inspect
 
         @p[[j, i, a]] = true if @p[[j, k, b]] and @p[[j+k, i-k, c]] 
       end
