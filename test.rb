@@ -1,21 +1,3 @@
-@dictionary = ['program', 'test', ';']
-
-@table = {
-  :r1 => 'program' ,
-  :r2 => 'test'    ,
-  :r3 => ';'       ,
-  :r4 => [:r5, :r3],
-  :r5 => [:r1, :r2]
-}
-
-#@nterminals = @table.keys
-
-#@n = @dictionary.size
-#@r = @table.size
-#@start_symbols = @table.select { |k,v| v.is_a?(Array) }
-
-#@matrix = Hash.new
-
 class Cyk
   def initialize options = { }
     @dictionary    = options[:dictionary]
@@ -71,11 +53,20 @@ class Cyk
       end
     end
   end
-
 end
 
-cyk = Cyk.new(:dictionary => @dictionary, :table => @table).result
-puts cyk
+@string = ['program', 'test', ';']
+
+@table = {
+  :r1 => 'program' ,
+  :r2 => 'test'    ,
+  :r3 => ';'       ,
+  :r4 => [:r5, :r3],
+  :r5 => [:r1, :r2]
+}
+
+puts Cyk.new(:string => @string, :table => @table).valid?
+
 #R1 -> program
 #R2 -> test
 #R3 -> ok
