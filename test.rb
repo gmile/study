@@ -3,25 +3,29 @@ class Cyk
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = { }
-    @dictionary    = options[:dictionary]
+    @string        = options[:string]
     @table         = options[:table]
     @nterminals    = @table.keys
     @r             = @table.size
     @start_symbols = @table.select { |k,v| v.is_a?(Array) }
-    @n             = @dictionary.size
+    @n             = @string.size
   end
 
-  def result
+  def valid?
     initialize_matrix
     prepare_matrix
     calculate
+    validate
+  end
 
-    for i in @nterminals.size+1-@start_symbols.size..@nterminals.size do
+  private
+  def validate
+    @start_symbols.keys.each do |symbol|
+      i = @nterminals.index(symbol) + 1
       return @matrix[[1,@n,i]] ? true : false
     end
   end
 
-  private
   def initialize_matrix
     @matrix = Hash.new
 
@@ -36,7 +40,7 @@ class Cyk
 
   def prepare_matrix
     for i in 1..@n do
-      x = @nterminals.index { |key| @table[key] == @dictionary[i-1] } + 1
+      x = @nterminals.index { |key| @table[key] == @string[i-1] } + 1
       @matrix[[i,1,x]] = true
     end
   end
