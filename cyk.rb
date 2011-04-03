@@ -50,9 +50,9 @@ class Cyk
       for j in 1..@n-i+1 do
         for k in 1..i-1 do
           for rule in @start_symbols
-            a = @nterminals.index { |item| item == rule[0]       } + 1
-            b = @nterminals.index { |item| item == rule[1].first } + 1
-            c = @nterminals.index { |item| item == rule[1].last  } + 1
+            a = @nterminals.index(rule[0])       + 1
+            b = @nterminals.index(rule[1].first) + 1
+            c = @nterminals.index(rule[1].last)  + 1
 
             @matrix[[j, i, a]] = true if @matrix[[j, k, b]] and @matrix[[j+k, i-k, c]]
           end
