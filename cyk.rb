@@ -61,21 +61,3 @@ class Cyk
     end
   end
 end
-
-@string = ['program', 'test', ';']
-
-@table = {
-  :r1 => 'program' ,
-  :r2 => 'test'    ,
-  :r3 => ';'       ,
-  :r4 => [:r5, :r3],
-  :r5 => [:r1, :r2]
-}
-
-puts Cyk.new(:string => @string, :table => @table).valid?
-
-#R1 -> program
-#R2 -> test
-#R3 -> ok
-#R4 -> R5 R3
-#R5 -> R1 R2
