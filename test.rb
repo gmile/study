@@ -1,4 +1,7 @@
 class Cyk
+  # @param [Hash] options the options to create a message with.
+  # @option options [Array] :string Input string, slplitted into an array
+  # @option options [Hash] :table Table of rules
   def initialize options = { }
     @dictionary    = options[:dictionary]
     @table         = options[:table]
