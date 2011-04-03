@@ -2,13 +2,15 @@
 
 @a = ['program', 'test', ';']
 
-@r = [
-  { :r1 => 'program'  },
-  { :r2 => 'test'     },
-  { :r3 => ';'        },
-  { :r4 => [:r5, :r3] },
-  { :r5 => [:r1, :r2] }
-]
+@r = {
+  :r1 => 'program' ,
+  :r2 => 'test'    ,
+  :r3 => ';'       ,
+  :r4 => [:r5, :r3],
+  :r5 => [:r1, :r2]
+}
+
+@r_k = @r.keys
 
 n = @a.size # size of Rules array
 r = @r.size
@@ -24,22 +26,22 @@ for i in 1..n do
 end
 
 for i in 1..n do
-  x = @r.index { |item| item.values.include?(@a[i-1]) } + 1
+  x = @r_k.index { |key| @r[key] == @a[i-1] } + 1
   @p[[i,1,x]] = true
 end
 
-complex_rules = @r.select { |item| item.values.first.is_a?(Array) }
+complex_rules = @r.select { |k,v| v.is_a?(Array) }
 
 for i in 2..n do
   for j in 1..n-i+1 do
     for k in 1..i-1 do
       for rule in complex_rules
-        key = rule.keys.first
-        keys = rule.values.first
+        #key = rule.keys.first
+        #keys = rule.values.first
 
-        a = @r.index {|item| item.keys.include?(key) } + 1
-        b = @r.index {|item| item.keys.include?(keys.first) } + 1
-        c = @r.index {|item| item.keys.include?(keys.last) } + 1
+        a = @r_k.index { |item| item == rule.first } + 1
+        b = @r_k.index { |item| item == rule.last.first } + 1
+        c = @r_k.index { |item| item == rule.last.last } + 1
 
         #puts "i = #{i};   j = #{j};   k = #{k}"
         #puts "a = #{a};   b = #{b};   c = #{c}"
@@ -52,7 +54,7 @@ for i in 2..n do
   end
 end
 
-for i in @r.size+1-complex_rules.size..@r.size do
+for i in @r_k.size+1-complex_rules.size..@r_k.size do
   puts 'success!' if @p[[1,n,i]]
 end
 
