@@ -9,6 +9,7 @@ class Cyk
     @r             = @table.size
     @start_symbols = @table.select { |k,v| v.is_a?(Array) }
     @n             = @string.size
+    @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
   end
 
   def valid?
@@ -19,38 +20,24 @@ class Cyk
     #  - matrix.calculate
     #
 
-    initialize_matrix
     prepare_matrix
     calculate
     validate
   end
 
   private
+
   def validate
     @start_symbols.keys.each do |symbol|
-      i = @nterminals.index(symbol) + 1
-      return @matrix[[1,@n,i]] ? true : false
-    end
-  end
-
-  def initialize_matrix
-    @matrix = Hash.new
-
-    # @matrix = Array.new(n) { Array.new(n) { Array.new(n) { false } } }
-
-    for i in 1..@n do
-      for j in 1..@n do
-        for k in 1..@r do
-          @matrix[[i,j,k]] = false
-        end
-      end
+      i = @nterminals.index(symbol)
+      return @matrix[0][@n-1][i] ? true : false
     end
   end
 
   def prepare_matrix
-    for i in 1..@n do
-      x = @nterminals.index { |key| @table[key] == @string[i-1] } + 1
-      @matrix[[i,1,x]] = true
+    for i in 0..@n-1 do
+      x = @nterminals.index { |key| @table[key] == @string[i] }
+      @matrix[i][0][x] = true
     end
   end
 
@@ -59,11 +46,13 @@ class Cyk
       for j in 1..@n-i+1 do
         for k in 1..i-1 do
           for rule in @start_symbols
-            a = @nterminals.index(rule[0])       + 1
-            b = @nterminals.index(rule[1].first) + 1
-            c = @nterminals.index(rule[1].last)  + 1
+            a = @nterminals.index(rule[0])
+            b = @nterminals.index(rule[1].first)
+            c = @nterminals.index(rule[1].last)
 
-            @matrix[[j, i, a]] = true if @matrix[[j, k, b]] and @matrix[[j+k, i-k, c]]
+            x, y, z = i-1, j-1, k-1
+
+            @matrix[y][x][a] = true if @matrix[y][z][b] and @matrix[y+k][x-k][c]
           end
         end
       end
