@@ -12,6 +12,13 @@ class Cyk
   end
 
   def valid?
+    # TODO: consider using the following approach:
+    # .define_singletone_method on matrix so it will look like:
+    #  - matrix.initialize
+    #  - matrix.prepare
+    #  - matrix.calculate
+    #
+
     initialize_matrix
     prepare_matrix
     calculate
@@ -28,6 +35,8 @@ class Cyk
 
   def initialize_matrix
     @matrix = Hash.new
+
+    # @matrix = Array.new(n) { Array.new(n) { Array.new(n) { false } } }
 
     for i in 1..@n do
       for j in 1..@n do
