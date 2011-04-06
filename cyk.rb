@@ -32,6 +32,10 @@ class Cyk
     end
   end
 
+  def plain_debug array
+    puts array.inspect
+  end
+
   def validate
     @start_symbols.keys.each do |symbol|
       i = @nterminals.index(symbol)
