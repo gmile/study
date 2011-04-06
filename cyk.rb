@@ -8,6 +8,7 @@ class Cyk
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
     @r             = @table.size
+    # start symbols should be calculated as symbols which aren't present in right side
     @start_symbols = @table.select { |key, value| value.any? { |item| item.is_a?(Array) } }.reject { |key, value| value.any? { |item| item.is_a?(Array) } }
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
