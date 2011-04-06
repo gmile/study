@@ -34,9 +34,9 @@ class Cyk
 
   private
 
-  def matrix_debug
-    @matrix.each do |row|
-      puts row.inspect
+  def debug array
+    array.each do |item|
+      puts item.inspect
     end
   end
 
