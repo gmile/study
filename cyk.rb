@@ -3,15 +3,9 @@ class Cyk
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = { }
-    @table = options[:table].inject({}) do |table, hash|
-      key, value = hash.first, hash.last
-      value      = [value] unless value.is_a?(Array) && value.any? { |type| type.is_a? (Array) || type.is_a?(Symbol) }
-
-      table.merge!(Hash[key, value])
-    end
-
+    @table         = options[:table]
     @string        = options[:string]
-    @terminals     = @table.values.select { |value| !value.any? { |item| item.is_a?(Array) } }
+    @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
     @r             = @table.size
     @start_symbols = @table.select { |key, value| value.any? { |item| item.is_a?(Array) } }.reject { |key, value| value.any? { |item| item.is_a?(Array) } }
