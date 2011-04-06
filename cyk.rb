@@ -15,13 +15,6 @@ class Cyk
   end
 
   def valid?
-    # TODO: consider using the following approach:
-    # .define_singletone_method on matrix so it will look like:
-    #  - matrix.initialize
-    #  - matrix.prepare
-    #  - matrix.calculate
-    #
-
     prepare_matrix
     calculate
     validate
