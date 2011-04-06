@@ -20,6 +20,10 @@ class Cyk
     validate
   end
 
+  def complexity
+    @n*@n*@r
+  end
+
   private
 
   def debug array
