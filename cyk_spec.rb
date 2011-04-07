@@ -9,8 +9,8 @@ describe Cyk do
           :r1 => ['program'],
           :r2 => ['test'   ],
           :r3 => [';'      ],
-          :r4 => [[:r5, :r3], [:r2, :r3]],
-          :r5 => [[:r1, :r2], [:r2, :r1]]
+          :r4 => [[:r5, :r3]],
+          :r5 => [[:r1, :r2]]
         }
       }
     end
@@ -19,10 +19,11 @@ describe Cyk do
       Cyk.new(@options).valid?.should be_true
     end
 
-    it 'should not bother if there are redundant strings' do
+    it 'should not bother if there are redundant rules' do
       @options[:table].merge!({
         :r4 => [[:r5, :r3], [:r2, :r3]],
-        :r5 => [[:r1, :r2], [:r2, :r1]]
+        :r5 => [[:r1, :r2], [:r2, :r1]],
+        :r6 => [[:r7, :r8]]
       })
 
       Cyk.new(@options).valid?.should be_true
