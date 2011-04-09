@@ -1,6 +1,7 @@
 require 'set'
 
 class Cyk
+  attr_reader :start_symbols
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
