@@ -27,6 +27,19 @@ class Cyk
     @n*@n*@r
   end
 
+  def trues
+    puts @matrix.flatten.select { |item| item == true }
+  end
+
+  def print_matrix matrix
+    matrix.each_index do |i|
+      puts "\n"
+      matrix[i].each_index do |j|
+        print matrix[i][0][j] ? '1 ' : '0 '
+      end
+    end
+  end
+
   private
   def productions_from table
     productions = Set.new
