@@ -31,10 +31,10 @@ class Cyk
   def productions_from table
     productions = Set.new
 
-    table.each do |key, value|
-      right_sides = value.select { |item| item.is_a?(Array) }
+    table.each do |nterminal, prods|
+      right_sides = prods.select { |p| p.is_a?(Array) }
 
-      right_sides.each { |item| productions << [key] + item } unless right_sides.size.zero?
+      right_sides.each { |p| productions << [nterminal] + p } unless right_sides.empty?
     end
 
     productions
