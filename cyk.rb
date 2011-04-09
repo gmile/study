@@ -1,3 +1,5 @@
+require 'set'
+
 class Cyk
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
@@ -8,8 +10,8 @@ class Cyk
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
     @r             = @table.size
-    # start symbols should be calculated as symbols which aren't present in right side
-    @start_symbols = @table.select { |key, value| value.any? { |item| item.is_a?(Array) } }.reject { |key, value| value.any? { |item| item.is_a?(Array) } }
+    @productions   = productions_from(@table)
+    @start_symbols = start_symbols_from(@productions)
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
   end
@@ -25,11 +27,26 @@ class Cyk
   end
 
   private
+  def productions_from table
+    productions = Set.new
 
-  def debug array
-    array.each do |item|
-      puts item.inspect
+    table.each do |key, value|
+      right_sides = value.select { |item| item.is_a?(Array) }
+
+      right_sides.each { |item| productions << [key] + item } unless right_sides.size.zero?
     end
+
+    productions
+  end
+
+  def start_symbols_from productions
+    found = Set.new
+
+    for prod in productions
+      found << prod[0] unless productions.any? { |p| p[1..2].include?(prod[0]) }
+    end
+
+    found
   end
 
   def plain_debug array
@@ -37,7 +54,7 @@ class Cyk
   end
 
   def validate
-    @start_symbols.keys.each do |symbol|
+    @start_symbols.each do |symbol|
       i = @nterminals.index(symbol)
       return @matrix[0][@n-1][i] ? true : false
     end
@@ -54,16 +71,14 @@ class Cyk
     for i in 2..@n do
       for j in 1..@n-i+1 do
         for k in 1..i-1 do
-          for rule in @start_symbols
-            for origins in rule[1]
-              a = @nterminals.index(rule[0])
-              b = @nterminals.index(origins.first)
-              c = @nterminals.index(origins.last)
+          for prod in @productions
+            a = @nterminals.index(prod[0])
+            b = @nterminals.index(prod[1])
+            c = @nterminals.index(prod[2])
 
-              x, y, z = i-1, j-1, k-1
+            x, y, z = i-1, j-1, k-1
 
-              @matrix[y][x][a] = true if @matrix[y][z][b] and @matrix[y+k][x-k][c]
-            end
+            @matrix[y][x][a] = true if @matrix[y][z][b] and @matrix[y+k][x-k][c]
           end
         end
       end
