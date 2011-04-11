@@ -126,7 +126,7 @@ describe Cyk do
         :t1  => [:user_data],
         :t2  => [:assignement],
         :t3  => [:number],
-        :t4  => [:semi],
+        :t4  => [:colon],
         :e1  => [[:t1, :t2]],
         :e2  => [[:e1, :t3]],
         :e3  => [[:e2, :t4]],

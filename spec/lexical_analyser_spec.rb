@@ -214,7 +214,7 @@ describe Parser do
       @parser.output.map { |token| [token.type, token.value] }.should == [
         [:reserved_word, 'program'],
         [:user_data,     'test'   ],
-        [:semi,          ';'      ],
+        [:colon,         ';'      ],
       ]
     end
   end
@@ -243,15 +243,15 @@ eos
         ['s',      2, 2, :user_data    ],
         [':=',     4, 2, :assignement  ],
         ['10',     7, 2, :number       ],
-        [';',      9, 2, :semi         ],
+        [';',      9, 2, :colon        ],
         ['s',     11, 2, :user_data    ],
         [':=',    13, 2, :assignement  ],
         ['12',    16, 2, :number       ],
-        [';',     18, 2, :semi         ],
+        [';',     18, 2, :colon        ],
         ['s',     20, 2, :user_data    ],
         [':=',    22, 2, :assignement  ],
         ['14',    25, 2, :number       ],
-        [';',     27, 2, :semi         ],
+        [';',     27, 2, :colon        ],
         ['end',    0, 3, :reserved_word]
       ]
     end

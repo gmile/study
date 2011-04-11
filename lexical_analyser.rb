@@ -45,8 +45,34 @@ class Parser
   }
 
   BRACKET = {
-    :left => '(',
+    :left  => '(',
     :right => ')'
+  }
+
+  COLON = {
+    :colon     => ':',
+    :semicolon => ';'
+  }
+
+  OPERATION = {
+    :add => '+',
+    :sub => '-',
+    :mul => '*',
+    :div => '/'
+  }
+
+  BOOLEAN_OPERATIONS = {
+    :not_equal        => '<>',
+    :less_or_equal    => '<=',
+    :greater_or_equal => '>=',
+    :equal            => '=',
+    :greater_then     => '>',
+    :less_then        => '<'
+  }
+
+  NUMBER = {
+    :real    => '\d+\.\d+',
+    :integer => '\d+'
   }
 
   def output
@@ -54,21 +80,21 @@ class Parser
   end
 
   FILTERS = {
-    :comment      => '\{*.*\}',
-    :bracket      => '[()]',
-    :operation    => '[/+\-*]',
-    :string       => "\'.*?\'",
-    :assignement  => ':=',
-    :semi         => '[;:]',
-    :quality      => '<>|<=|>=|=|>|<',
-    :number       => '\d+\.\d+|\d+',
-    :bitter_end   => 'end\.',          #TODO: refactor me to where I should belong
-    :type_ordinar => TYPES[:ordinar].join('|'),
-    :type_real    => TYPES[:real].join('|'),
-    :type_boolean => TYPES[:boolean],
-    :type_string  => TYPES[:string],
-    :user_data    => '\w+',
-    :undefined    => '[^ \t\r\n\v\f]'
+    :comment     => '\{*.*\}',
+    :bracket     => '['+BRACKET.values.join+']',
+    :operation   => '['+Regexp.escape(OPERATION.values.join)+']',
+    :string      => "\'.*?\'",
+    :assignement => ':=',
+    :colon       => '['+COLON.values.join+']',
+    :quality     => Regexp.union(BOOLEAN_OPERATIONS.values),
+    :number      => NUMBER.values.join('|'),
+    :bitter_end  => 'end\.',          #TODO: refactor me to where I should belong
+    :tordinar    => TYPES[:ordinar].join('|'),
+    :treal       => TYPES[:real].join('|'),
+    :tboolean    => TYPES[:boolean],
+    :tstring     => TYPES[:string],
+    :user_data   => '\w+',
+    :undefined   => '[^ \t\r\n\v\f]'
   }
 
   ERROR = {
