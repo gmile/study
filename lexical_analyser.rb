@@ -44,18 +44,23 @@ class Parser
     :string  => 'string'
   }
 
+  BRACKET = {
+    :left => '(',
+    :right => ')'
+  }
+
   def output
     @output.size > 1 ? @output : @output.flatten
   end
 
   FILTERS = {
-    :comments     => '\{*.*\}',
+    :comment      => '\{*.*\}',
     :bracket      => '[()]',
     :operation    => '[/+\-*]',
-    :strings      => "\'.*?\'",
+    :string       => "\'.*?\'",
     :assignement  => ':=',
     :semi         => '[;:]',
-    :qualities    => '<>|<=|>=|=|>|<',
+    :quality      => '<>|<=|>=|=|>|<',
     :number       => '\d+\.\d+|\d+',
     :bitter_end   => 'end\.',          #TODO: refactor me to where I should belong
     :type_ordinar => TYPES[:ordinar].join('|'),

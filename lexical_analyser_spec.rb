@@ -201,7 +201,7 @@ describe Parser do
       @parser.output.map { |token| [token.type, token.value] }.should == [
         [:reserved_word, 'if'  ],
         [:user_data,     'x'   ],
-        [:qualities,      '='  ],
+        [:quality,       '='   ],
         [:number,        '5'   ],
         [:reserved_word, 'then']
       ]
