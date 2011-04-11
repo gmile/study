@@ -19,12 +19,20 @@ module Tokens
     end
   end
 
-  class Comment < Token
-    STRING   = '\{*.*\}'
-    PRIORITY = 1
+  class BooleanOperation < Token
+    attr_reader :values
 
-    def to_s
-      STRING
+    @values = {
+      :not_equal        => '<>',
+      :less_or_equal    => '<=',
+      :greater_or_equal => '>=',
+      :equal            => '=',
+      :greater_then     => '>',
+      :less_then        => '<'
+    }
+
+    def self.regexp
+      Regexp.union(@values.values)
     end
   end
 

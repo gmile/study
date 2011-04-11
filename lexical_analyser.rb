@@ -61,15 +61,6 @@ class Parser
     :div => '/'
   }
 
-  BOOLEAN_OPERATIONS = {
-    :not_equal        => '<>',
-    :less_or_equal    => '<=',
-    :greater_or_equal => '>=',
-    :equal            => '=',
-    :greater_then     => '>',
-    :less_then        => '<'
-  }
-
   NUMBER = {
     :real    => '\d+\.\d+',
     :integer => '\d+'
@@ -86,7 +77,7 @@ class Parser
     :string      => "\'.*?\'",
     :assignement => ':=',
     :colon       => '['+COLON.values.join+']',
-    :quality     => Regexp.union(BOOLEAN_OPERATIONS.values),
+    :quality     => Tokens::BooleanOperation.regexp,
     :number      => NUMBER.values.join('|'),
     :bitter_end  => 'end\.',          #TODO: refactor me to where I should belong
     :tordinar    => TYPES[:ordinar].join('|'),
