@@ -108,16 +108,16 @@ class Parser
           FILTERS.key(matched_filter)
         end
 
-        value = line[index]
+        lexeme = line[index]
 
         line[index] = Token.new({
-          :type  => type,
-          :value => value,
-          :x     => @lines[line_number].index(line[index]),
-          :y     => line_number
+          :type   => type,
+          :lexeme => lexeme,
+          :x      => @lines[line_number].index(line[index]),
+          :y      => line_number
         })
 
-        @lines[line_number][value] = ' '*value.size
+        @lines[line_number][lexeme] = ' '*lexeme.size
       end
     end
   end

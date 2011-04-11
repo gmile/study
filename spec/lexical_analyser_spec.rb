@@ -9,7 +9,7 @@ describe Parser do
     @parser.input = 'x := 2 + 3'
     @parser.divide
     @parser.tokenize
-    @parser.output.map { |token| [token.type, token.value] }.should == [
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:user_data,   'x' ],
       [:assignement, ':='],
       [:number,      '2' ],
@@ -22,7 +22,7 @@ describe Parser do
     @parser.input = 'var_a := var_b + (5 + 10)/23'
     @parser.divide
     @parser.tokenize
-    @parser.output.map { |token| [token.type, token.value] }.should == [
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:user_data,   'var_a'],
       [:assignement, ':='   ],
       [:user_data,   'var_b'],
@@ -185,7 +185,7 @@ describe Parser do
       @parser.input = "x := 2.3 + 4.6"
       @parser.divide
       @parser.tokenize
-      @parser.output.map { |token| [token.type, token.value] }.should == [
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:user_data,   'x'  ],
         [:assignement, ':=' ],
         [:number,      '2.3'],
@@ -198,7 +198,7 @@ describe Parser do
       @parser.input = "if x = 5 then"
       @parser.divide
       @parser.tokenize
-      @parser.output.map { |token| [token.type, token.value] }.should == [
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:reserved_word, 'if'  ],
         [:user_data,     'x'   ],
         [:quality,       '='   ],
@@ -211,7 +211,7 @@ describe Parser do
       @parser.input = "program test;"
       @parser.divide
       @parser.tokenize
-      @parser.output.map { |token| [token.type, token.value] }.should == [
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:reserved_word, 'program'],
         [:user_data,     'test'   ],
         [:colon,         ';'      ],
@@ -231,7 +231,7 @@ eos
       @parser.divide
       @parser.tokenize
 
-      @parser.output.flatten.map { |token| [token.value, token.x, token.y, token.type] }.should == [
+      @parser.output.flatten.map { |token| [token.lexeme, token.x, token.y, token.type] }.should == [
         ['for',    0, 0, :reserved_word],
         ['i',      4, 0, :user_data    ],
         [':=',     6, 0, :assignement  ],

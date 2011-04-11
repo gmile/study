@@ -1,13 +1,13 @@
 module Tokens
   class Token
     attr_reader :type
-    attr_reader :value, :x, :y
+    attr_reader :lexeme, :x, :y
 
     def initialize params
-      @type  = params[:type]
-      @value = params[:value]
-      @x     = params[:x]
-      @y     = params[:y]
+      @type   = params[:type]
+      @lexeme = params[:lexeme]
+      @x      = params[:x]
+      @y      = params[:y]
     end
 
     def undefined?
