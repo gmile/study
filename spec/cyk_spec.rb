@@ -1,5 +1,5 @@
-require_relative 'cyk'
-require_relative 'lexical_analyser'
+require_relative '../cyk'
+require_relative '../lexical_analyser'
 
 describe Cyk do
   context '"program test ;"' do
