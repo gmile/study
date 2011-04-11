@@ -231,28 +231,28 @@ eos
       @parser.divide
       @parser.tokenize
 
-      @parser.output.flatten.map { |token| [token.value, token.x, token.y] }.should == [
-        ['for',    0, 0],
-        ['i',      4, 0],
-        [':=',     6, 0],
-        ['1',      9, 0],
-        ['to',    11, 0],
-        ['20',    14, 0],
-        ['do',    17, 0],
-        ['begin',  0, 1],
-        ['s',      2, 2],
-        [':=',     4, 2],
-        ['10',     7, 2],
-        [';',      9, 2],
-        ['s',     11, 2],
-        [':=',    13, 2],
-        ['12',    16, 2],
-        [';',     18, 2],
-        ['s',     20, 2],
-        [':=',    22, 2],
-        ['14',    25, 2],
-        [';',     27, 2],
-        ['end',    0, 3]
+      @parser.output.flatten.map { |token| [token.value, token.x, token.y, token.type] }.should == [
+        ['for',    0, 0, :reserved_word],
+        ['i',      4, 0, :user_data    ],
+        [':=',     6, 0, :assignement  ],
+        ['1',      9, 0, :number       ],
+        ['to',    11, 0, :reserved_word],
+        ['20',    14, 0, :number       ],
+        ['do',    17, 0, :reserved_word],
+        ['begin',  0, 1, :reserved_word],
+        ['s',      2, 2, :user_data    ],
+        [':=',     4, 2, :assignement  ],
+        ['10',     7, 2, :number       ],
+        [';',      9, 2, :semi         ],
+        ['s',     11, 2, :user_data    ],
+        [':=',    13, 2, :assignement  ],
+        ['12',    16, 2, :number       ],
+        [';',     18, 2, :semi         ],
+        ['s',     20, 2, :user_data    ],
+        [':=',    22, 2, :assignement  ],
+        ['14',    25, 2, :number       ],
+        [';',     27, 2, :semi         ],
+        ['end',    0, 3, :reserved_word]
       ]
     end
   end
