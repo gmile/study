@@ -11,7 +11,7 @@ class Parser
     'asm',         'begin',          'case',
     'constructor', 'const',          'destructor',
     'div',         'downto',         'do',
-    'else',        'end'             'file',
+    'else',        'end',            'file',
     'for',         'function',       'goto',
     'if',          'implementation', 'inherited',
     'inline',      'interface',      'in',
