@@ -71,21 +71,21 @@ class Parser
   end
 
   FILTERS = {
-    :comment     => '\{*.*\}',
-    :bracket     => '['+BRACKET.values.join+']',
-    :operation   => '['+Regexp.escape(OPERATION.values.join)+']',
-    :string      => "\'.*?\'",
-    :assignement => ':=',
-    :colon       => '['+COLON.values.join+']',
+    :comment     => Tokens::Comment.regexp,
+    :bracket     => Tokens::Bracket.regexp,
+    :operation   => Tokens::AlgebraicOperation.regexp,
+    :string      => Tokens::MyString.regexp,
+    :assignement => Tokens::Assignement.regexp,
+    :colon       => Tokens::Punctuation.regexp,
     :quality     => Tokens::BooleanOperation.regexp,
-    :number      => NUMBER.values.join('|'),
+    :number      => Tokens::Number.regexp,
     :bitter_end  => 'end\.',          #TODO: refactor me to where I should belong
     :tordinar    => TYPES[:ordinar].join('|'),
     :treal       => TYPES[:real].join('|'),
     :tboolean    => TYPES[:boolean],
     :tstring     => TYPES[:string],
-    :user_data   => '\w+',
-    :undefined   => '[^ \t\r\n\v\f]'
+    :user_data   => Tokens::Variable.regexp,
+    :undefined   => Tokens::Undefined.regexp
   }
 
   ERROR = {

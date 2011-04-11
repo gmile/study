@@ -19,9 +19,7 @@ module Tokens
     end
   end
 
-  class BooleanOperation < Token
-    attr_reader :values
-
+  class BooleanOperation
     @values = {
       :not_equal        => '<>',
       :less_or_equal    => '<=',
@@ -36,23 +34,99 @@ module Tokens
     end
   end
 
-  class Brackets < Token
-    STRING   = '[()]'
-    PRIORITY = 2
+  class AlgebraicOperation
+    @values = {
+      :add => '+',
+      :sub => '-',
+      :mul => '*',
+      :div => '/'
+    }
+
+    def self.regexp
+      '['+Regexp.escape(@values.values.join)+']'
+    end
   end
 
-  class Operations < Token
-    STRING   = '[/+\-*]'
-    PRIORITY = 3
+  class Assignement
+    @values = {
+      :assign => ':='
+    }
+
+    def self.regexp
+      @values[:assign]
+    end
   end
 
-  class String < Token
-    STRING   = "\'.*?\'"
-    PRIORITY = 4
+  class Comment
+    @values = {
+      :comment => '\{*.*\}'
+    }
+
+    def self.regexp
+      @values[:comment]
+    end
   end
 
-  class Operations < Token
-    STRING   = '[/+\-*]'
-    PRIORITY = 5
+  class Bracket
+    @values = {
+      :left  => '(',
+      :right => ')'
+    }
+
+    def self.regexp
+      '['+@values.values.join+']'
+    end
+  end
+
+  class MyString
+    @values = {
+      :string => ''
+    }
+
+    def self.regexp
+      "\'.*?\'"
+    end
+  end
+
+  class Punctuation
+    @values = {
+      :colon     => ':',
+      :semicolon => ';'
+    }
+
+    def self.regexp
+      '['+@values.values.join+']'
+    end
+  end
+
+  class Number
+    @values = {
+      :real    => '\d+\.\d+',
+      :integer => '\d+'
+    }
+
+    def self.regexp
+      @values.values.join('|')
+    end
+  end
+
+  class Variable
+    @values = {
+      :var => '\w+',
+    }
+
+    def self.regexp
+      @values[:var]
+    end
+  end
+
+  class Undefined
+    @values = {
+      :undefined => '[^ \t\r\n\v\f]'
+    }
+
+    def self.regexp
+      @values[:undefined]
+    end
   end
 end
