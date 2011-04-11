@@ -14,8 +14,22 @@ module Tokens
       @type == :undefined
     end
 
-    def comment?
-      @type == :comment
+    def build
+      raise "No type given! Please, provide type when building a Token." unless @type
+
+      case @type
+      when :comment     then
+      when :bracket     then
+      when :operation   then
+      when :string      then
+      when :assignement then
+      when :colon       then
+      when :quality     then
+      when :number      then
+      when :bitter_end  then
+      when :user_data   then
+      when :undefined   then
+      end
     end
   end
 
