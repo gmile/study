@@ -1,6 +1,8 @@
 require_relative '../cyk'
 require_relative '../lexical_analyser'
 
+# TODO: check if nterms have defined term symbol they can be derived from
+
 describe Cyk do
   context '"program test ;"' do
     before :each do
@@ -123,10 +125,10 @@ describe Cyk do
     options = {
       :string => string,
       :table  => {
-        :t1  => [:user_data],
+        :t1  => [:variable],
         :t2  => [:assignement],
-        :t3  => [:number],
-        :t4  => [:colon],
+        :t3  => [:integer],
+        :t4  => [:semicolon],
         :e1  => [[:t1, :t2]],
         :e2  => [[:e1, :t3]],
         :e3  => [[:e2, :t4]],

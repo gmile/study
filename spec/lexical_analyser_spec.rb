@@ -10,11 +10,21 @@ describe Parser do
     @parser.divide
     @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-      [:user_data,   'x' ],
+      [:variable,    'x' ],
       [:assignement, ':='],
-      [:number,      '2' ],
-      [:operation,   '+' ],
-      [:number,      '3' ]
+      [:integer,     '2' ],
+      [:add,         '+' ],
+      [:integer,     '3' ]
+    ]
+  end
+
+  it "should parse: () as :bracket_left and :bracket_right" do
+    @parser.input = '()'
+    @parser.divide
+    @parser.tokenize
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:left_bracket,  '('],
+      [:right_bracket, ')']
     ]
   end
 
@@ -23,17 +33,17 @@ describe Parser do
     @parser.divide
     @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-      [:user_data,   'var_a'],
-      [:assignement, ':='   ],
-      [:user_data,   'var_b'],
-      [:operation,   '+'    ],
-      [:bracket,     '('    ],
-      [:number,      '5'    ],
-      [:operation,   '+'    ],
-      [:number,      '10'   ],
-      [:bracket,     ')'    ],
-      [:operation,   '/'    ],
-      [:number,      '23'   ]
+      [:variable,      'var_a'],
+      [:assignement,   ':='   ],
+      [:variable,      'var_b'],
+      [:add,           '+'    ],
+      [:left_bracket,  '('    ],
+      [:integer,       '5'    ],
+      [:add,           '+'    ],
+      [:integer,       '10'   ],
+      [:right_bracket, ')'    ],
+      [:div,           '/'    ],
+      [:integer,       '23'   ]
     ]
   end
 
@@ -56,7 +66,15 @@ describe Parser do
   it "should parse arrays: x := a[3]" do
     @parser.input = "x := a[3]"
     @parser.divide
-    @parser.output.should == ['x', ':=', 'a', '[', '3', ']']
+    @parser.tokenize
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,         'x' ],
+      [:assignement,      ':='],
+      [:variable,         'a' ],
+      [:sq_left_bracket,  '[' ],
+      [:integer,          '3' ],
+      [:sq_right_bracket, ']' ]
+    ]
   end
 
   context 'Numbers' do
@@ -110,6 +128,13 @@ describe Parser do
       @parser.input = "123456 + 789."
       @parser.divide
       @parser.tokenize
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+        [:integer,   '123456'],
+        [:add,       '+'     ],
+        [:integer,   '789'   ],
+        [:undefined, '.'     ]
+      ]
+
       @parser.valid?.should be_false
     end
   end

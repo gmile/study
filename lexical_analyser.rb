@@ -1,8 +1,6 @@
-require_relative 'tokens'
+require_relative 'builder'
 
 class Parser
-  include Tokens
-
   attr_writer :input
   attr_reader :output
 
@@ -49,21 +47,21 @@ class Parser
   end
 
   FILTERS = {
-    :comment     => Tokens::Comment.regexp,
-    :bracket     => Tokens::Bracket.regexp,
-    :operation   => Tokens::AlgebraicOperation.regexp,
-    :string      => Tokens::MyString.regexp,
-    :assignement => Tokens::Assignement.regexp,
-    :colon       => Tokens::Punctuation.regexp,
-    :quality     => Tokens::BooleanOperation.regexp,
-    :number      => Tokens::Number.regexp,
-    :bitter_end  => 'end\.',          #TODO: refactor me to where I should belong
-    :tordinar    => TYPES[:ordinar].join('|'),
-    :treal       => TYPES[:real].join('|'),
-    :tboolean    => TYPES[:boolean],
-    :tstring     => TYPES[:string],
-    :user_data   => Tokens::Variable.regexp,
-    :undefined   => Tokens::Undefined.regexp
+    :comment           => Tokens::Comment.regexp,
+    :bracket           => Builder::BracketBuilder.regexp,
+    :operation         => Builder::OperationBuilder.regexp,
+    :mystring          => Builder::MystringBuilder.regexp,
+    :assignement       => Builder::AssignementBuilder.regexp,
+    :punctuation       => Builder::PunctuationBuilder.regexp,
+    :boolean_operation => Tokens::BooleanOperation.regexp,
+    :number            => Builder::NumberBuilder.regexp,
+    :bitter_end        => 'end\.',          #TODO: refactor me to where I should belong      extract "." as a reserved word with regexp like ".eof"
+    :tordinar          => TYPES[:ordinar].join('|'),
+    :treal             => TYPES[:real].join('|'),
+    :tboolean          => TYPES[:boolean],
+    :tstring           => TYPES[:string],
+    :variable          => Builder::VariableBuilder.regexp,
+    :undefined         => Builder::UndefinedBuilder.regexp
   }
 
   ERROR = {
@@ -88,12 +86,14 @@ class Parser
 
         lexeme = line[index]
 
-        line[index] = Token.new({
+        options = {
           :type   => type,
           :lexeme => lexeme,
           :x      => @lines[line_number].index(line[index]),
           :y      => line_number
-        })
+        }
+
+        line[index] = Builder.const_get("#{type.capitalize}Builder").build(options)
 
         @lines[line_number][lexeme] = ' '*lexeme.size
       end
@@ -128,6 +128,6 @@ class Parser
   end
 
   def validate
-    @undefined = output.find_all { |token| token.undefined? }
+    @undefined = output.find_all { |token| token.is_a?(Tokens::Undefined) }
   end
 end
