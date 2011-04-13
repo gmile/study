@@ -44,28 +44,6 @@ class Parser
     :string  => 'string'
   }
 
-  BRACKET = {
-    :left  => '(',
-    :right => ')'
-  }
-
-  COLON = {
-    :colon     => ':',
-    :semicolon => ';'
-  }
-
-  OPERATION = {
-    :add => '+',
-    :sub => '-',
-    :mul => '*',
-    :div => '/'
-  }
-
-  NUMBER = {
-    :real    => '\d+\.\d+',
-    :integer => '\d+'
-  }
-
   def output
     @output.size > 1 ? @output : @output.flatten
   end
