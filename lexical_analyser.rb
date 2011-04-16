@@ -37,7 +37,6 @@ class Parser
     :punctuation         => Builder::PunctuationBuilder.regexp,
     :boolean_operation   => Builder::BooleanOperationBuilder.regexp,
     :number              => Builder::NumberBuilder.regexp,
-    :bitter_end          => 'end\.',          #TODO: refactor me to where I should belong      extract "." as a reserved word with regexp like ".eof"
     :tordinar            => TYPES[:ordinar].join('|'),
     :treal               => TYPES[:real].join('|'),
     :tboolean            => TYPES[:boolean],
