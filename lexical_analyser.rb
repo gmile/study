@@ -4,6 +4,8 @@ class Parser
   attr_writer :input
   attr_reader :output
 
+  # TODO: add '.' as a reserved word + test for it
+
   TYPES = {
     :ordinar => [
       'integer',  'shortint', 'smallint',
@@ -54,6 +56,7 @@ class Parser
     @output = []
   end
 
+  # TODO: remove inner .each_with_index
   def tokenize
     @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
