@@ -143,4 +143,24 @@ module Builder
       Regexp.new(@values[:comment])
     end
   end
+
+  class BooleanopBuilder
+    @values = {
+      :not_equal        => '<>',
+      :less_or_equal    => '<=',
+      :greater_or_equal => '>=',
+      :equal            => '=',
+      :greater_then     => '>',
+      :less_then        => '<'
+    }
+
+    def self.build(options)
+      options[:type] = @values.key(options[:lexeme])
+      Tokens::Booleanop.new(options)
+    end
+
+    def self.regexp
+      Regexp.union(@values.values)
+    end
+  end
 end

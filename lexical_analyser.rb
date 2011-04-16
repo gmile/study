@@ -53,7 +53,7 @@ class Parser
     :mystring          => Builder::MystringBuilder.regexp,
     :assignement       => Builder::AssignementBuilder.regexp,
     :punctuation       => Builder::PunctuationBuilder.regexp,
-    :boolean_operation => Tokens::BooleanOperation.regexp,
+    :booleanop         => Builder::BooleanopBuilder.regexp,
     :number            => Builder::NumberBuilder.regexp,
     :bitter_end        => 'end\.',          #TODO: refactor me to where I should belong      extract "." as a reserved word with regexp like ".eof"
     :tordinar          => TYPES[:ordinar].join('|'),

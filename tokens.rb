@@ -19,19 +19,5 @@ module Tokens
   class Number      < Token; end
   class Undefined   < Token; end
   class Comment     < Token; end
-
-  class BooleanOperation
-    @values = {
-      :not_equal        => '<>',
-      :less_or_equal    => '<=',
-      :greater_or_equal => '>=',
-      :equal            => '=',
-      :greater_then     => '>',
-      :less_then        => '<'
-    }
-
-    def self.regexp
-      Regexp.union(@values.values)
-    end
-  end
+  class Booleanop   < Token; end
 end
