@@ -247,11 +247,11 @@ describe Parser do
       @parser.divide
       @parser.tokenize
       @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:reserved_word, 'if'  ],
-        [:user_data,     'x'   ],
-        [:quality,       '='   ],
-        [:number,        '5'   ],
-        [:reserved_word, 'then']
+        [:if,       'if'  ],
+        [:variable, 'x'   ],
+        [:equal,    '='   ],
+        [:integer,  '5'   ],
+        [:then,     'then']
       ]
     end
 
@@ -260,9 +260,9 @@ describe Parser do
       @parser.divide
       @parser.tokenize
       @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:reserved_word, 'program'],
-        [:user_data,     'test'   ],
-        [:colon,         ';'      ],
+        [:program,   'program'],
+        [:variable,  'test'   ],
+        [:semicolon, ';'      ]
       ]
     end
   end
@@ -279,28 +279,28 @@ eos
       @parser.divide
       @parser.tokenize
 
-      @parser.output.flatten.map { |token| [token.lexeme, token.x, token.y, token.type] }.should == [
-        ['for',    0, 0, :reserved_word],
-        ['i',      4, 0, :user_data    ],
-        [':=',     6, 0, :assignement  ],
-        ['1',      9, 0, :number       ],
-        ['to',    11, 0, :reserved_word],
-        ['20',    14, 0, :number       ],
-        ['do',    17, 0, :reserved_word],
-        ['begin',  0, 1, :reserved_word],
-        ['s',      2, 2, :user_data    ],
-        [':=',     4, 2, :assignement  ],
-        ['10',     7, 2, :number       ],
-        [';',      9, 2, :colon        ],
-        ['s',     11, 2, :user_data    ],
-        [':=',    13, 2, :assignement  ],
-        ['12',    16, 2, :number       ],
-        [';',     18, 2, :colon        ],
-        ['s',     20, 2, :user_data    ],
-        [':=',    22, 2, :assignement  ],
-        ['14',    25, 2, :number       ],
-        [';',     27, 2, :colon        ],
-        ['end',    0, 3, :reserved_word]
+      @parser.output.flatten.map { |token| [token.type, token.lexeme, token.x, token.y] }.should == [
+        [:for,           'for',    0, 0],
+        [:variable,      'i',      4, 0],
+        [:assignement,   ':=',     6, 0],
+        [:integer,       '1',      9, 0],
+        [:to,            'to',    11, 0],
+        [:integer,       '20',    14, 0],
+        [:do,            'do',    17, 0],
+        [:begin,         'begin',  0, 1],
+        [:variable,      's',      2, 2],
+        [:assignement,   ':=',     4, 2],
+        [:integer,       '10',     7, 2],
+        [:semicolon,     ';',      9, 2],
+        [:variable,      's',     11, 2],
+        [:assignement,   ':=',    13, 2],
+        [:integer,       '12',    16, 2],
+        [:semicolon,     ';',     18, 2],
+        [:variable,      's',     20, 2],
+        [:assignement,   ':=',    22, 2],
+        [:integer,       '14',    25, 2],
+        [:semicolon,     ';',     27, 2],
+        [:end,           'end',    0, 3]
       ]
     end
   end

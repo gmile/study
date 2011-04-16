@@ -4,27 +4,6 @@ class Parser
   attr_writer :input
   attr_reader :output
 
-  RESERVED_WORDS = [
-    'absolute',    'and',            'array',
-    'asm',         'begin',          'case',
-    'constructor', 'const',          'destructor',
-    'div',         'downto',         'do',
-    'else',        'end',            'file',
-    'for',         'function',       'goto',
-    'if',          'implementation', 'inherited',
-    'inline',      'interface',      'in',
-    'label',       'mod',            'nil',
-    'not',         'object',         'of',
-    'on',          'operator',       'packed',
-    'procedure',   'program',        'record',
-    'reintroduce', 'repeat',         'self',
-    'set',         'shl',            'shr',
-    'string',      'then',           'to',
-    'type',        'unit',           'until',
-    'uses',        'var',            'while',
-    'with',        'xor',            'or'
-  ]
-
   TYPES = {
     :ordinar => [
       'integer',  'shortint', 'smallint',
@@ -47,6 +26,7 @@ class Parser
   end
 
   FILTERS = {
+    :reserved_word       => Builder::ReservedWordBuilder.regexp,
     :comment             => Builder::CommentBuilder.regexp,
     :bracket             => Builder::BracketBuilder.regexp,
     :algebraic_operation => Builder::AlgebraicOperationBuilder.regexp,
@@ -77,14 +57,10 @@ class Parser
   def tokenize
     @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
-        type = if RESERVED_WORDS.include?(item)
-          :reserved_word
-        else
-          matched_filter = filters.find { |filter| item =~ /#{filter}/ }
-          FILTERS.key(matched_filter)
-        end
+        matched_filter = filters.find { |filter| item =~ /#{filter}/ }
 
-        lexeme = line[index]
+        type           = FILTERS.key(matched_filter)
+        lexeme         = line[index]
 
         options = {
           :type   => type,

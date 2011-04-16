@@ -163,4 +163,36 @@ module Builder
       Regexp.union(@values.values)
     end
   end
+
+  class ReservedWordBuilder
+    @values = [
+      'absolute',    'and',            'array',
+      'asm',         'begin',          'case',
+      'constructor', 'const',          'destructor',
+      'div',         'downto',         'do',
+      'else',        'end',            'file',
+      'for',         'function',       'goto',
+      'if',          'implementation', 'inherited',
+      'inline',      'interface',      'in',
+      'label',       'mod',            'nil',
+      'not',         'object',         'of',
+      'on',          'operator',       'packed',
+      'procedure',   'program',        'record',
+      'reintroduce', 'repeat',         'self',
+      'set',         'shl',            'shr',
+      'string',      'then',           'to',
+      'type',        'unit',           'until',
+      'uses',        'var',            'while',
+      'with',        'xor',            'or'
+    ]
+
+    def self.build(options)
+      options[:type] = options[:lexeme].to_sym
+      Tokens::ReservedWord.new(options)
+    end
+
+    def self.regexp
+      Regexp.new @values.map{ |i| '\b'+i+'\b' }.join('|')
+    end
+  end
 end
