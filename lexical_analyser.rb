@@ -47,7 +47,7 @@ class Parser
   end
 
   FILTERS = {
-    :comment           => Tokens::Comment.regexp,
+    :comment           => Builder::CommentBuilder.regexp,
     :bracket           => Builder::BracketBuilder.regexp,
     :operation         => Builder::OperationBuilder.regexp,
     :mystring          => Builder::MystringBuilder.regexp,

@@ -128,4 +128,19 @@ module Builder
       '['+@values.values.join+']'
     end
   end
+
+  class CommentBuilder
+    @values = {
+      :comment => '\{.*\}'
+    }
+
+    def self.build(options)
+      options[:type] = @values.keys.first
+      Tokens::Comment.new(options)
+    end
+
+    def self.regexp
+      Regexp.new(@values[:comment])
+    end
+  end
 end
