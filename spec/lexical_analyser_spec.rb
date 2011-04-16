@@ -218,11 +218,11 @@ describe Parser do
       @parser.divide
       @parser.tokenize
       @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:user_data,   'x'  ],
+        [:variable,    'x'  ],
         [:assignement, ':=' ],
-        [:number,      '2.3'],
-        [:operation,   '+'  ],
-        [:number,      '4.6']
+        [:real,        '2.3'],
+        [:add,         '+'  ],
+        [:real,        '4.6']
       ]
     end
 
@@ -324,7 +324,7 @@ eos
         'while', 'my_var_1', '<>', '0', 'do',
         'dec', '(', 'my_var_1', ')', ';',
         'end',
-        'end.'
+        'end', '.'
       ]
     end
 
@@ -362,7 +362,7 @@ eos
         'write', '(', '"', 'a', '"', ')', ';',
         'read', '(', 'a', ')', ';',
         'end', ';',
-        'end.'
+        'end', '.'
       ]
     end
   end
