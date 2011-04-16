@@ -137,6 +137,18 @@ describe Parser do
 
       @parser.valid?.should be_false
     end
+
+    it "should parse inline comments" do
+      @parser.input = "a := 2 { this is a comment line }"
+      @parser.divide
+      @parser.tokenize
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+        [:variable,    'a' ],
+        [:assignement, ':='],
+        [:integer,     '2' ],
+        [:comment,     '{ this is a comment line }' ]
+      ]
+    end
   end
 
   context 'Inequalities' do
