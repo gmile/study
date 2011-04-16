@@ -212,23 +212,7 @@ describe Parser do
     end
   end
 
-  it "should parse inline comments" do
-    @parser.input = "{ this is a comment line }"
-    @parser.divide
-    @parser.output.should == ['{ this is a comment line }']
-  end
-
   context 'Tokenization' do
-    it "should correctly tokenize all reserved words" do
-      @parser.input = Parser::RESERVED_WORDS.join(' ')
-      @parser.divide
-      @parser.tokenize
-
-      @parser.output.each do |token|
-        token.type.should == :reserved_word
-      end
-    end
-
     it "should correctly tokenize: x := 2.3 + 4.6" do
       @parser.input = "x := 2.3 + 4.6"
       @parser.divide
