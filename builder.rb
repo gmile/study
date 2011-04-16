@@ -35,7 +35,7 @@ module Builder
     end
   end
 
-  class OperationBuilder
+  class AlgebraicOperationBuilder
     @values = {
       :add => '+',
       :sub => '-',
@@ -45,7 +45,7 @@ module Builder
 
     def self.build(options)
       options[:type] = @values.key(options[:lexeme]) # Extract to MultipleChoisesBuilder
-      Tokens::Operation.new(options)
+      Tokens::AlgebraicOperation.new(options)
     end
 
     def self.regexp
@@ -144,7 +144,7 @@ module Builder
     end
   end
 
-  class BooleanopBuilder
+  class BooleanOperationBuilder
     @values = {
       :not_equal        => '<>',
       :less_or_equal    => '<=',
@@ -156,7 +156,7 @@ module Builder
 
     def self.build(options)
       options[:type] = @values.key(options[:lexeme])
-      Tokens::Booleanop.new(options)
+      Tokens::BooleanOperation.new(options)
     end
 
     def self.regexp

@@ -47,21 +47,21 @@ class Parser
   end
 
   FILTERS = {
-    :comment           => Builder::CommentBuilder.regexp,
-    :bracket           => Builder::BracketBuilder.regexp,
-    :operation         => Builder::OperationBuilder.regexp,
-    :mystring          => Builder::MystringBuilder.regexp,
-    :assignement       => Builder::AssignementBuilder.regexp,
-    :punctuation       => Builder::PunctuationBuilder.regexp,
-    :booleanop         => Builder::BooleanopBuilder.regexp,
-    :number            => Builder::NumberBuilder.regexp,
-    :bitter_end        => 'end\.',          #TODO: refactor me to where I should belong      extract "." as a reserved word with regexp like ".eof"
-    :tordinar          => TYPES[:ordinar].join('|'),
-    :treal             => TYPES[:real].join('|'),
-    :tboolean          => TYPES[:boolean],
-    :tstring           => TYPES[:string],
-    :variable          => Builder::VariableBuilder.regexp,
-    :undefined         => Builder::UndefinedBuilder.regexp
+    :comment             => Builder::CommentBuilder.regexp,
+    :bracket             => Builder::BracketBuilder.regexp,
+    :algebraic_operation => Builder::AlgebraicOperationBuilder.regexp,
+    :mystring            => Builder::MystringBuilder.regexp,
+    :assignement         => Builder::AssignementBuilder.regexp,
+    :punctuation         => Builder::PunctuationBuilder.regexp,
+    :boolean_operation   => Builder::BooleanOperationBuilder.regexp,
+    :number              => Builder::NumberBuilder.regexp,
+    :bitter_end          => 'end\.',          #TODO: refactor me to where I should belong      extract "." as a reserved word with regexp like ".eof"
+    :tordinar            => TYPES[:ordinar].join('|'),
+    :treal               => TYPES[:real].join('|'),
+    :tboolean            => TYPES[:boolean],
+    :tstring             => TYPES[:string],
+    :variable            => Builder::VariableBuilder.regexp,
+    :undefined           => Builder::UndefinedBuilder.regexp
   }
 
   ERROR = {
@@ -93,7 +93,7 @@ class Parser
           :y      => line_number
         }
 
-        line[index] = Builder.const_get("#{type.capitalize}Builder").build(options)
+        line[index] = Builder.const_get("#{type.to_s.split('_').map {|t| t.capitalize}.join}Builder").build(options)
 
         @lines[line_number][lexeme] = ' '*lexeme.size
       end
