@@ -117,13 +117,9 @@ describe Cyk do
     eos
 
     @parser = Parser.new(source_code)
-    @parser.divide
-    @parser.tokenize
-
-    string = @parser.output.flatten.map { |token| token.type }
 
     options = {
-      :string => string,
+      :string => @parser.output.flatten.map { |token| token.type },
       :table  => {
         :t1  => [:variable],
         :t2  => [:assignement],
@@ -137,8 +133,6 @@ describe Cyk do
       }
     }
 
-    x = Cyk.new(options)
-    result = x.valid?
-    result.should be_true
+    Cyk.new(options).valid?.should be_true
   end
 end

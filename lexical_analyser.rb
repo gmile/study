@@ -24,10 +24,6 @@ class Parser
     :string  => 'string'
   }
 
-  def output
-    @output.size > 1 ? @output : @output.flatten
-  end
-
   FILTERS = {
     :reserved_word       => Builder::ReservedWordBuilder.regexp,
     :comment             => Builder::CommentBuilder.regexp,
@@ -51,7 +47,21 @@ class Parser
     @output = []
   end
 
-  # TODO: remove inner .each_with_index
+  def valid?
+    validate
+    @undefined.empty?
+  end
+
+  def output
+    raise Errors::InputMissingException if @input.nil? || @input.empty?
+
+    divide
+    tokenize
+    @output.flatten
+  end
+
+  private
+
   def tokenize
     @output.each_with_index do |line, line_number|
       line.each_with_index do |item, index|
@@ -74,15 +84,6 @@ class Parser
     end
   end
 
-  def valid?
-    validate
-    @undefined.empty?
-  end
-
-  # Refactor the division method someday
-  # make division without a @lines-proxy
-  # see 'case' from tokenize. Any ideas?
-
   def divide
     @lines = []
     @input.each_line {|line| @lines << line}
@@ -92,8 +93,6 @@ class Parser
       @output << line.scan(filter)
     end
   end
-
-  private
 
   def filters
     FILTERS.values

@@ -8,8 +8,6 @@ describe Parser do
 
   it "should parse: x := 2 + 3" do
     @parser.input = 'x := 2 + 3'
-    @parser.divide
-    @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,    'x' ],
       [:assignement, ':='],
@@ -19,10 +17,19 @@ describe Parser do
     ]
   end
 
+  it "should parse strings with real values: x := 2.3 - 4.5" do
+    @parser.input = "x := 2.3 - 4.5"
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,    'x'  ],
+      [:assignement, ':=' ],
+      [:real,        '2.3'],
+      [:sub,         '-'  ],
+      [:real,        '4.5']
+    ]
+  end
+
   it "should parse: () as :bracket_left and :bracket_right" do
     @parser.input = '()'
-    @parser.divide
-    @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:left_bracket,  '('],
       [:right_bracket, ')']
@@ -31,8 +38,6 @@ describe Parser do
 
   it "should parse: var_a := var_b + (5 + 10)/23" do
     @parser.input = 'var_a := var_b + (5 + 10)/23'
-    @parser.divide
-    @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,      'var_a'],
       [:assignement,   ':='   ],
@@ -50,24 +55,42 @@ describe Parser do
 
   it "should parse: x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'" do
     @parser.input = "x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'"
-    @parser.divide
-    @parser.output.should == ['x_', ':=', '2', 'mod', '0', '+', '(', '10', '+', 'coma', '/', '12', ')', '*', 'pjotr', '+', "'asdsad'"]
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,      'x_'      ],
+      [:assignement,   ':='      ],
+      [:integer,       '2'       ],
+      [:mod,           'mod'     ],
+      [:integer,       '0'       ],
+      [:add,           '+'       ],
+      [:left_bracket,  '('       ],
+      [:integer,       '10'      ],
+      [:add,           '+'       ],
+      [:variable,      'coma'    ],
+      [:div,           '/'       ],
+      [:integer,       '12'      ],
+      [:right_bracket, ')'       ],
+      [:mul,           '*'       ],
+      [:variable,      'pjotr'   ],
+      [:add,           '+'       ],
+      [:string,        "'asdsad'"]
+    ]
   end
 
   it "should return an error if no input string given" do
-    @parser.divide.should == Parser::ERROR[:input_missing]
+    lambda { @parser.output }.should raise_error(Errors::InputMissingException, 'Input string is not given.')
   end
 
   it "should parse strings as strings: x := 'Hello world!'" do
     @parser.input = "x := 'Hello world!'"
-    @parser.divide
-    @parser.output.should == ['x', ':=', "'Hello world!'"]
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,     'x'             ],
+      [:assignement,  ':='            ],
+      [:string,       "'Hello world!'"]
+    ]
   end
 
   it "should parse arrays: x := a[3]" do
     @parser.input = "x := a[3]"
-    @parser.divide
-    @parser.tokenize
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,         'x' ],
       [:assignement,      ':='],
@@ -81,156 +104,85 @@ describe Parser do
   context 'Numbers' do
     it "should parse numbers: 123456789 + 12.3456789" do
       @parser.input = "123456789 + 12.3456789"
-      @parser.divide
-      @parser.output.should == ['123456789', '+', '12.3456789']
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+        [:integer, '123456789' ],
+        [:add,     '+'         ],
+        [:real,    '12.3456789']
+      ]
     end
 
     it "should get rid of trailing zeros: 0.1234567890001" do
       @parser.input = "0.1234567890001"
-      @parser.divide
-      @parser.output.should == ['0.1234567890001']
+      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+        [:real, '0.1234567890001']
+      ]
     end
   end
 
   it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
     @parser.input = "x := 'Hello' + dear + 'world!'"
-    @parser.divide
-    @parser.output.should == ['x', ':=', "'Hello'", '+', "dear", '+', "'world!'"]
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,    'x'       ],
+      [:assignement, ':='      ],
+      [:string,      "'Hello'" ],
+      [:add,         '+'       ],
+      [:variable,    'dear'    ],
+      [:add,         '+'       ],
+      [:string,      "'world!'"]
+    ]
   end
 
-  it "should parse strings with real values: x := 2.3 - 4.6" do
-    @parser.input = "x := 2.3 - 4.6"
-    @parser.divide
-    @parser.output.should == ['x', ':=', "2.3", '-', "4.6"]
-  end
-
-  it "should parse strings as strings: x := 'Hello' + 'dear' + 'world!'" do
-    @parser.input = "x := 'Hello' + 'dear' + 'world!'"
-    @parser.divide
-    @parser.output.should == ['x', ':=', "'Hello'", '+', "'dear'", '+', "'world!'"]
+  it "should parse inline comments" do
+    @parser.input = "a := 2 { this is a comment line }"
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,    'a' ],
+      [:assignement, ':='],
+      [:integer,     '2' ],
+      [:comment,     '{ this is a comment line }' ]
+    ]
   end
 
   context 'Validity' do
-    it "string should be valid: x := 'Hello world!'" do
-      @parser.input = "x := 'Hello world!'"
-      @parser.divide
-      @parser.tokenize
-      @parser.valid?.should be_true
-    end
-
     it "should not be valid: 123456 + .789" do
       @parser.input = "123456 + .789"
-      @parser.divide
-      @parser.tokenize
       @parser.valid?.should be_false
     end
 
     it "should not be valid: 123456 + 789." do
       @parser.input = "123456 + 789."
-      @parser.divide
-      @parser.tokenize
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:integer,   '123456'],
-        [:add,       '+'     ],
-        [:integer,   '789'   ],
-        [:undefined, '.'     ]
-      ]
-
-      @parser.valid?.should be_false
+      @parser.valid?.should be_true
     end
+  end
 
-    it "should parse inline comments" do
-      @parser.input = "a := 2 { this is a comment line }"
-      @parser.divide
-      @parser.tokenize
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:variable,    'a' ],
-        [:assignement, ':='],
-        [:integer,     '2' ],
-        [:comment,     '{ this is a comment line }' ]
-      ]
-    end
-
-    it "should parse inline comments" do
-      @parser.input = "a > b"
-      @parser.divide
-      @parser.tokenize
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:variable,     'a'],
-        [:greater_then, '>'],
-        [:variable,     'b']
-      ]
-    end
+  it "should correctly tokenize reserved words: program test;" do
+    @parser.input = "program test;"
+    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:program,   'program'],
+      [:variable,  'test'   ],
+      [:semicolon, ';'      ]
+    ]
   end
 
   context 'Inequalities' do
-    it "string should be valid: if a > b then" do
-      @parser.input = "if a > b then"
-      @parser.divide
-      @parser.output.should == ['if', 'a', '>', 'b', 'then']
-    end
-
-    it "string should be valid: if a >= b then" do
-      @parser.input = "if a >= b then"
-      @parser.divide
-      @parser.output.should == ['if', 'a', '>=', 'b', 'then']
-    end
-
-    it "string should be valid: if a < b then" do
-      @parser.input = "if a < b then"
-      @parser.divide
-      @parser.output.should == ['if', 'a', '<', 'b', 'then']
-    end
-
-    it "string should be valid: if a <= b then" do
-      @parser.input = "if a <= b then"
-      @parser.divide
-      @parser.output.should == ['if', 'a', '<=', 'b', 'then']
-    end
-
-    it "string should be valid: if a <> b then" do
-      @parser.input = "if a <> b then"
-      @parser.divide
-      @parser.output.should == ['if', 'a', '<>', 'b', 'then']
-    end
-
-    it "string should be valid: if (a <> b) and (var = 5) then" do
-      @parser.input = "if (a <> b) and (var = 5) then"
-      @parser.divide
-      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
-    end
-
-    it "string should be valid: if (a <> b) or (var = 5) then" do
-      @parser.input = "if (a <> b) or (var = 5) then"
-      @parser.divide
-      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'then']
-    end
-
-    it "string should be valid: if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then" do
-      @parser.input = "if (a <> b) or (var = 5) and (x <= 12.45) or (string = 'lalala') then"
-      @parser.divide
-      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'or', '(', 'var', '=', '5', ')', 'and', '(', 'x', '<=', '12.45', ')', 'or', '(', 'string', '=', "'lalala'", ')', 'then']
-    end
-  end
-
-  context 'Tokenization' do
-    it "should correctly tokenize: x := 2.3 + 4.6" do
-      @parser.input = "x := 2.3 + 4.6"
-      @parser.divide
-      @parser.tokenize
+    it "should parse: >" do
+      @parser.input = "<> <= >= = > <"
       @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:variable,    'x'  ],
-        [:assignement, ':=' ],
-        [:real,        '2.3'],
-        [:add,         '+'  ],
-        [:real,        '4.6']
+        [:not_equal,        '<>'],
+        [:less_or_equal,    '<='],
+        [:greater_or_equal, '>='],
+        [:equal,            '=' ],
+        [:greater_then,     '>' ],
+        [:less_then,        '<' ]
       ]
+    end
+
+    it "string should be valid: if (a <> b) or true or false and (5 < 4) then" do
+      @parser.input = "if (a <> b) and (var = 5) then"
+      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
     end
 
     it "should correctly tokenize reserved words: if x = 5 then" do
       @parser.input = "if x = 5 then"
-      @parser.divide
-      @parser.tokenize
       @parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:if,       'if'  ],
         [:variable, 'x'   ],
@@ -239,17 +191,9 @@ describe Parser do
         [:then,     'then']
       ]
     end
+  end
 
-    it "should correctly tokenize reserved words: program test;" do
-      @parser.input = "program test;"
-      @parser.divide
-      @parser.tokenize
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-        [:program,   'program'],
-        [:variable,  'test'   ],
-        [:semicolon, ';'      ]
-      ]
-    end
+  context 'Tokenization' do
   end
 
   context 'Coordinates' do
@@ -260,9 +204,6 @@ begin
   s := 10; s := 12; s := 14;
 end
 eos
-
-      @parser.divide
-      @parser.tokenize
 
       @parser.output.flatten.map { |token| [token.type, token.lexeme, token.x, token.y] }.should == [
         [:for,           'for',    0, 0],
@@ -292,7 +233,7 @@ eos
 
   context 'Multiline' do
     it 'should correctly parse a full multiline program (example 2)' do
-      source_code = <<-eos
+      @parser.input = <<-eos
         uses crt;
 
         var
@@ -310,10 +251,7 @@ eos
         end.
       eos
 
-      @parser.input = source_code
-      @parser.divide
-
-      @parser.output.flatten.should == [
+      @parser.output.map { |token| token.lexeme }.should == [
         'uses', 'crt', ';',
         'var',
         'my_var_1', ':', 'integer', ';',
@@ -330,7 +268,7 @@ eos
     end
 
     it 'should correctly parse a full multiline program (example 1)' do
-      source_code = <<-eos
+      @parser.input = <<-eos
         program test;
 
         var
@@ -348,10 +286,7 @@ eos
         end.
       eos
 
-      @parser.input = source_code
-      @parser.divide
-
-      @parser.output.flatten.should == [
+      @parser.output.map { |token| token.lexeme }.should == [
         'program', 'test', ';',
         'var',
         'a', ',', 'b', ':', 'integer', ';',
