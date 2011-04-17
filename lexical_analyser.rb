@@ -1,4 +1,5 @@
 require_relative 'builder'
+require_relative 'errors'
 
 class Parser
   attr_writer :input
@@ -45,11 +46,6 @@ class Parser
     :undefined           => Builder::UndefinedBuilder.regexp
   }
 
-  ERROR = {
-    :input_missing => 'Input string is not given',
-    :unknown_token => 'Given token is unknown'
-  }
-
   def initialize string = nil
     @input  = string
     @output = []
@@ -88,8 +84,6 @@ class Parser
   # see 'case' from tokenize. Any ideas?
 
   def divide
-    return ERROR[:input_missing] if @input.nil?
-
     @lines = []
     @input.each_line {|line| @lines << line}
 
