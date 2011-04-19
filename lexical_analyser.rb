@@ -2,6 +2,8 @@ require_relative 'builder'
 require_relative 'errors'
 
 class Parser
+  include Errors::Parser
+
   attr_writer :input
   attr_reader :output
 
@@ -26,13 +28,13 @@ class Parser
   end
 
   def valid?
-    raise Errors::NoOutputPerformedException unless @output_performed
+    raise NoOutputPerformedException unless @output_performed
 
     !@output.any? { |token| token.is_a?(Tokens::Undefined) }
   end
 
   def output
-    raise Errors::InputMissingException if @input.nil? || @input.empty?
+    raise InputMissingException if @input.nil? || @input.empty?
 
     divide
     tokenize

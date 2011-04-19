@@ -1,11 +1,17 @@
 require 'set'
 
+require_relative 'cnf_table'
+require_relative 'errors'
+
 class Cyk
+  include Errors::Cyk
   attr_reader :start_symbols
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = {}
+    raise UnknownTokensException unless (options[:table].values.select { |value| value.any? {|v| v.is_a?(Array)} } - options[:table].keys).empty?
+
     @table         = options[:table]
     @string        = options[:string]
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
