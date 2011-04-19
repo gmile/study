@@ -26,7 +26,7 @@ class Parser
   end
 
   def valid?
-    @output.any? { |token| token.is_a?(Tokens::Undefined) }
+    !@output.flatten.any? { |token| puts token.class; token.is_a?(Tokens::Undefined) }
   end
 
   def output
