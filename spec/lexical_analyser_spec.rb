@@ -162,7 +162,7 @@ describe Parser do
 
     it "string should be valid: if (a <> b) or true or false and (5 < 4) then" do
       @parser.input = "if (a <> b) and (var = 5) then"
-      @parser.output.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
+      @parser.output.map { |token| token.lexeme }.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
     end
 
     it "should correctly tokenize reserved words: if x = 5 then" do
