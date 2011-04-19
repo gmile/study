@@ -10,7 +10,7 @@ class Cyk
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = {}
-    raise UnknownTokensException unless (options[:table].values.select { |value| value.any? {|v| v.is_a?(Array)} } - options[:table].keys).empty?
+    validate_input options[:table]
 
     @table         = options[:table]
     @string        = options[:string]
@@ -47,6 +47,14 @@ class Cyk
   end
 
   private
+  def validate_input cnf_table
+    a = cnf_table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol)}
+    b = cnf_table.keys
+
+    raise UnknownTokensException       unless (a - b).empty?
+    raise NoStartSymbolsGivenException if     (b - a).empty?
+  end
+
   def productions_from table
     productions = Set.new
 
