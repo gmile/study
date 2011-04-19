@@ -123,14 +123,18 @@ describe Parser do
   end
 
   context 'Validity' do
-    it "should not be valid: 123456 + .789" do
-      @parser.input = "123456 + .789"
-      @parser.valid?.should be_false
+    it "should not be valid: 123456 + 1.789" do
+      @parser.input = "123456 + 1.789"
+      puts @parser.output.map { |token| token.lexeme }.should == ['123456', '+', '1.789']
+
+      @parser.valid?.should be_true
     end
 
-    it "should not be valid: 123456 + 789." do
-      @parser.input = "123456 + 789."
-      @parser.valid?.should be_true
+    it "should not be valid: 123456 + # 789" do
+      @parser.input = "123456 + # 789"
+      @parser.output.map { |token| token.lexeme }.should == ['123456', '+', '#', '789']
+
+      @parser.valid?.should be_false
     end
   end
 
