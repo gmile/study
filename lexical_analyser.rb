@@ -56,11 +56,15 @@ class Parser
           :y      => line_number
         }
 
-        line[index] = Builder.const_get("#{type.to_s.split('_').map {|t| t.capitalize}.join}Builder").build(options)
+        line[index] = Builder.const_get(builder_name_from(type)).build(options)
 
         @lines[line_number][lexeme] = ' '*lexeme.size
       end
     end
+  end
+
+  def builder_name_from type
+    "#{type.to_s.split('_').map {|t| t.capitalize}.join}Builder"
   end
 
   def divide
