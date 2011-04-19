@@ -26,7 +26,9 @@ class Parser
   end
 
   def valid?
-    !@output.flatten.any? { |token| puts token.class; token.is_a?(Tokens::Undefined) }
+    raise Errors::NoOutputPerformedException unless @output_performed
+
+    !@output.any? { |token| token.is_a?(Tokens::Undefined) }
   end
 
   def output
@@ -34,7 +36,9 @@ class Parser
 
     divide
     tokenize
-    @output.flatten
+
+    @output_performed = true
+    @output
   end
 
   private
@@ -58,7 +62,7 @@ class Parser
 
         @lines[line_number][lexeme] = ' '*lexeme.size
       end
-    end
+    end.flatten!
   end
 
   def builder_name_from type

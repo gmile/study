@@ -78,9 +78,18 @@ describe Parser do
     ]
   end
 
-  it "should return an error if no input string given" do
-    lambda { @parser.output }.should raise_error(Errors::InputMissingException, 'Input string is not given.')
+  context 'Errors' do
+    it "should return an error if no input string given" do
+      lambda { @parser.output }.should raise_error(Errors::InputMissingException, 'Nothing to parse. Was input string given?')
+    end
+
+    it "should return an error if no input string given" do
+      @parser.input = '2 + 3'
+
+      lambda { @parser.valid? }.should raise_error(Errors::NoOutputPerformedException, 'No tokens to validate. Was output performed?')
+    end
   end
+
 
   it "should parse arrays: x := a[3]" do
     @parser.input = "x := a[3]"
