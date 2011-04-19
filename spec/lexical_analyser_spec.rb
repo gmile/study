@@ -177,9 +177,6 @@ describe Parser do
     end
   end
 
-  context 'Tokenization' do
-  end
-
   context 'Coordinates' do
     it 'should correctly set coodinates' do
       @parser.input = <<-eos
