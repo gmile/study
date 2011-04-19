@@ -7,23 +7,6 @@ class Parser
 
   # TODO: add '.' as a reserved word + test for it
 
-  TYPES = {
-    :ordinar => [
-      'integer',  'shortint', 'smallint',
-      'longint',  'longword', 'int64',
-      'byte',     'word',     'cardinal',
-      'qword',    'bytebool',
-      'wordbool', 'longbool', 'char'
-    ],
-    :real => [
-      'real',     'single',   'double',
-      'exteded',  'comp',     'comp',
-      'currency'
-    ],
-    :boolean => 'boolean',
-    :string  => 'string'
-  }
-
   FILTERS = {
     :reserved_word       => Builder::ReservedWordBuilder.regexp,
     :comment             => Builder::CommentBuilder.regexp,
@@ -34,10 +17,7 @@ class Parser
     :punctuation         => Builder::PunctuationBuilder.regexp,
     :boolean_operation   => Builder::BooleanOperationBuilder.regexp,
     :number              => Builder::NumberBuilder.regexp,
-    :tordinar            => TYPES[:ordinar].join('|'),
-    :treal               => TYPES[:real].join('|'),
-    :tboolean            => TYPES[:boolean],
-    :tstring             => TYPES[:string],
+    :type                => Builder::TypeBuilder.regexp,
     :variable            => Builder::VariableBuilder.regexp,
     :undefined           => Builder::UndefinedBuilder.regexp
   }

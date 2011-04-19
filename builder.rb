@@ -197,4 +197,22 @@ module Builder
       Regexp.new(@values.map{ |i| '\b'+i+'\b' }.join('|') + @program_end_regex)
     end
   end
+
+  class TypeBuilder
+    @values = {
+      :ordinar => ['integer', 'longint', 'byte', 'word'],
+      :real    => ['real'],
+      :boolean => ['boolean'],
+      :string  => ['string']
+    }
+
+    def self.build(options)
+      options[:type] = @values.select { |k, v| v.include?(options[:lexeme]) }.keys.first
+      Tokens::Type.new(options)
+    end
+
+    def self.regexp
+      Regexp.new(@values.values.flatten.join('|'))
+    end
+  end
 end
