@@ -28,8 +28,7 @@ class Parser
   end
 
   def valid?
-    validate
-    @undefined.empty?
+    @output.any? { |token| token.is_a?(Tokens::Undefined) }
   end
 
   def output
@@ -76,9 +75,5 @@ class Parser
 
   def filters
     FILTERS.values
-  end
-
-  def validate
-    @undefined = output.find_all { |token| token.is_a?(Tokens::Undefined) }
   end
 end
