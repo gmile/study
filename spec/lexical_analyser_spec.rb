@@ -2,13 +2,11 @@ require_relative '../lexical_analyser'
 require_relative '../errors'
 
 describe Parser do
-  before :each do
-    @parser = Parser.new
-  end
+  let (:parser) { described_class.new }
 
   it "should parse: x := 2 + 3" do
-    @parser.input = 'x := 2 + 3'
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = 'x := 2 + 3'
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,    'x' ],
       [:assignement, ':='],
       [:integer,     '2' ],
@@ -18,8 +16,8 @@ describe Parser do
   end
 
   it "should parse strings with real values: x := 2.3 - 4.5" do
-    @parser.input = "x := 2.3 - 4.5"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = "x := 2.3 - 4.5"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,    'x'  ],
       [:assignement, ':=' ],
       [:real,        '2.3'],
@@ -29,8 +27,8 @@ describe Parser do
   end
 
   it "should parse: () as :bracket_left and :bracket_right" do
-    @parser.input = '()[]'
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = '()[]'
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:left_bracket,     '('],
       [:right_bracket,    ')'],
       [:sq_left_bracket,  '['],
@@ -39,8 +37,8 @@ describe Parser do
   end
 
   it "should parse: var_a := var_b + (5 + 10)/23" do
-    @parser.input = 'var_a := var_b + (5 + 10)/23'
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = 'var_a := var_b + (5 + 10)/23'
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,      'var_a'],
       [:assignement,   ':='   ],
       [:variable,      'var_b'],
@@ -56,8 +54,8 @@ describe Parser do
   end
 
   it "should parse: x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'" do
-    @parser.input = "x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = "x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,      'x_'      ],
       [:assignement,   ':='      ],
       [:integer,       '2'       ],
@@ -80,20 +78,20 @@ describe Parser do
 
   context 'Errors' do
     it "should return an error if no input string given" do
-      lambda { @parser.output }.should raise_error(Parser::InputMissingException, 'Nothing to parse. Was input string given?')
+      lambda { parser.output }.should raise_error(Parser::InputMissingException, 'Nothing to parse. Was input string given?')
     end
 
     it "should return an error if no input string given" do
-      @parser.input = '2 + 3'
+      parser.input = '2 + 3'
 
-      lambda { @parser.valid? }.should raise_error(Parser::NoOutputPerformedException, 'No tokens to validate. Was output performed?')
+      lambda { parser.valid? }.should raise_error(Parser::NoOutputPerformedException, 'No tokens to validate. Was output performed?')
     end
   end
 
 
   it "should parse arrays: x := a[3]" do
-    @parser.input = "x := a[3]"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = "x := a[3]"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,         'x' ],
       [:assignement,      ':='],
       [:variable,         'a' ],
@@ -105,8 +103,8 @@ describe Parser do
 
   context 'Numbers' do
     it "should parse numbers: 123456789 + 12.3456789" do
-      @parser.input = "123456789 + 12.3456789"
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      parser.input = "123456789 + 12.3456789"
+      parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:integer, '123456789' ],
         [:add,     '+'         ],
         [:real,    '12.3456789']
@@ -114,16 +112,16 @@ describe Parser do
     end
 
     it "should get rid of trailing zeros: 0.1234567890001" do
-      @parser.input = "0.1234567890001"
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      parser.input = "0.1234567890001"
+      parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:real, '0.1234567890001']
       ]
     end
   end
 
   it "should parse inline comments" do
-    @parser.input = "a := 2 { this is a comment line }"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = "a := 2 { this is a comment line }"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,    'a' ],
       [:assignement, ':='],
       [:integer,     '2' ],
@@ -133,23 +131,23 @@ describe Parser do
 
   context 'Validity' do
     it "should not be valid: 123456 + 1.789" do
-      @parser.input = "123456 + 1.789"
-      @parser.output.map { |token| token.lexeme }.should == ['123456', '+', '1.789']
+      parser.input = "123456 + 1.789"
+      parser.output.map { |token| token.lexeme }.should == ['123456', '+', '1.789']
 
-      @parser.valid?.should be_true
+      parser.valid?.should be_true
     end
 
     it "should not be valid: 123456 + # 789" do
-      @parser.input = "123456 + # 789"
-      @parser.output.map { |token| token.lexeme }.should == ['123456', '+', '#', '789']
+      parser.input = "123456 + # 789"
+      parser.output.map { |token| token.lexeme }.should == ['123456', '+', '#', '789']
 
-      @parser.valid?.should be_false
+      parser.valid?.should be_false
     end
   end
 
   it "should correctly tokenize reserved words: program test;" do
-    @parser.input = "program test;"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+    parser.input = "program test;"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:program,   'program'],
       [:variable,  'test'   ],
       [:semicolon, ';'      ]
@@ -158,8 +156,8 @@ describe Parser do
 
   context 'Inequalities' do
     it "should parse: >" do
-      @parser.input = "<> <= >= = > <"
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      parser.input = "<> <= >= = > <"
+      parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:not_equal,        '<>'],
         [:less_or_equal,    '<='],
         [:greater_or_equal, '>='],
@@ -170,13 +168,13 @@ describe Parser do
     end
 
     it "string should be valid: if (a <> b) or true or false and (5 < 4) then" do
-      @parser.input = "if (a <> b) and (var = 5) then"
-      @parser.output.map { |token| token.lexeme }.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
+      parser.input = "if (a <> b) and (var = 5) then"
+      parser.output.map { |token| token.lexeme }.should == ['if', '(', 'a', '<>', 'b', ')', 'and', '(', 'var', '=', '5', ')', 'then']
     end
 
     it "should correctly tokenize reserved words: if x = 5 then" do
-      @parser.input = "if x = 5 then"
-      @parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      parser.input = "if x = 5 then"
+      parser.output.map { |token| [token.type, token.lexeme] }.should == [
         [:if,       'if'  ],
         [:variable, 'x'   ],
         [:equal,    '='   ],
@@ -188,14 +186,14 @@ describe Parser do
 
   context 'Coordinates' do
     it 'should correctly set coodinates' do
-      @parser.input = <<-eos
+      parser.input = <<-eos
 for i := 1 to 20 do
 begin
   s := 10; s := 12; s := 14;
 end
 eos
 
-      @parser.output.flatten.map { |token| [token.type, token.lexeme, token.x, token.y] }.should == [
+      parser.output.flatten.map { |token| [token.type, token.lexeme, token.x, token.y] }.should == [
         [:for,           'for',    0, 0],
         [:variable,      'i',      4, 0],
         [:assignement,   ':=',     6, 0],
@@ -223,7 +221,7 @@ eos
 
   context 'Multiline' do
     it 'should correctly parse a full multiline program (example 2)' do
-      @parser.input = <<-eos
+      parser.input = <<-eos
         uses crt;
 
         var
@@ -241,7 +239,7 @@ eos
         end.
       eos
 
-      @parser.output.map { |token| token.lexeme }.should == [
+      parser.output.map { |token| token.lexeme }.should == [
         'uses', 'crt', ';',
         'var',
         'my_var_1', ':', 'integer', ';',
@@ -258,7 +256,7 @@ eos
     end
 
     it 'should correctly parse a full multiline program (example 1)' do
-      @parser.input = <<-eos
+      parser.input = <<-eos
         program test;
 
         var
@@ -276,7 +274,7 @@ eos
         end.
       eos
 
-      @parser.output.map { |token| token.lexeme }.should == [
+      parser.output.map { |token| token.lexeme }.should == [
         'program', 'test', ';',
         'var',
         'a', ',', 'b', ':', 'integer', ';',
