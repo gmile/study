@@ -82,15 +82,6 @@ describe Parser do
     lambda { @parser.output }.should raise_error(Errors::InputMissingException, 'Input string is not given.')
   end
 
-  it "should parse strings as strings: x := 'Hello world!'" do
-    @parser.input = "x := 'Hello world!'"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-      [:variable,     'x'             ],
-      [:assignement,  ':='            ],
-      [:string,       "'Hello world!'"]
-    ]
-  end
-
   it "should parse arrays: x := a[3]" do
     @parser.input = "x := a[3]"
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
@@ -119,19 +110,6 @@ describe Parser do
         [:real, '0.1234567890001']
       ]
     end
-  end
-
-  it "should parse strings as strings: x := 'Hello' + dear + 'world!'" do
-    @parser.input = "x := 'Hello' + dear + 'world!'"
-    @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-      [:variable,    'x'       ],
-      [:assignement, ':='      ],
-      [:string,      "'Hello'" ],
-      [:add,         '+'       ],
-      [:variable,    'dear'    ],
-      [:add,         '+'       ],
-      [:string,      "'world!'"]
-    ]
   end
 
   it "should parse inline comments" do
