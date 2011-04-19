@@ -26,7 +26,7 @@ describe Cyk do
       @options[:table].merge!({
         :r4 => [[:r5, :r3], [:r2, :r3]],
         :r5 => [[:r1, :r2], [:r2, :r1]],
-        :r6 => ['2', [:r1, :r1]]
+        :r6 => [[:r1, :r1]]
       })
 
       Cyk.new(@options).valid?.should be_true
@@ -50,7 +50,20 @@ describe Cyk do
     it "should find no start symbols" do
       @options[:table].merge!({ :r4 => [[:r4, :r1]] })
 
-      Cyk.new(@options).start_symbols.should == Set.new
+      lambda { Cyk.new(@options) }.should raise_error(Cyk::NoStartSymbolsGivenException, 'No start symbols given. Left side should include at least one token which is absent from the right side')
+    end
+
+    it 'should parse numerical expression' do
+      options = {
+        :string => '1 + 2 / 3 + 5'.split(' '),
+        :table  => {
+          :r1 => ['1', '2', '3', '5', [:r2, :r1]],
+          :r2 => [[:r1, :r3]],
+          :r3 => ['+', '/']
+        }
+      }
+
+      lambda { Cyk.new(options) }.should raise_error(Cyk::NoStartSymbolsGivenException)
     end
 
     it "should find one start symbol" do
@@ -62,19 +75,6 @@ describe Cyk do
 
       Cyk.new(@options).start_symbols.should == Set.new([:r4, :r6])
     end
-  end
-
-  it 'should parse numerical expression' do
-    options = {
-      :string => '1 + 2 / 3 + 5'.split(' '),
-      :table  => {
-        :r1 => ['1', '2', '3', '5', [:r2, :r1]],
-        :r2 => [[:r1, :r3]],
-        :r3 => ['+', '-', '*', '/']
-      }
-    }
-    # no start symbols here...
-    Cyk.new(options).valid?.should be_true
   end
 
   it 'should parse with a rule: R -> A A' do
@@ -134,5 +134,20 @@ describe Cyk do
     }
 
     Cyk.new(options).valid?.should be_true
+  end
+
+  it 'should raise error if there are unknown nterminals in the right side' do
+    @parser = Parser.new("a")
+
+    options = {
+      :string => @parser.output.map { |token| token.type },
+      :table  => {
+        :t1  => [:variable],
+        :e1  => [:t1, [:t1, :w]],
+        :e2  => [:t1, :a, [:t1, :q]],
+      }
+    }
+
+    lambda { Cyk.new(options) }.should raise_error(Cyk::UnknownTokensException)
   end
 end
