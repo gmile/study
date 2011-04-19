@@ -119,7 +119,7 @@ describe Cyk do
     @parser = Parser.new(source_code)
 
     options = {
-      :string => @parser.output.flatten.map { |token| token.type },
+      :string => @parser.output.map { |token| token.type },
       :table  => {
         :t1  => [:variable],
         :t2  => [:assignement],
