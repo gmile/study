@@ -69,12 +69,10 @@ class Parser
 
   def divide
     @lines = []
-    @input.each_line {|line| @lines << line}
+    @input.each_line {|line| @lines << line }
 
     filter = Regexp.new(filters.join('|'))
-    @lines.each do |line|
-      @output << line.scan(filter)
-    end
+    @output = @lines.map { |line| line.scan(filter) }
   end
 
   def filters
