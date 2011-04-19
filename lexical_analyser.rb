@@ -44,8 +44,8 @@ class Parser
       line.each_with_index do |item, index|
         matched_filter = filters.find { |filter| item =~ /#{filter}/ }
 
-        type           = FILTERS.key(matched_filter)
-        lexeme         = line[index]
+        type    = FILTERS.key(matched_filter)
+        lexeme  = line[index]
 
         options = {
           :type   => type,
