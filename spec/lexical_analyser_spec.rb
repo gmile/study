@@ -29,10 +29,12 @@ describe Parser do
   end
 
   it "should parse: () as :bracket_left and :bracket_right" do
-    @parser.input = '()'
+    @parser.input = '()[]'
     @parser.output.map { |token| [token.type, token.lexeme] }.should == [
-      [:left_bracket,  '('],
-      [:right_bracket, ')']
+      [:left_bracket,     '('],
+      [:right_bracket,    ')'],
+      [:sq_left_bracket,  '['],
+      [:sq_right_bracket, ']']
     ]
   end
 
