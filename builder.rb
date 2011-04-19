@@ -10,7 +10,7 @@ module Builder
     }
 
     def self.build(options)
-      options[:type] = @values.key(options[:lexeme]) # Extract to MultipleChoisesBuilder
+      options[:type] = @values.key(options[:lexeme])
       Tokens::Bracket.new(options)
     end
 
@@ -26,7 +26,7 @@ module Builder
     }
 
     def self.build(options)
-      options[:type] = @values.key(@values.values.find { |v| options[:lexeme] =~ Regexp.new(v) }) # Extract to MultipleChoisesBuilder
+      options[:type] = @values.key(@values.values.find { |v| options[:lexeme] =~ Regexp.new(v) })
       Tokens::Number.new(options)
     end
 
@@ -44,7 +44,7 @@ module Builder
     }
 
     def self.build(options)
-      options[:type] = @values.key(options[:lexeme]) # Extract to MultipleChoisesBuilder
+      options[:type] = @values.key(options[:lexeme])
       Tokens::AlgebraicOperation.new(options)
     end
 
@@ -59,7 +59,7 @@ module Builder
     }
 
     def self.build(options)
-      options[:type] = @values.keys.first # Extract to MultipleChoisesBuilder
+      options[:type] = @values.keys.first
       Tokens::Variable.new(options)
     end
 

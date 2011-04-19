@@ -5,8 +5,6 @@ class Parser
   attr_writer :input
   attr_reader :output
 
-  # TODO: add '.' as a reserved word + test for it
-
   FILTERS = {
     :reserved_word       => Builder::ReservedWordBuilder.regexp,
     :comment             => Builder::CommentBuilder.regexp,
