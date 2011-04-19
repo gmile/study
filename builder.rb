@@ -186,13 +186,15 @@ module Builder
       'with',        'xor',            'or'
     ]
 
+    @program_end_regex = '|\.\z'
+
     def self.build(options)
       options[:type] = options[:lexeme].to_sym
       Tokens::ReservedWord.new(options)
     end
 
     def self.regexp
-      Regexp.new @values.map{ |i| '\b'+i+'\b' }.join('|')
+      Regexp.new(@values.map{ |i| '\b'+i+'\b' }.join('|') + @program_end_regex)
     end
   end
 end
