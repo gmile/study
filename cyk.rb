@@ -5,6 +5,7 @@ require_relative 'errors'
 
 class Cyk
   include Errors::Cyk
+
   attr_reader :start_symbols
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
@@ -12,9 +13,11 @@ class Cyk
   def initialize options = {}
     @table         = options[:table]
     @string        = options[:string]
+
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
     @r             = @table.size
+
     @productions   = productions_from(@table)
     @start_symbols = start_symbols_from(@productions)
     @n             = @string.size
