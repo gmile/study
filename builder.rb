@@ -1,7 +1,19 @@
 require_relative 'tokens'
 
 module Builder
-  class BracketBuilder
+  class Builder
+    @values = {}
+
+    def self.terminals
+      if @values.is_a?(Hash)
+        @values.keys
+      elsif @values.is_a?(Array)
+        @values.map { |value| value.to_sym }
+      end
+    end
+  end
+
+  class BracketBuilder < Builder
     @values = {
       :left_bracket     => '(',
       :right_bracket    => ')',
@@ -19,7 +31,7 @@ module Builder
     end
   end
 
-  class NumberBuilder
+  class NumberBuilder < Builder
     @values = {
       :real    => '\d+\.\d+',
       :integer => '\d+'
@@ -35,7 +47,7 @@ module Builder
     end
   end
 
-  class AlgebraicOperationBuilder
+  class AlgebraicOperationBuilder < Builder
     @values = {
       :add => '+',
       :sub => '-',
@@ -53,7 +65,7 @@ module Builder
     end
   end
 
-  class VariableBuilder
+  class VariableBuilder < Builder
     @values = {
       :variable => '\w+',
     }
@@ -68,7 +80,7 @@ module Builder
     end
   end
 
-  class AssignementBuilder
+  class AssignementBuilder < Builder
     @values = {
       :assignement => ':='
     }
@@ -83,7 +95,7 @@ module Builder
     end
   end
 
-  class UndefinedBuilder
+  class UndefinedBuilder < Builder
     @values = {
       :undefined => '[^ \t\r\n\v\f]'
     }
@@ -98,7 +110,7 @@ module Builder
     end
   end
 
-  class MystringBuilder
+  class MystringBuilder < Builder
     @values = {
       :string => "\'.*?\'"
     }
@@ -113,7 +125,7 @@ module Builder
     end
   end
 
-  class PunctuationBuilder
+  class PunctuationBuilder < Builder
     @values = {
       :colon     => ':',
       :semicolon => ';'
@@ -129,7 +141,7 @@ module Builder
     end
   end
 
-  class CommentBuilder
+  class CommentBuilder < Builder
     @values = {
       :comment => '\{.*\}'
     }
@@ -144,7 +156,7 @@ module Builder
     end
   end
 
-  class BooleanOperationBuilder
+  class BooleanOperationBuilder < Builder
     @values = {
       :not_equal        => '<>',
       :less_or_equal    => '<=',
@@ -164,7 +176,7 @@ module Builder
     end
   end
 
-  class ReservedWordBuilder
+  class ReservedWordBuilder < Builder
     @values = [
       'absolute',    'and',            'array',
       'asm',         'begin',          'case',
@@ -198,7 +210,7 @@ module Builder
     end
   end
 
-  class TypeBuilder
+  class TypeBuilder < Builder
     @values = {
       :ordinar => ['integer', 'longint', 'byte', 'word'],
       :real    => ['real'],
