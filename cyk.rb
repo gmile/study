@@ -10,8 +10,6 @@ class Cyk
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = {}
-    validate_input options[:table]
-
     @table         = options[:table]
     @string        = options[:string]
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
@@ -21,6 +19,8 @@ class Cyk
     @start_symbols = start_symbols_from(@productions)
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
+
+    validate_input
   end
 
   def valid?
@@ -47,12 +47,13 @@ class Cyk
   end
 
   private
-  def validate_input cnf_table
-    a = cnf_table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol)}
-    b = cnf_table.keys
+  def validate_input
+    a = @table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol) }
+    b = @nterminals
 
-    raise UnknownTokensException       unless (a - b).empty?
-    raise NoStartSymbolsGivenException if     (b - a).empty?
+    raise UnknownTokensException.new(a-b) unless (a - b).empty?
+    raise NoPairProductionsException      if     @productions.empty?
+    raise NoStartSymbolsGivenException    if     @start_symbols.empty?
   end
 
   def productions_from table

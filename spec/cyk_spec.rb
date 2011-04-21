@@ -148,6 +148,6 @@ describe Cyk do
       }
     }
 
-    lambda { Cyk.new(options) }.should raise_error(Cyk::UnknownTokensException)
+    lambda { Cyk.new(options) }.should raise_error(Cyk::UnknownTokensException, 'Right side of table includes unknown tokens [:w, :a, :q]. Are all of them defined?')
   end
 end
