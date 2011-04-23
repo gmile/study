@@ -128,7 +128,8 @@ module Builder
   class PunctuationBuilder < Builder
     @values = {
       :colon     => ':',
-      :semicolon => ';'
+      :semicolon => ';',
+      :coma      => ','
     }
 
     def self.build(options)
