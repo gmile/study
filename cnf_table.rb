@@ -9,8 +9,13 @@ class CNFTable
 
   def self.non_terminals
     {
-      :program_fold   => [[:program_fold_1, :n_semicolon]],
-      :program_fold_1 => [[:n_program,      :n_variable ]]
+      :var_and_coma      => [[:n_variable,   :n_coma]],
+      :var_and_semicolon => [[:n_variable,   :n_semicolon]],
+
+      :program_fold      => [[:n_program,    :var_and_semicolon]],
+
+      :uses_fold         => [[:n_uses,       :var_and_semicolon], [:n_uses,       :uses_fold_1]],
+      :uses_fold_1       => [[:var_and_coma, :var_and_semicolon], [:var_and_coma, :uses_fold_1]]
     }
   end
 
