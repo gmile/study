@@ -91,25 +91,37 @@ describe Cyk do
     Cyk.new(string, table).valid?.should be_true
   end
 
-  it 'should raise error if there are unknown nterminals in the right side' do
-    string = Parser.new("a").output.map { |token| token.type }
-    table  = {
-      :t1  => [:variable],
-      :e1  => [:t1, [:t1, :w]],
-      :e2  => [:t1, :a, [:t1, :q]],
+  context 'Exceptions' do
+    let(:string) { 'a b c d'.split }
+    let(:table) {
+      {
+        :t1 => ['a', 'b', 'c', 'd'],
+        :t2 => [:t1, [:t1, :t3]]
+      }
     }
+    it 'should raise error if there are unknown nterminals in the right side' do
+      exception = Cyk::UnknownTokensException
+      message   = 'Right side of table includes unknown tokens [:t3]. Are all of them defined?'
 
-    lambda { Cyk.new(string, table) }.should raise_error(Cyk::UnknownTokensException, 'Right side of table includes unknown tokens [:w, :a, :q]. Are all of them defined?')
-  end
+      lambda { Cyk.new(string, table) }.should raise_error(exception, message)
+    end
 
-  it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
-    string = '1 + 2 / 3 + 5'.split(' ')
-    table  = {
-      :r1 => ['1', '2', '3', '5', [:r2, :r1]],
-      :r2 => [[:r1, :r3]],
-      :r3 => ['+', '/']
-    }
+    it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
+      exception = Cyk::NoStartSymbolsGivenException
+      message   = 'No start symbols given. Left side should include at least one token which is absent from the right side'
 
-    lambda { Cyk.new(string, table) }.should raise_error(Cyk::NoStartSymbolsGivenException, 'No start symbols given. Left side should include at least one token which is absent from the right side')
+      error_agent = { :t2 => [[:t1, :t2]] }
+
+      lambda { Cyk.new(string, table.merge(error_agent)) }.should raise_error(exception, message)
+    end
+
+    it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
+      exception = Cyk::NoPairProductionsException
+      message   = 'No A -> BC productions given. Have you specified them?'
+
+      error_agent = { :t2 => [:t1] }
+
+      lambda { Cyk.new(string, table.merge(error_agent)) }.should raise_error(exception, message)
+    end
   end
 end
