@@ -13,12 +13,34 @@ describe Cyk do
     lambda { Cyk.new(@options) }.should raise_error(Cyk::NoPairProductionsException, 'No A -> BC productions given. Have you specified them?')
   end
 
-  it "should raise error if no A -> B C rules given" do
-    @options = {
-      :table => CNFTable.table,
-      :string => [:program, :variable, :semicolon]
-    }
+  context 'CNF Table' do
+    let!(:table) { CNFTable.table }
 
-    Cyk.new(@options).valid?.should be_true
+    it "should raise error if no A -> B C rules given" do
+      @options = {
+        :table => table,
+        :string => [:program, :variable, :semicolon]
+      }
+
+      Cyk.new(@options).valid?.should be_true
+    end
+
+    it "should parse 'uses' block with only one arg" do
+      @options = {
+        :table => table,
+        :string => [:uses, :variable, :semicolon]
+      }
+
+      Cyk.new(@options).valid?.should be_true
+    end
+
+    it "should parse 'uses' block with several args" do
+      @options = {
+        :table => table,
+        :string => [:uses, :variable, :coma, :variable, :semicolon]
+      }
+
+      Cyk.new(@options).valid?.should be_true
+    end
   end
 end
