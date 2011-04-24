@@ -104,8 +104,10 @@ class Cyk
   def validate
     @start_symbols.each do |symbol|
       i = @nterminals.index(symbol)
-      return @matrix[0][@n-1][i] ? true : false
+      return true if @matrix[0][@n-1][i]
     end
+
+    false
   end
 
   def prepare_matrix
