@@ -112,8 +112,8 @@ class Cyk
 
   def prepare_matrix
     for i in 0..@n-1 do
-      x = @nterminals.index { |key| @table[key].include?(@string[i]) }
-      @matrix[i][0][x] = true
+      basic_productions = @nterminals.select { |key| @table[key].include?(@string[i]) }.map {|key| @nterminals.index(key) }
+      basic_productions.each { |p| @matrix[i][0][p] = true }
     end
   end
 
