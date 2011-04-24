@@ -29,6 +29,19 @@ class Cyk
     validate_input
   end
 
+  def debug_info
+    puts \
+    "@table         : #{@table.inspect}\n" +
+    "@string        : #{@string.inspect}\n" +
+    "@terminals     : #{@terminals.inspect}\n" +
+    "@nterminals    : #{@nterminals.inspect}\n" +
+    "@r             : #{@r.inspect}\n" +
+    "@productions   : #{@productions.inspect}\n" +
+    "@start_symbols : #{@start_symbols.inspect}\n" +
+    "@n             : #{@n.inspect}\n" +
+    "@matrix        : #{@matrix.inspect}"
+  end
+
   def valid?
     prepare_matrix
     calculate
