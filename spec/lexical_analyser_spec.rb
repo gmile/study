@@ -129,6 +129,15 @@ describe Parser do
     ]
   end
 
+  it "should parse coma" do
+    parser.input = "a, 1.234"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable, 'a'    ],
+      [:coma,     ','    ],
+      [:real,     '1.234']
+    ]
+  end
+
   context 'Validity' do
     it "should not be valid: 123456 + 1.789" do
       parser.input = "123456 + 1.789"

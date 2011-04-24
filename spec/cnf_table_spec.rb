@@ -5,42 +5,30 @@ describe Cyk do
   it "should raise error if no A -> B C rules given" do
     CNFTable.stub(:non_terminals).and_return({})
 
-    @options = {
-      :table => CNFTable.table,
-      :string => [:program, :variable, :semicolon]
-    }
+    string = [:program, :variable, :semicolon]
 
-    lambda { Cyk.new(@options) }.should raise_error(Cyk::NoPairProductionsException, 'No A -> BC productions given. Have you specified them?')
+    lambda { Cyk.new(string, CNFTable.table) }.should raise_error(Cyk::NoPairProductionsException, 'No A -> BC productions given. Have you specified them?')
   end
 
   context 'CNF Table' do
     let!(:table) { CNFTable.table }
 
     it "should raise error if no A -> B C rules given" do
-      @options = {
-        :table => table,
-        :string => [:program, :variable, :semicolon]
-      }
+      string = [:program, :variable, :semicolon]
 
-      Cyk.new(@options).valid?.should be_true
+      Cyk.new(string, table).valid?.should be_true
     end
 
     it "should parse 'uses' block with only one arg" do
-      @options = {
-        :table => table,
-        :string => [:uses, :variable, :semicolon]
-      }
+      string = [:uses, :variable, :semicolon]
 
-      Cyk.new(@options).valid?.should be_true
+      Cyk.new(string, table).valid?.should be_true
     end
 
     it "should parse 'uses' block with several args" do
-      @options = {
-        :table => table,
-        :string => [:uses, :variable, :coma, :variable, :semicolon]
-      }
+      string = [:uses, :variable, :coma, :variable, :semicolon]
 
-      Cyk.new(@options).valid?.should be_true
+      Cyk.new(string, table).valid?.should be_true
     end
   end
 end
