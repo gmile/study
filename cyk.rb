@@ -11,6 +11,9 @@ class Cyk
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
   def initialize options = {}
+
+    # TODO: raise errors if @string isn't of String class (same for Array)
+
     @table         = options[:table]
     @string        = options[:string]
 
