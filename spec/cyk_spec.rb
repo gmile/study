@@ -62,7 +62,7 @@ describe Cyk do
 
   it 'should parse with a rule: R -> A A' do
     string = 'a b c d a b c d a b c d a'.split(' ')
-    table  = {
+    table = {
       :r1 => ['a'],
       :r2 => ['b'],
       :c1 => ['c'],
