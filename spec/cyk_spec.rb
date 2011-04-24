@@ -99,6 +99,7 @@ describe Cyk do
         :t2 => [:t1, [:t1, :t3]]
       }
     }
+
     it 'should raise error if there are unknown nterminals in the right side' do
       exception = Cyk::UnknownTokensException
       message   = 'Right side of table includes unknown tokens [:t3]. Are all of them defined?'
