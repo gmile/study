@@ -1,8 +1,6 @@
 require_relative '../lexical_analyser'
 require_relative '../cyk'
 
-# TODO: check if nterms have defined term symbol they can be derived from
-
 describe Cyk do
   context '"program test ;"' do
     let(:string) { 'program test ;'.split }
