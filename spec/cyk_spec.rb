@@ -77,22 +77,35 @@ describe Cyk do
     end
   end
 
-  it 'should parse with a rule: R -> A A' do
-    @options = {
-      :string => 'a b c d'.split(' '),
-      :table  => {
-        :r1 => ['a'],
-        :r2 => ['b'],
-        :r3 => ['c'],
-        :r4 => ['d'],
-        :r5 => [[:r1, :r2], [:r3, :r4]],
-        :r6 => [[:r5, :r5]]
+  context 'patterns' do
+    let(:table) do
+      {
+        :r1 => [:a],
+        :r2 => [:b],
+        :r3 => [:c],
+        :r4 => [:d],
+        :r5 => [[:r2, :r3], [:r2, :r4], [:r5, :r5]],
+        :r6 => [[:r1, :r5]]
       }
-    }
+    end
 
-    x = Cyk.new(@options)
-    result = x.valid?
-    result.should be_true
+    it '"Vars with coma" pattern' do
+      options = {
+        :string => [:a, :b, :c, :b, :d],
+        :table  => table
+      }
+
+      Cyk.new(options).valid?.should be_true
+    end
+
+    it '"Single var" pattern' do
+      options = {
+        :string => [:a, :b, :d],
+        :table  => table
+      }
+
+      Cyk.new(options).valid?.should be_true
+    end
   end
 
   it 'should parse with a rule: R -> A A' do
