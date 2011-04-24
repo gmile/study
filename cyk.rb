@@ -10,12 +10,12 @@ class Cyk
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
-  def initialize options = {}
+  def initialize string, table
 
     # TODO: raise errors if @string isn't of String class (same for Array)
 
-    @table         = options[:table]
-    @string        = options[:string]
+    @table         = table
+    @string        = string
 
     @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
