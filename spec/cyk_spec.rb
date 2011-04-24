@@ -5,7 +5,7 @@ require_relative '../cyk'
 
 describe Cyk do
   context '"program test ;"' do
-    let(:string) { 'program test ;'.split(' ') }
+    let(:string) { 'program test ;'.split }
     let(:table)  {
       {
         :r1 => ['program'],
