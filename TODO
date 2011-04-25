@@ -1,3 +1,7 @@
-Multiline comments!
-Boolean result
-. (dot) as reserved word for program end
+Todo
+ - Multiline comments!
+ - Boolean result (?)
+ - Rename 'variable' -> 'identifier'
+
+Done:
+ - '.' (dot) as reserved word for program end
