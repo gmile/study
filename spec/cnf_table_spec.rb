@@ -8,7 +8,6 @@ describe Cyk do
     string = [:program, :variable]
 
     cyk = Cyk.new(string, table)
-    cyk.start_symbols << :program_title_fold
 
     cyk.valid?.should be_true
     cyk.parse_tree.last.last.should == :program_title_fold
@@ -19,7 +18,6 @@ describe Cyk do
       string = [:uses, :variable]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :uses_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :uses_fold
@@ -29,7 +27,6 @@ describe Cyk do
       string = [:uses, :variable, :coma, :variable]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :uses_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :uses_fold
@@ -40,7 +37,6 @@ describe Cyk do
     string = [:variable, :add, :real, :add, :integer, :add, :variable]
 
     cyk = Cyk.new(string, table)
-    cyk.start_symbols << :value_fold
 
     cyk.valid?.should be_true
     cyk.parse_tree.last.last.should == :value_fold
@@ -51,7 +47,6 @@ describe Cyk do
       string = [:variable, :assignement, :variable]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :common_expr_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :common_expr_fold
@@ -61,7 +56,6 @@ describe Cyk do
       string = [:variable, :assignement, :variable, :add, :variable, :add, :integer]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :common_expr_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :common_expr_fold
@@ -73,7 +67,6 @@ describe Cyk do
       string = [:begin, :end]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :block_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :block_fold
@@ -83,7 +76,6 @@ describe Cyk do
       string = [:begin, :variable, :assignement, :variable, :add, :variable, :add, :integer, :end]
 
       cyk = Cyk.new(string, table)
-      cyk.start_symbols << :block_fold
 
       cyk.valid?.should be_true
       cyk.parse_tree.last.last.should == :block_fold
