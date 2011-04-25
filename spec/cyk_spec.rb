@@ -60,6 +60,7 @@ describe Cyk do
 
   it 'should parse with a rule: R -> A A' do
     string = 'a b c d a b c d a b c d a'.split(' ')
+
     table = {
       :r1 => ['a'],
       :r2 => ['b'],
@@ -74,16 +75,17 @@ describe Cyk do
 
   it 'should parse a real piece of program with reccurent produtions' do
     string = Parser.new("s := 10; s := 12; s := 14;").output.map { |token| token.type }
-    table  = {
-      :t1  => [:variable   ],
-      :t2  => [:assignement],
-      :t3  => [:integer    ],
-      :t4  => [:semicolon  ],
-      :e1  => [[:t1, :t2]  ],
-      :e2  => [[:e1, :t3]  ],
-      :e3  => [[:e2, :t4]  ],
-      :e4  => [[:e3, :e3]  ],
-      :e5  => [[:e4, :e3]  ]
+
+    table = {
+      :t1 => [:variable   ],
+      :t2 => [:assignement],
+      :t3 => [:integer    ],
+      :t4 => [:semicolon  ],
+      :e1 => [[:t1, :t2]  ],
+      :e2 => [[:e1, :t3]  ],
+      :e3 => [[:e2, :t4]  ],
+      :e4 => [[:e3, :e3]  ],
+      :e5 => [[:e4, :e3]  ]
     }
 
     Cyk.new(string, table).valid?.should be_true
