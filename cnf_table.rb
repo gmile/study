@@ -9,23 +9,20 @@ class CNFTable
 
   def self.non_terminals
     {
-      :var_and_coma      => [[:n_variable,    :n_coma           ]],
-      :var_and_semicolon => [[:n_variable,    :n_semicolon      ]],
+      :operation          => [:add, :sub, :mul, :div    ],
+      :value              => [:integer, :real, :variable],
 
-      :program_fold      => [[:n_program,     :var_and_semicolon]],
+      :program_title_fold => [[:n_program,  :n_variable]],
+      :uses_fold          => [[:n_uses,     :n_variable], [:n_uses, :uses_fold_1]],
+      :uses_fold_1        => [[:n_variable, :n_coma],     [:uses_fold_1, :n_variable], [:uses_fold_1, :uses_fold_1]],
 
-      :uses_fold         => [[:n_uses,        :var_and_semicolon], [:n_uses,       :uses_fold_1]],
-      :uses_fold_1       => [[:var_and_coma,  :var_and_semicolon], [:var_and_coma, :uses_fold_1]],
+      :value_fold         => [[:value,      :operation], [:value_fold, :value], [:value_fold, :value_fold]],
 
-      :block_fold        => [[:n_begin,       :n_end            ]],
+      :common_expr_fold   => [[:n_variable,    :common_expr_fold_1    ]],
+      :common_expr_fold_1 => [[:n_assignement, :value_fold       ], [:n_assignement, :value]],
 
-      :operation         => [:add, :sub, :mul, :div              ],
-      :value             => [:integer, :real, :variable          ],
-      :value_fold        => [[:value_fold_1,  :value            ]],
-      :value_fold_1      => [[:value,         :operation        ]],
-
-      :common_expr       => [[:n_variable,    :common_expr_1    ]],
-      :common_expr_1     => [[:n_assignement, :value_fold       ]]
+      :block_fold         => [[:n_begin, :n_end], [:n_begin, :block_fold_1]],
+      :block_fold_1       => [[:common_expr_fold, :n_end]]
     }
   end
 
