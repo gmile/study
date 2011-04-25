@@ -1,4 +1,5 @@
 require 'set'
+require 'ostruct'
 
 require_relative 'cnf_table'
 require_relative 'errors'
@@ -118,8 +119,18 @@ class Cyk
     end
   end
 
-  def update_parse_tree start, endd, a
-    @parse_tree << [start, endd, @nterminals[a]]
+  def update_parse_tree start, length, a
+    range = start..(start+length)
+    nodes = @parse_tree.select { |node| range.cover?(node.start) && range.cover?(node.start + node.length) }
+
+    if @parse_tree.empty? || nodes.empty?
+      @parse_tree << OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a]})
+      return
+    end
+
+    indexes = nodes.map { |node| @parse_tree.index(node) }
+    node = OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a], :children => nodes})
+    @parse_tree[indexes.min..indexes.max] = [node]
   end
 
   def calculate
