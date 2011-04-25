@@ -6,7 +6,8 @@ require_relative 'errors'
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols
+  attr_accessor :start_symbols
+  attr_reader :parse_tree
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
@@ -116,6 +117,10 @@ class Cyk
     end
   end
 
+  def update_parse_tree start, endd, a
+    @parse_tree << [start, endd, @nterminals[a]]
+  end
+
   def calculate
     for i in 2..@n do
       for j in 1..@n-i+1 do
@@ -127,7 +132,11 @@ class Cyk
 
             x, y, z = i-1, j-1, k-1
 
-            @matrix[y][x][a] = true if @matrix[y][z][b] and @matrix[y+k][x-k][c]
+            if @matrix[y][z][b] and @matrix[y+k][x-k][c]
+              @matrix[y][x][a] = true
+
+              update_parse_tree(y, x, a)
+            end
           end
         end
       end
