@@ -26,6 +26,8 @@ class Cyk
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
 
+    @parse_tree    = []
+
     validate_input
   end
 
