@@ -22,7 +22,7 @@ class Cyk
     @r             = @table.size
 
     @productions   = productions_from(@table)
-    @start_symbols = start_symbols_from(@productions)
+    @start_symbols = start_symbols_from(@table)
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
 
@@ -74,7 +74,6 @@ class Cyk
 
     raise UnknownTokensException.new(a-b) unless (a - b).empty?
     raise NoPairProductionsException      if     @productions.empty?
-    raise NoStartSymbolsGivenException    if     @start_symbols.empty?
   end
 
   def productions_from table
@@ -89,14 +88,14 @@ class Cyk
     productions
   end
 
-  def start_symbols_from productions
-    found = Set.new
+  def start_symbols_from table
+    start_symbols = Set.new
 
-    for prod in productions
-      found << prod[0] unless productions.any? { |p| p[1..2].include?(prod[0]) }
+    for rule in table
+      start_symbols << rule[0] if rule[1].any? { |item| item.is_a?(Array) }
     end
 
-    found
+    start_symbols
   end
 
   def plain_debug array

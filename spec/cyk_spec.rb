@@ -17,7 +17,7 @@ describe Cyk do
     it 'should prove that sentance can be generated over a given alphabet' do
       cyk = Cyk.new(string, table)
       cyk.valid?.should be_true
-      cyk.start_symbols.should == Set.new([:r4])
+      cyk.start_symbols.should == Set.new([:r4, :r5])
     end
 
     it 'should not bother if there are redundant rules' do
@@ -29,7 +29,7 @@ describe Cyk do
 
       cyk = Cyk.new(string, table.merge(redundant_rules))
       cyk.valid?.should be_true
-      cyk.start_symbols.should == Set.new([:r4, :r6])
+      cyk.start_symbols.should == Set.new([:r4, :r5, :r6])
     end
   end
 
@@ -170,15 +170,6 @@ describe Cyk do
       message   = 'Right side of table includes unknown tokens [:t3]. Are all of them defined?'
 
       lambda { Cyk.new(string, table) }.should raise_error(exception, message)
-    end
-
-    it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
-      exception = Cyk::NoStartSymbolsGivenException
-      message   = 'No start symbols given. Left side should include at least one token which is absent from the right side'
-
-      error_agent = { :t2 => [[:t1, :t2]] }
-
-      lambda { Cyk.new(string, table.merge(error_agent)) }.should raise_error(exception, message)
     end
 
     it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
