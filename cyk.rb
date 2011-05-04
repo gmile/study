@@ -7,8 +7,7 @@ require_relative 'errors'
 class Cyk
   include Errors::Cyk
 
-  attr_accessor :start_symbols
-  attr_reader :parse_tree
+  attr_reader :start_symbols, :parse_tree
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
