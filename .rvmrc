@@ -1,1 +1,2 @@
-rvm use 1.9.2-p0@lexer
+rvm_install_on_use_flag=1
+rvm use 1.9.2-head@lexer
