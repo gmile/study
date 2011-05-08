@@ -1,148 +1,82 @@
 require_relative '../cnf_table'
 require_relative '../cyk'
+require 'rspec/expectations'
+
+RSpec::Matchers.define :be_folded do
+  match do |example|
+    input_string     = Parser.new(example.description).output.map { |token| token.type }
+    expected_folding = example.example_group.description.to_sym
+    cyk              = Cyk.new(input_string, table)
+
+    cyk.valid?
+    @node = cyk.parse_tree.first.node
+    @node == expected_folding
+  end
+
+  failure_message_for_should do |example|
+    "#{example.example_group.description.to_sym} expected, but #{@node} found"
+  end
+end
 
 describe Cyk do
   let!(:table) { CNFTable.table }
 
-  def test_folding string, expected_folding
-    cyk = Cyk.new(string, table)
-
-    cyk.valid?.should be_true
-    cyk.parse_tree.first.node.should == expected_folding
+  context 'program_title_fold' do
+    it('program foo')                               { example.should be_folded }
   end
-
-  it 'program_title_fold' do
-    test_folding [:program, :variable], :program_title_fold
-  end
-
   context 'uses_fold' do
-    it 'with only one arg' do
-      test_folding [:uses, :variable], :uses_fold
-    end
-
-    it 'with several args' do
-      test_folding [:uses, :variable, :coma, :variable], :uses_fold
-    end
+    it('uses fuu')                                  { example.should be_folded }
+    it('uses fuu, bar')                             { example.should be_folded }
   end
 
-  it 'value fold' do
-    test_folding [:variable, :add, :real, :add, :integer, :add, :variable], :value_fold
+  context 'value_fold' do
+    it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
   context 'common_expr_fold' do
-    it 'simple right side' do
-      test_folding [:variable, :assignement, :variable], :common_expr_fold
-    end
+    it('x := y')                                    { example.should be_folded }
+    it('x := y + z + 5')                            { example.should be_folded }
 
-    it 'complex right side' do
-      test_folding [:variable, :assignement, :variable, :add, :variable, :add, :integer], :common_expr_fold
-    end
+    it 'x := y - 3 * (1 - 2)'
+    it 'some_bool := 3 < 5;'
   end
 
   context 'common_expr_fold_list' do
-    it 'simple right side' do
-      test_folding [:variable, :assignement, :variable, :semicolon, :variable, :assignement, :variable], :common_expr_fold_list
-    end
-
-    it 'complex right side' do
-      string = [
-        :variable, :assignement, :variable, :semicolon,
-        :variable, :assignement, :variable, :semicolon,
-        :variable, :assignement, :variable, :semicolon,
-        :variable, :assignement, :variable
-      ]
-
-      test_folding string, :common_expr_fold_list
-    end
+    it('x := y; a := b')                            { example.should be_folded }
+    it('x := y; a := b; c := d; i := j')            { example.should be_folded }
   end
 
   context 'block_fold' do
-    it 'with no statements' do
-      test_folding [:begin, :end], :block_fold
-    end
-
-    it 'with one statement' do
-      test_folding [:begin, :variable, :assignement, :variable, :add, :variable, :add, :integer, :end], :block_fold
-    end
-
-    it 'with multiple statement' do
-      test_folding [
-        :begin,
-        :variable, :assignement, :variable, :add, :variable, :add, :integer, :semicolon,
-        :variable, :assignement, :integer, :semicolon,
-        :variable, :assignement, :integer, :end
-      ], :block_fold
-    end
+    it('begin end')                                 { example.should be_folded }
+    it('begin x := y + z + 5 end')                  { example.should be_folded }
+    it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
   end
 
   context 'boolean_block_fold' do
-    context 'boolean_block_body' do
-      it 'x = 5' do
-        test_folding [:variable, :equal, :integer], :basic_boolean_expression
-      end
+    context 'basic_boolean_expression' do
+      it('x = 5')                                   { example.should be_folded }
+    end
 
-      it 'x = 5 and y = 10' do
-        test_folding [:variable, :equal, :integer, :and, :variable, :equal, :integer], :combined_boolean_expression
-      end
-
-      it 'x = 5 or y = false' do
-        test_folding [:variable, :equal, :integer, :and, :variable, :equal, :false], :combined_boolean_expression
-      end
-
-      it 'x = 5 and y' do
-        test_folding [:variable, :equal, :integer, :and, :false], :combined_boolean_expression
-      end
-
-      it 'x = 5 or y' do
-        test_folding [:variable, :equal, :integer, :or, :variable], :combined_boolean_expression
-      end
-
-      it '(x = 5) and (y = true)' do
-        test_folding [
-          :left_bracket, :variable, :equal, :integer, :right_bracket,
-          :and,
-          :left_bracket, :variable, :equal, :true, :right_bracket], :combined_boolean_expression
-      end
-
-      it '(x = 5) and (y = true) or (x = true)' do
-        test_folding [
-          :left_bracket, :variable, :equal, :integer, :right_bracket,
-          :and,
-          :left_bracket, :variable, :equal, :true, :right_bracket,
-          :or,
-          :left_bracket, :variable, :equal, :true, :right_bracket], :combined_boolean_expression
-      end
-
-      it '(x = 5) or y' do
-        test_folding [
-          :left_bracket, :variable, :equal, :integer, :right_bracket,
-          :or,
-          :variable], :combined_boolean_expression
-      end
-
-      it '(x) or (y)' do
-        test_folding [:left_bracket, :variable, :right_bracket, :and, :left_bracket, :variable, :right_bracket], :combined_boolean_expression
-      end
-
-      it 'x and y' do
-        test_folding [:variable, :and, :variable], :combined_boolean_expression
-      end
-
-      it 'true or false' do
-        test_folding [:true, :or, :false], :combined_boolean_expression
-      end
-
-      it 'x = 5 and not y' do
-        test_folding [:variable, :equal, :integer, :and, :not, :variable], :combined_boolean_expression
-      end
+    context 'combined_boolean_expression' do
+      it('x = 5 and y = 10')                        { example.should be_folded }
+      it('x = 5 or y = false')                      { example.should be_folded }
+      it('x = 5 and y')                             { example.should be_folded }
+      it('x = 5 or y')                              { example.should be_folded }
+      it('(x = 5) and (y = true)')                  { example.should be_folded }
+      it('(x = 5) and (y = true) or (x = true)')    { example.should be_folded }
+      it('(x = 5) or y')                            { example.should be_folded }
+      it('(x) or (y)')                              { example.should be_folded }
+      it('x and y')                                 { example.should be_folded }
+      it('true or false')                           { example.should be_folded }
+      it('x = 5 and not y')                         { example.should be_folded }
 
       it '(combined...)'
       it 'not (combined...)'
-      it '(((((())))))' # we can have any depth...
+      it '(((((())))))'
+    end
 
-      it 'not x = 5' do
-        test_folding [:not, :variable, :equal, :integer], :basic_boolean_expression_n
-      end
+    context 'basic_boolean_expression_n' do
+      it('not x = 5')                               { example.should be_folded }
     end
   end
 end
