@@ -64,5 +64,85 @@ describe Cyk do
     it 'with one statement' do
       test_folding [:begin, :variable, :assignement, :variable, :add, :variable, :add, :integer, :end], :block_fold
     end
+
+    it 'with multiple statement' do
+      test_folding [
+        :begin,
+        :variable, :assignement, :variable, :add, :variable, :add, :integer, :semicolon,
+        :variable, :assignement, :integer, :semicolon,
+        :variable, :assignement, :integer, :end
+      ], :block_fold
+    end
+  end
+
+  context 'boolean_block_fold' do
+    context 'boolean_block_body' do
+      it 'x = 5' do
+        test_folding [:variable, :equal, :integer], :basic_boolean_expression
+      end
+
+      it 'x = 5 and y = 10' do
+        test_folding [:variable, :equal, :integer, :and, :variable, :equal, :integer], :combined_boolean_expression
+      end
+
+      it 'x = 5 or y = false' do
+        test_folding [:variable, :equal, :integer, :and, :variable, :equal, :false], :combined_boolean_expression
+      end
+
+      it 'x = 5 and y' do
+        test_folding [:variable, :equal, :integer, :and, :false], :combined_boolean_expression
+      end
+
+      it 'x = 5 or y' do
+        test_folding [:variable, :equal, :integer, :or, :variable], :combined_boolean_expression
+      end
+
+      it '(x = 5) and (y = true)' do
+        test_folding [
+          :left_bracket, :variable, :equal, :integer, :right_bracket,
+          :and,
+          :left_bracket, :variable, :equal, :true, :right_bracket], :combined_boolean_expression
+      end
+
+      it '(x = 5) and (y = true) or (x = true)' do
+        test_folding [
+          :left_bracket, :variable, :equal, :integer, :right_bracket,
+          :and,
+          :left_bracket, :variable, :equal, :true, :right_bracket,
+          :or,
+          :left_bracket, :variable, :equal, :true, :right_bracket], :combined_boolean_expression
+      end
+
+      it '(x = 5) or y' do
+        test_folding [
+          :left_bracket, :variable, :equal, :integer, :right_bracket,
+          :or,
+          :variable], :combined_boolean_expression
+      end
+
+      it '(x) or (y)' do
+        test_folding [:left_bracket, :variable, :right_bracket, :and, :left_bracket, :variable, :right_bracket], :combined_boolean_expression
+      end
+
+      it 'x and y' do
+        test_folding [:variable, :and, :variable], :combined_boolean_expression
+      end
+
+      it 'true or false' do
+        test_folding [:true, :or, :false], :combined_boolean_expression
+      end
+
+      it 'x = 5 and not y' do
+        test_folding [:variable, :equal, :integer, :and, :not, :variable], :combined_boolean_expression
+      end
+
+      it '(combined...)'
+      it 'not (combined...)'
+      it '(((((())))))' # we can have any depth...
+
+      it 'not x = 5' do
+        test_folding [:not, :variable, :equal, :integer], :basic_boolean_expression_n
+      end
+    end
   end
 end
