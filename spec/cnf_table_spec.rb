@@ -52,9 +52,19 @@ describe Cyk do
     it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
   end
 
-  context 'boolean_block_fold' do
+  context 'Boolean expressions' do
     context 'basic_boolean_expression' do
       it('x = 5')                                   { example.should be_folded }
+      it 'expression > expression'
+    end
+
+    context 'basic_boolean_expression_n' do
+      it('not x = 5')                               { example.should be_folded }
+    end
+
+    context 'basic_boolean_expression_w' do
+      it('(y)')                                     { example.should be_folded }
+      it('(not y)')                                 { example.should be_folded }
     end
 
     context 'combined_boolean_expression' do
@@ -70,8 +80,8 @@ describe Cyk do
       it('true or false')                           { example.should be_folded }
       it('x = 5 and not y')                         { example.should be_folded }
 
-      it '(combined...)'
-      it 'not (combined...)'
+      it '(combined)'
+      it 'not (combined)'
       it '(((((())))))'
     end
 

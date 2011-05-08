@@ -67,6 +67,16 @@ class Cyk
     end
   end
 
+  def show_pt branch, depth = 0
+    if branch.is_a?(Symbol)
+      print ' '*depth + branch.inspect + "\n"
+    else
+      print ' '*depth + branch.node.to_s + "\n"
+      branch.children.each {|c| show_pt c, depth + 2 } unless branch.children.nil?
+    end
+    nil
+  end
+
   private
   def validate_input
     a = @table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol) }
@@ -120,15 +130,27 @@ class Cyk
 
   def update_parse_tree start, length, a
     range = start..(start+length)
+#    puts '!!!' if start == length+start
     nodes = @parse_tree.select { |node| range.cover?(node.start) && range.cover?(node.start + node.length) }
 
     if @parse_tree.empty? || nodes.empty?
-      @parse_tree << OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a]})
+      @parse_tree << OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a], :children => @string[start..start+length] })
       return
     end
 
     indexes = nodes.map { |node| @parse_tree.index(node) }
+    if nodes.size == 1
+      i = start
+      if start < nodes.first.start
+        i = start
+      elsif start + length > nodes.first.start + nodes.first.length - 1
+        i = start + length
+      end
+      nodes << @string[i]
+    end
+
     node = OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a], :children => nodes})
+
     @parse_tree[indexes.min..indexes.max] = [node]
   end
 
