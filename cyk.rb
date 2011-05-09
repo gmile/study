@@ -31,40 +31,10 @@ class Cyk
     validate_input
   end
 
-  def debug_info
-    puts \
-    "@table         : #{@table.inspect}\n" +
-    "@string        : #{@string.inspect}\n" +
-    "@terminals     : #{@terminals.inspect}\n" +
-    "@nterminals    : #{@nterminals.inspect}\n" +
-    "@r             : #{@r.inspect}\n" +
-    "@productions   : #{@productions.inspect}\n" +
-    "@start_symbols : #{@start_symbols.inspect}\n" +
-    "@n             : #{@n.inspect}\n" +
-    "@matrix        : #{@matrix.inspect}"
-  end
-
   def valid?
     prepare_matrix
     calculate
     validate
-  end
-
-  def complexity
-    @n*@n*@r
-  end
-
-  def trues
-    puts @matrix.flatten.select { |item| item == true }
-  end
-
-  def print_matrix matrix
-    matrix.each_index do |i|
-      puts "\n"
-      matrix[i].each_index do |j|
-        print matrix[i][0][j] ? '1 ' : '0 '
-      end
-    end
   end
 
   def show_pt branch, depth = 0
@@ -106,10 +76,6 @@ class Cyk
     end
 
     start_symbols
-  end
-
-  def plain_debug array
-    puts array.inspect
   end
 
   def validate
