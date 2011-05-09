@@ -38,7 +38,16 @@ class Cyk
     validate
   end
 
+  def tree
+    generate_tree @root
+  end
+
   private
+
+  def generate_tree root
+    root.is_a?(Symbol) ? root : [root.node, root.children.map { |c| generate_tree c }]
+  end
+
   def validate_input
     a = @table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol) }
     b = @nterminals
