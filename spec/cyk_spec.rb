@@ -156,6 +156,30 @@ describe Cyk do
     end
   end
 
+  context 'Build tree from: a b c' do
+    it 'forward strategy' do
+      table = {
+        :e1 => [:a, :b, :c],
+        :e2 => [[:e1, :e2], [:e1, :e1]]
+      }
+
+      cyk = Cyk.new([:a, :b, :c], table)
+      cyk.valid?
+      cyk.tree.should == [:e2, [:e1, [:e2, [:e1, :e1]]]]
+    end
+
+    it 'backward strategy' do
+      table = {
+        :e1 => [:a, :b, :c],
+        :e2 => [[:e2, :e1], [:e1, :e1]]
+      }
+
+      cyk = Cyk.new([:a, :b, :c], table)
+      cyk.valid?
+      cyk.tree.should == [:e2, [[:e2, [:e1, :e1]], :e1]]
+    end
+  end
+
   context 'Exceptions' do
     let(:string) { 'a b c d'.split }
     let(:table) {
