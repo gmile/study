@@ -7,7 +7,7 @@ require_relative 'errors'
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols, :parse_tree
+  attr_reader :start_symbols, :root
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
@@ -26,8 +26,9 @@ class Cyk
     @n             = @string.size
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
 
-    @parse_tree    = []
+    @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil } } }
 
+    @root          = 0
     validate_input
   end
 
@@ -35,16 +36,6 @@ class Cyk
     prepare_matrix
     calculate
     validate
-  end
-
-  def show_pt branch, depth = 0
-    if branch.is_a?(Symbol)
-      print ' '*depth + branch.inspect + "\n"
-    else
-      print ' '*depth + branch.node.to_s + "\n"
-      branch.children.each {|c| show_pt c, depth + 2 } unless branch.children.nil?
-    end
-    nil
   end
 
   private
@@ -90,34 +81,11 @@ class Cyk
   def prepare_matrix
     for i in 0..@n-1 do
       basic_productions = @nterminals.select { |key| @table[key].include?(@string[i]) }.map {|key| @nterminals.index(key) }
-      basic_productions.each { |p| @matrix[i][0][p] = true }
-    end
-  end
-
-  def update_parse_tree start, length, a
-    range = start..(start+length)
-#    puts '!!!' if start == length+start
-    nodes = @parse_tree.select { |node| range.cover?(node.start) && range.cover?(node.start + node.length) }
-
-    if @parse_tree.empty? || nodes.empty?
-      @parse_tree << OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a], :children => @string[start..start+length] })
-      return
-    end
-
-    indexes = nodes.map { |node| @parse_tree.index(node) }
-    if nodes.size == 1
-      i = start
-      if start < nodes.first.start
-        i = start
-      elsif start + length > nodes.first.start + nodes.first.length - 1
-        i = start + length
+      basic_productions.each do |p|
+        @matrix[i][0][p] = true
+        @parse_tree[i][0][p] = @nterminals[p]
       end
-      nodes << @string[i]
     end
-
-    node = OpenStruct.new({ :start => start, :length => length, :node => @nterminals[a], :children => nodes})
-
-    @parse_tree[indexes.min..indexes.max] = [node]
   end
 
   def calculate
@@ -134,7 +102,13 @@ class Cyk
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
               @matrix[y][x][a] = true
 
-              update_parse_tree(y, x, a)
+              @root = @parse_tree[y][x][a] = OpenStruct.new({
+                :node     => prod[0],
+                :children => [
+                  @parse_tree[y][z][b],
+                  @parse_tree[y+k][x-k][c]
+                ]
+              })
             end
           end
         end
