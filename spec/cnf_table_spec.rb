@@ -6,18 +6,15 @@ RSpec::Matchers.define :be_folded do
   match do |example|
     input_string     = Parser.new(example.description).output.map { |token| token.type }
     expected_folding = example.example_group.description.to_sym
-    cyk              = Cyk.new(input_string, table)
+    @cyk             = Cyk.new(input_string, table)
 
-    @valid = cyk.valid?
-    @valid.should be_true
-
-    @root = cyk.root.node
-    @root == expected_folding
+    @cyk.valid?.should be_true
+    @cyk.root.node == expected_folding
   end
 
   failure_message_for_should do |example|
-    if @valid
-      "#{example.example_group.description.to_sym} expected, but #{@root} found"
+    if @cyk.root
+      "#{example.example_group.description.to_sym} expected, but #{@cyk.root.node} found"
     else
       "#{example.example_group.description.to_sym} expected, but it was unable to build tree"
     end
