@@ -89,4 +89,14 @@ describe Cyk do
       it('not x = 5')                               { example.should be_folded }
     end
   end
+
+  context 'Conditional block' do
+    it('if (x)')
+    it('if (x or y)')
+    it('if (x or y)')
+    it('if (true) x := 10; end')
+    it('if (x = true and y == false) x := 10; else end')
+    it('if (x = true and y == false) x := 10 else z := 12 end')
+    it('if (x = true and y == false) x := 10 else z := 12; end')
+  end
 end
