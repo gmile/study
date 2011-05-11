@@ -84,6 +84,7 @@ class Cyk
   def validate
     @start_symbols.each do |symbol|
       i = @nterminals.index(symbol)
+
       if @matrix[0][@n-1][i]
         @root = @parse_tree[0][@n-1][i]
         return true
