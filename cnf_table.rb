@@ -12,7 +12,6 @@ class CNFTable
       :operation             => [:add, :sub, :mul, :div    ],
       :value                 => [:integer, :real, :variable],
 
-      :common_expr_fold_list => [[:common_expr_fold_list, :common_expr_fold_list], [:assignement_expression, :n_semicolon], [:common_expr_fold_list, :assignement_expression]],
 
 #      :block_fold            => [[:n_begin, :n_end], [:n_begin, :block_fold], [:assignement_expression, :n_end], [:common_expr_fold_list, :n_end]]
     }.merge(self.boolean_expression)
@@ -22,15 +21,15 @@ class CNFTable
      .merge(self.algebra_expression)
      .merge(self.assignement_expression)
      .merge(self.statement_block)
+     .merge(self.statement_list)
   end
 
   def self.statement_block
     {
-      :block_fold => [
-        [:n_begin, :n_end],
-        [:n_begin, :block_fold],
-        [:assignement_expression, :n_end],
-        [:common_expr_fold_list, :n_end]]
+      :statement_list => [
+        [:n_begin,        :statement_list],
+        [:statement_list, :n_end         ]
+      ]
     }
   end
 
@@ -59,6 +58,16 @@ class CNFTable
         [:identifier_list, :n_variable],
         [:identifier_list, :n_coma    ],
         [:n_variable,      :n_coma    ]
+      ]
+    }
+  end
+
+  def self.statement_list
+    {
+      :statement_list => [
+        [:assignement_expression, :n_semicolon           ],
+        [:statement_list,         :statement_list        ],
+        [:statement_list,         :assignement_expression]
       ]
     }
   end

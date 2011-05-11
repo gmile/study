@@ -52,16 +52,18 @@ describe Cyk do
     it 'some_bool := 3 < 5;'
   end
 
-  context 'common_expr_fold_list' do
-    it('x := y; a := b')                            { example.should be_folded }
+  context 'statement_list' do
+    it('x := y;')                            { example.should be_folded }
     it('x := y; a := b; c := d; i := j')            { example.should be_folded }
   end
-
+=begin
   context 'block_fold' do
     it('begin end')                                 { example.should be_folded }
     it('begin x := y + z + 5 end')                  { example.should be_folded }
+    it('begin x := y + z + 5; end')
     it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
   end
+=end
 
   context 'Boolean expressions' do
     context 'basic_boolean_expression' do
