@@ -7,7 +7,7 @@ require_relative 'errors'
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols
+  attr_reader :start_symbols, :root
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
@@ -43,12 +43,6 @@ class Cyk
     self.root unless @root
 
     generate_tree @root
-  end
-
-  def root
-    root_symbol = @start_symbols.find { |symbol| @parse_tree[0][@n-1][@nterminals.index(symbol)] }
-
-    @root ||= @parse_tree[0][@n-1][@nterminals.index(root_symbol)]
   end
 
   private
@@ -90,7 +84,10 @@ class Cyk
   def validate
     @start_symbols.each do |symbol|
       i = @nterminals.index(symbol)
-      return true if @matrix[0][@n-1][i]
+      if @matrix[0][@n-1][i]
+        @root = @parse_tree[0][@n-1][i]
+        return true
+      end
     end
 
     false
