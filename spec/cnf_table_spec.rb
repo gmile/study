@@ -26,10 +26,10 @@ end
 
 describe Cyk do
   let!(:table) { CNFTable.table }
-
   context 'program_title_fold' do
     it('program foo')                               { example.should be_folded }
   end
+
   context 'uses_fold' do
     it('uses fuu')                                  { example.should be_folded }
     it('uses fuu, bar')                             { example.should be_folded }
