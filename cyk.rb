@@ -7,7 +7,7 @@ require_relative 'errors'
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols, :root
+  attr_reader :start_symbols
   # @param [Hash] options the options to create a message with.
   # @option options [Array] :string Input string, slplitted into an array
   # @option options [Hash] :table Table of rules
@@ -24,11 +24,12 @@ class Cyk
     @productions   = productions_from(@table)
     @start_symbols = start_symbols_from(@table)
     @n             = @string.size
+
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
+    @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil   } } }
 
-    @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil } } }
+    @root          = nil
 
-    @root          = 0
     validate_input
   end
 
@@ -39,7 +40,15 @@ class Cyk
   end
 
   def tree
+    self.root unless @root
+
     generate_tree @root
+  end
+
+  def root
+    root_symbol = @start_symbols.find { |symbol| @parse_tree[0][@n-1][@nterminals.index(symbol)] }
+
+    @root ||= @parse_tree[0][@n-1][@nterminals.index(root_symbol)]
   end
 
   private
@@ -111,7 +120,7 @@ class Cyk
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
               @matrix[y][x][a] = true
 
-              @root = @parse_tree[y][x][a] = OpenStruct.new({
+              @parse_tree[y][x][a] = OpenStruct.new({
                 :node     => prod[0],
                 :children => [
                   @parse_tree[y][z][b],
