@@ -26,21 +26,26 @@ end
 
 describe Cyk do
   let!(:table) { CNFTable.table }
-  context 'program_title_fold' do
-    it('program foo')                               { example.should be_folded }
+
+  context 'program_title_block' do
+    it('program foo;')                              { example.should be_folded }
   end
 
   context 'uses_fold' do
-    it('uses fuu')                                  { example.should be_folded }
-    it('uses fuu, bar')                             { example.should be_folded }
+    it('uses fuu;')                                 { example.should be_folded }
+    it('uses fuu, bar;')                            { example.should be_folded }
+    it('uses fuu, bar, baz;')                       { example.should be_folded }
   end
 
   context 'value_fold' do
+    it('x + 1.2')                                   { example.should be_folded }
+    it('x + 1.2 + 73')                              { example.should be_folded }
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
-  context 'common_expr_fold' do
+  context 'assignement_expression' do
     it('x := y')                                    { example.should be_folded }
+    it('x := y + z')                                { example.should be_folded }
     it('x := y + z + 5')                            { example.should be_folded }
 
     it 'x := y - 3 * (1 - 2)'
@@ -86,6 +91,7 @@ describe Cyk do
       it('true or false')                           { example.should be_folded }
       it('x = 5 and not y')                         { example.should be_folded }
 
+      it '5 + 10 > 4 - 7'
       it '(combined)'
       it 'not (combined)'
       it '(((((())))))'

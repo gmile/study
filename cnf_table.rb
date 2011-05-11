@@ -12,17 +12,76 @@ class CNFTable
       :operation             => [:add, :sub, :mul, :div    ],
       :value                 => [:integer, :real, :variable],
 
-      :program_title_fold    => [[:n_program,  :n_variable]],
-      :uses_fold             => [[:n_uses, :n_variable], [:n_uses, :uses_fold], [:n_variable, :uses_fold], [:n_coma, :uses_fold], [:n_coma, :n_variable]],
-      :value_fold            => [[:value, :operation], [:value_fold, :value], [:value_fold, :value_fold]],
+      :common_expr_fold_list => [[:common_expr_fold_list, :common_expr_fold_list], [:assignement_expression, :n_semicolon], [:common_expr_fold_list, :assignement_expression]],
 
-      :common_expr_fold      => [[:n_variable, :common_expr_fold_1]], # can we somehow put value and value_fold toather?
-      :common_expr_fold_1    => [[:n_assignement, :value_fold], [:n_assignement, :value]],
-
-      :common_expr_fold_list => [[:common_expr_fold_list, :common_expr_fold_list], [:common_expr_fold, :n_semicolon], [:common_expr_fold_list, :common_expr_fold]],
-
-      :block_fold            => [[:n_begin, :n_end], [:n_begin, :block_fold], [:common_expr_fold, :n_end], [:common_expr_fold_list, :n_end]]
+#      :block_fold            => [[:n_begin, :n_end], [:n_begin, :block_fold], [:assignement_expression, :n_end], [:common_expr_fold_list, :n_end]]
     }.merge(self.boolean_expression)
+     .merge(self.program_title_block)
+     .merge(self.uses_block)
+     .merge(self.identifier_list)
+     .merge(self.algebra_expression)
+     .merge(self.assignement_expression)
+     .merge(self.statement_block)
+  end
+
+  def self.statement_block
+    {
+      :block_fold => [
+        [:n_begin, :n_end],
+        [:n_begin, :block_fold],
+        [:assignement_expression, :n_end],
+        [:common_expr_fold_list, :n_end]]
+    }
+  end
+
+  def self.program_title_block
+    {
+      :program_title_block    => [
+        [:n_program,            :n_variable],
+        [:program_title_block,  :n_semicolon]
+      ]
+    }
+  end
+
+  def self.uses_block
+    {
+      :uses_fold => [
+        [:n_uses,     :n_variable     ],
+        [:n_uses,     :identifier_list],
+        [:uses_fold,  :n_semicolon    ]
+      ]
+    }
+  end
+
+  def self.identifier_list
+    {
+      :identifier_list => [
+        [:identifier_list, :n_variable],
+        [:identifier_list, :n_coma    ],
+        [:n_variable,      :n_coma    ]
+      ]
+    }
+  end
+
+  # statement
+  def self.assignement_expression
+    {
+      :assignement_expression => [
+        [:n_variable,             :n_assignement],
+        [:assignement_expression, :value_fold   ],
+        [:assignement_expression, :value        ]
+      ]
+    }
+  end
+
+  def self.algebra_expression
+    {
+      :value_fold => [
+        [:value_fold, :value     ],
+        [:value_fold, :operation ],
+        [:value,      :operation ]
+      ]
+    }
   end
 
   def self.boolean_expression
