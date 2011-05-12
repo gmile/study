@@ -8,27 +8,32 @@ class CNFTable
   end
 
   def self.non_terminals
-    {
-      :operation             => [:add, :sub, :mul, :div    ],
-      :value                 => [:integer, :real, :variable],
+    {}.merge(self.value)
+      .merge(self.operation)
+      .merge(self.boolean_expression)
+      .merge(self.program_title_block)
+      .merge(self.uses_block)
+      .merge(self.identifier_list)
+      .merge(self.algebra_expression)
+      .merge(self.assignement_expression)
+      .merge(self.statement_block)
+      .merge(self.statement_list)
+  end
 
+  def self.operation
+    { :operation => [:add, :sub, :mul, :div] }
+  end
 
-#      :block_fold            => [[:n_begin, :n_end], [:n_begin, :block_fold], [:assignement_expression, :n_end], [:common_expr_fold_list, :n_end]]
-    }.merge(self.boolean_expression)
-     .merge(self.program_title_block)
-     .merge(self.uses_block)
-     .merge(self.identifier_list)
-     .merge(self.algebra_expression)
-     .merge(self.assignement_expression)
-     .merge(self.statement_block)
-     .merge(self.statement_list)
+  def self.value
+    { :value => [:integer, :real, :variable] }
   end
 
   def self.statement_block
     {
-      :statement_list => [
-        [:n_begin,        :statement_list],
-        [:statement_list, :n_end         ]
+      :statement_block => [
+        [:n_begin,         :statement_list],
+        [:n_begin,         :n_end         ],
+        [:statement_block, :n_end         ]
       ]
     }
   end
