@@ -71,7 +71,7 @@ class CNFTable
   def self.statement_list
     {
       :statement_list => [
-        [:assignement_statement, :n_semicolon           ],
+        [:assignement_statement, :n_semicolon          ],
         [:statement_list,        :statement_list       ],
         [:statement_list,        :assignement_statement]
       ]
