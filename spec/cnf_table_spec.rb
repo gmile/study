@@ -77,6 +77,7 @@ describe Cyk do
 
     context 'basic_boolean_expression_n' do
       it('not x = 5')                               { example.should be_folded }
+      it('not (x = 5)')
     end
 
     context 'basic_boolean_expression_w' do
