@@ -18,6 +18,7 @@ class CNFTable
       .merge(self.assignement_statement)
       .merge(self.statement_block)
       .merge(self.statement_list)
+      .merge(self.if_then_statement)
   end
 
   def self.operation
@@ -88,12 +89,26 @@ class CNFTable
     }
   end
 
+  def self.if_then_statement
+    {
+      :if_then_statement => [
+        [:n_if,              :basic_boolean_expression   ],
+        [:n_if,              :basic_boolean_expression_n ],
+        [:n_if,              :basic_boolean_expression_w ],
+        [:n_if,              :combined_boolean_expression],
+        [:if_then_statement, :n_then                     ],
+        [:if_then_statement, :statement_block            ]
+       #[:if_then_statement, :statement                  ] add when statement's ready
+      ]
+    }
+  end
+
   def self.algebra_expression
     {
       :value_fold => [
-        [:value_fold, :value     ],
-        [:value_fold, :operation ],
-        [:value,      :operation ]
+        [:value_fold, :value    ],
+        [:value_fold, :operation],
+        [:value,      :operation]
       ]
     }
   end
