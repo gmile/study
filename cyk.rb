@@ -45,6 +45,24 @@ class Cyk
     generate_tree @root
   end
 
+  def combine
+    r = Array.new(@n) { Array.new(@n) { Set.new } }
+    matrix = @parse_tree
+
+    for m in 0..@r-1
+      for row in 0..@n-1
+        for col in 0..@n-1
+          unless matrix[col][row][m].nil?
+            client = matrix[col][row][m]
+            r[row][col].merge [client.is_a?(Symbol) ? client : client.node]
+          end
+        end
+      end
+    end
+
+    r
+  end
+
   private
 
   def generate_tree root
