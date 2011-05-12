@@ -40,7 +40,7 @@ describe Cyk do
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
-  context 'assignement_expression' do
+  context 'assignement_statement' do
     it('x := y')                                    { example.should be_folded }
     it('x := y + z')                                { example.should be_folded }
     it('x := y + z + 5')                            { example.should be_folded }

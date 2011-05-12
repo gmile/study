@@ -15,7 +15,7 @@ class CNFTable
       .merge(self.uses_block)
       .merge(self.identifier_list)
       .merge(self.algebra_expression)
-      .merge(self.assignement_expression)
+      .merge(self.assignement_statement)
       .merge(self.statement_block)
       .merge(self.statement_list)
   end
@@ -71,19 +71,19 @@ class CNFTable
   def self.statement_list
     {
       :statement_list => [
-        [:assignement_expression, :n_semicolon           ],
-        [:statement_list,         :statement_list        ],
-        [:statement_list,         :assignement_expression]
+        [:assignement_statement, :n_semicolon           ],
+        [:statement_list,        :statement_list       ],
+        [:statement_list,        :assignement_statement]
       ]
     }
   end
 
-  def self.assignement_expression
+  def self.assignement_statement
     {
-      :assignement_expression => [
-        [:n_variable,             :n_assignement],
-        [:assignement_expression, :value_fold   ],
-        [:assignement_expression, :value        ]
+      :assignement_statement => [
+        [:n_variable,            :n_assignement],
+        [:assignement_statement, :value_fold   ],
+        [:assignement_statement, :value        ]
       ]
     }
   end
