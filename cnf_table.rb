@@ -42,7 +42,7 @@ class CNFTable
   def self.program_title_block
     {
       :program_title_block    => [
-        [:n_program,            :n_variable],
+        [:n_program,            :n_variable ],
         [:program_title_block,  :n_semicolon]
       ]
     }
@@ -72,6 +72,7 @@ class CNFTable
   def self.statement_list
     {
       :statement_list => [
+        # no explicit statements here! refactor to use :statement instead
         [:assignement_statement, :n_semicolon          ],
         [:statement_list,        :statement_list       ],
         [:statement_list,        :assignement_statement]
