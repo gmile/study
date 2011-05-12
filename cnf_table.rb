@@ -67,6 +67,7 @@ class CNFTable
     }
   end
 
+  # add statements to this list !
   def self.statement_list
     {
       :statement_list => [
@@ -77,7 +78,6 @@ class CNFTable
     }
   end
 
-  # statement
   def self.assignement_expression
     {
       :assignement_expression => [
