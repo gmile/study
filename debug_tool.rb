@@ -13,7 +13,7 @@ max_string_length = combined_matrix.map { |row| row.map { |set| set.to_a.join(',
 for row in combined_matrix
   for col in row
     string = col.size.zero? ? '...' : col.to_a.join(', ')
-    print string.ljust(max_string_length + 3)
+    print string.ljust(max_string_length + 2)
   end
   puts "\n"
 end
