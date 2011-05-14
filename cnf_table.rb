@@ -85,9 +85,12 @@ class CNFTable
   def self.statement
     {
       :statement => [
-        [:assignement_statement, :n_semicolon],
-        [:block_statement,       :n_semicolon],
-        [:block_statement,       :n_semicolon]
+        [:for_statement,          :n_semicolon],
+        [:if_then_else_statement, :n_semicolon],
+        [:while_statement,        :n_semicolon],
+        [:assignement_statement,  :n_semicolon],
+        [:block_statement,        :n_semicolon],
+        [:block_statement,        :n_semicolon]
       ]
     }
   end
