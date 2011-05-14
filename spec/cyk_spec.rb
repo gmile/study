@@ -96,19 +96,21 @@ describe Cyk do
 
     it 'should parse with: A -> [a, b, [C, D]] types of rules' do
       table = {
-        :e1 => [:a, :b, :c],
-        :e2 => [[:e1, :e1]],
-        :e3 => [[:e2, :e1]]
+        :e1 => [:a, :b],
+        :e2 => [:c, [:e1, :e1]],
+        :e3 => [[:e2, :e2]]
       }
 
-      Cyk.new(string, table).valid?.should be_true
+      cyk = Cyk.new(string, table)
+      cyk.valid?.should be_true
+      cyk.instance_variable_get(:@known_terminals).should == [:a, :b, :c]
     end
 
     it 'should parse with: A -> [[B, C]] types of rules' do
       table = {
-        :t1 => [:a, :b, :c],
-        :e2 => [[:t1, :t1]],
-        :e3 => [[:e2, :t1]]
+        :e1 => [:a, :b, :c],
+        :e2 => [[:e1, :e1]],
+        :e3 => [[:e2, :e1]]
       }
 
       Cyk.new(string, table).valid?.should be_true
@@ -133,7 +135,9 @@ describe Cyk do
         :e3 => [[:e2, :e1]]
       }
 
-      Cyk.new(string, table).valid?.should be_true
+      cyk = Cyk.new(string, table)
+      cyk.valid?.should be_true
+      cyk.instance_variable_get(:@known_terminals).should == [:a]
     end
 
     it 'should parse with: A -> [a] types of rules' do
@@ -176,26 +180,37 @@ describe Cyk do
   end
 
   context 'Exceptions' do
-    let(:string) { 'a b c d'.split }
+    let(:string) { [:a, :b, :c, :d, :d] }
     let(:table) {
       {
-        :t1 => ['a', 'b', 'c', 'd'],
-        :t2 => [:t1, [:t1, :t3]]
+        :e1 => [:a, :b, :c, :d],
+        :e2 => [:e1, [:e1, :e3]]
       }
     }
 
-    it 'should raise error if there are unknown nterminals in the right side' do
-      exception = Cyk::UnknownTokensException
-      message   = 'Right side of table includes unknown tokens [:t3]. Are all of them defined?'
+    it 'should raise error if there are unknown non-terminals in the right side' do
+      exception = Cyk::UnknownNonTerminalsException
+      message   = 'Right side of table includes unknown non-terminals [:e3]. Are all of them defined?'
 
       lambda { Cyk.new(string, table) }.should raise_error(exception, message)
+    end
+
+    it 'should raise error if there are unknown terminals in the right side' do
+      exception = Cyk::UnknownTerminalsException
+      message   = 'Right side of table includes unknown terminals [:d]. Are all of them defined?'
+
+      error_agent = {
+        :e1 => [:a, :b, :c]
+      }
+
+      lambda { Cyk.new(string, table.merge(error_agent)) }.should raise_error(exception, message)
     end
 
     it 'should raise NoStartSymbolsGivenException exception if that\' the case' do
       exception = Cyk::NoPairProductionsException
       message   = 'No A -> BC productions given. Have you specified them?'
 
-      error_agent = { :t2 => [:t1] }
+      error_agent = { :e2 => [:e1] }
 
       lambda { Cyk.new(string, table.merge(error_agent)) }.should raise_error(exception, message)
     end

@@ -69,11 +69,15 @@ class Cyk
   end
 
   def validate_input
-    a = @table.values.select { |value| value.any? {|v| v.is_a?(Array)} }.flatten.select {|i| i.is_a?(Symbol) }
+    a = @table.values.select { |v| v.any? { |e| e.is_a?(Array)} }.map { |v| v.select { |e| e.is_a?(Array)} }.flatten
     b = @nterminals
 
-    raise UnknownTokensException.new(a-b) unless (a - b).empty?
-    raise NoPairProductionsException      if     @productions.empty?
+    @known_terminals  = @table.values.map { |v| v.select { |e| !e.is_a?(Array)} }.flatten.uniq
+    unknown_terminals = (@string - @known_terminals).uniq
+
+    raise UnknownTerminalsException.new unknown_terminals unless unknown_terminals.empty?
+    raise UnknownNonTerminalsException.new (a-b).uniq     unless (a - b).empty?
+    raise NoPairProductionsException                      if     @productions.empty?
   end
 
   def productions_from table

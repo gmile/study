@@ -10,10 +10,16 @@ module Errors
   end
 
   module Cyk
-    class UnknownTokensException < Exception
+    class UnknownNonTerminalsException < Exception
       def initialize tokens; @tokens = tokens; end
 
-      def to_s; "Right side of table includes unknown tokens #{@tokens.inspect}. Are all of them defined?" end
+      def to_s; "Right side of table includes unknown non-terminals #{@tokens.inspect}. Are all of them defined?" end
+    end
+
+    class UnknownTerminalsException < Exception
+      def initialize tokens; @tokens = tokens; end
+
+      def to_s; "Right side of table includes unknown terminals #{@tokens.inspect}. Are all of them defined?" end
     end
 
     class NoStartSymbolsGivenException < Exception
