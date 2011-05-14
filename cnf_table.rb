@@ -126,8 +126,7 @@ class CNFTable
         [:n_if,                   :basic_boolean_expression_w ],
         [:n_if,                   :combined_boolean_expression],
         [:if_then_else_statement, :then_statement             ]
-      ]
-    }.merge({
+      ],
       :then_statement => [
         [:n_then,         :statement     ],
         [:then_statement, :else_statement]
@@ -135,7 +134,7 @@ class CNFTable
       :else_statement => [
         [:n_else, :statement]
       ]
-    })
+    }
   end
 
   def self.value_fold
