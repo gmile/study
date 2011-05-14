@@ -92,13 +92,10 @@ describe Cyk do
   end
 
   context 'types of rules' do
-    it 'should parse with: A -> [a, b, [C, D]] types of rules' do
-      string = [:a, :b, :c]
+    let(:string) { [:a, :b, :c] }
 
+    it 'should parse with: A -> [a, b, [C, D]] types of rules' do
       table = {
-        :t1 => [:a],
-        :t2 => [:b],
-        :t3 => [:c],
         :e1 => [:a, :b, :c],
         :e2 => [[:e1, :e1]],
         :e3 => [[:e2, :e1]]
@@ -108,8 +105,6 @@ describe Cyk do
     end
 
     it 'should parse with: A -> [[B, C]] types of rules' do
-      string = [:a, :b, :c]
-
       table = {
         :t1 => [:a, :b, :c],
         :e2 => [[:t1, :t1]],
@@ -120,8 +115,6 @@ describe Cyk do
     end
 
     it 'should parse with: A -> [a, b, c] types of rules' do
-      string = [:a, :b, :c]
-
       table = {
         :t1 => [:a, :b, :c],
         :e2 => [[:t1, :t1]],
@@ -157,13 +150,15 @@ describe Cyk do
   end
 
   context 'Build tree from: a b c' do
+    let(:string) { [:a, :b, :c] }
+
     it 'forward strategy' do
       table = {
         :e1 => [:a, :b, :c],
         :e2 => [[:e1, :e2], [:e1, :e1]]
       }
 
-      cyk = Cyk.new([:a, :b, :c], table)
+      cyk = Cyk.new(string, table)
       cyk.valid?
       cyk.tree.should == [:e2, [:e1, [:e2, [:e1, :e1]]]]
     end
@@ -174,7 +169,7 @@ describe Cyk do
         :e2 => [[:e2, :e1], [:e1, :e1]]
       }
 
-      cyk = Cyk.new([:a, :b, :c], table)
+      cyk = Cyk.new(string, table)
       cyk.valid?
       cyk.tree.should == [:e2, [[:e2, [:e1, :e1]], :e1]]
     end
