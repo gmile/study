@@ -126,7 +126,6 @@ class CNFTable
         [:if_then_else_statement, :n_then                     ],
         [:if_then_else_statement, :statement                  ],
         [:if_then_else_statement, :n_else                     ],
-        [:if_then_else_statement, :statement                  ]
       ]
     }
   end
