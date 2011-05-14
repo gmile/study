@@ -111,7 +111,7 @@ class CNFTable
         [:value_fold,    :for_statement_tail],
         [:n_to,          :for_statement_tail],
         [:n_downto,      :for_statement_tail],
-        [:n_do,          :statement    ]
+        [:n_do,          :statement         ]
       ]
     }
   end
