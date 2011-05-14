@@ -67,7 +67,7 @@ describe Cyk do
     end
 
     context 'if_then_else_statement' do
-      it('if x = 5 then x := 3; ')                        { example.should be_folded }
+      it('if x = 5 then x := 3;')                         { example.should be_folded }
       it('if x = 5 then begin x := 3; end;')              { example.should be_folded }
       it('if x = 5 then x := 3; else x := 5;')            { example.should be_folded } # buggy thing (we shouldn't recognize '; else')
       it('if x = 5 then begin x := 3; end; else x := 5;') { example.should be_folded }
