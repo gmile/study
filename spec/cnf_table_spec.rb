@@ -40,12 +40,12 @@ describe Cyk do
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
-  context 'real_statement_list' do
+  context 'statement_list' do
     it('x := y; x := y;')                           { example.should be_folded }
     it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
   end
 
-  context 'real_statement' do
+  context 'statement' do
     it('begin x := y + z + 5 end')                  { example.should be_folded }
     it('begin x := y + z + 5; end')                 { example.should be_folded }
     it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
@@ -65,8 +65,8 @@ describe Cyk do
     it('if x = 5 then begin x := 3 end')                      { example.should be_folded }
     it('if x = 5 then begin x := 3; y := 4 end else x := 1')  { example.should be_folded }
 
-    it('while x < 5 do x := x + 1')               { example.should be_folded }
-    it('while x < 5 do begin x := x + 1 end')     { example.should be_folded }
+    it('while x < 5 do x := x + 1')                 { example.should be_folded }
+    it('while x < 5 do begin x := x + 1 end')       { example.should be_folded }
 
     it('repeat x := x + 1; until x = 10;')
     it('repeat x := x + 1; until true;')

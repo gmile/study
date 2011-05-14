@@ -21,7 +21,7 @@ class CNFTable
       .merge(self.if_then_else_statement)
       .merge(self.for_statement)
       .merge(self.while_statement)
-      .merge(self.real_statement)
+      .merge(self.statement)
   end
 
   def self.operation
@@ -35,8 +35,8 @@ class CNFTable
   def self.program_title_block
     {
       :program_title_block    => [
-        [:n_program,            :n_variable ],
-        [:program_title_block,  :n_semicolon]
+        [:n_program,           :n_variable ],
+        [:program_title_block, :n_semicolon]
       ]
     }
   end
@@ -63,18 +63,18 @@ class CNFTable
 
   def self.statement_list
     {
-      :real_statement_list => [
-        [:real_statement,      :n_semicolon        ],
-        [:real_statement_list, :n_semicolon        ],
-        [:real_statement_list, :real_statement     ],
-        [:real_statement_list, :real_statement_list]
+      :statement_list => [
+        [:statement,      :n_semicolon   ],
+        [:statement_list, :n_semicolon   ],
+        [:statement_list, :statement     ],
+        [:statement_list, :statement_list]
       ]
     }
   end
 
-  def self.real_statement
+  def self.statement
     {
-      :real_statement => [
+      :statement => [
         [:n_variable, :assignement_statement_tail ],
         [:n_begin,    :block_statement_tail       ],
         [:n_if,       :if_then_else_statement_tail],
@@ -96,8 +96,8 @@ class CNFTable
   def self.block_statement
     {
       :block_statement_tail => [
-        [:real_statement,      :n_end],
-        [:real_statement_list, :n_end]
+        [:statement,      :n_end],
+        [:statement_list, :n_end]
       ]
     }
   end
@@ -111,7 +111,7 @@ class CNFTable
         [:value_fold,    :for_statement_tail],
         [:n_to,          :for_statement_tail],
         [:n_downto,      :for_statement_tail],
-        [:n_do,          :real_statement    ]
+        [:n_do,          :statement    ]
       ]
     }
   end
@@ -125,11 +125,11 @@ class CNFTable
         [:combined_boolean_expression, :then]
       ],
       :then => [
-        [:n_then, :real_statement],
+        [:n_then, :statement],
         [:then,   :else]
       ],
       :else => [
-        [:n_else,    :real_statement]
+        [:n_else, :statement]
       ]
     }
   end
@@ -143,7 +143,7 @@ class CNFTable
         [:combined_boolean_expression, :do]
       ],
       :do => [
-        [:n_do, :real_statement]
+        [:n_do, :statement]
       ]
     }
   end
