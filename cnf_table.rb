@@ -22,6 +22,7 @@ class CNFTable
       .merge(self.for_statement)
       .merge(self.while_statement)
       .merge(self.statement)
+      .merge(self.subscription_value)
   end
 
   def self.operation
@@ -30,6 +31,22 @@ class CNFTable
 
   def self.value
     { :value => [:integer, :real, :variable] }
+  end
+
+
+   # oops, this doesn't work!
+#  def self.value
+#    { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
+#  end
+
+  def self.subscription_value
+    {
+      :subs_value => [
+        [:n_sq_left_bracket, :value      ],
+        [:n_sq_left_bracket, :value_fold ],
+        [:subs_value, :n_sq_right_bracket]
+      ]
+    }
   end
 
   def self.program_title_block

@@ -40,6 +40,15 @@ describe Cyk do
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
+  context 'value' do
+    it('a[b+10]')
+  end
+
+  context 'subs_value' do
+    it('[12]')                                      { example.should be_folded }
+    it('[12+x]')                                    { example.should be_folded }
+  end
+
   context 'statement_list' do
     it('x := y; x := y;')                           { example.should be_folded }
     it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
