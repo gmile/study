@@ -28,7 +28,6 @@ class Cyk
     @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil   } } }
 
     @root          = nil
-
     validate_input
   end
 

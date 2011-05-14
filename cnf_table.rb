@@ -33,11 +33,6 @@ class CNFTable
     { :value => [:integer, :real, :variable] }
   end
 
-   # oops, this doesn't work!
-#  def self.value
-#    { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
-#  end
-
   def self.subscription_value
     {
       :subs_value => [

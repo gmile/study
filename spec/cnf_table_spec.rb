@@ -69,7 +69,7 @@ describe Cyk do
     it('for x := 1 downto 10 do y := x - 1')        { example.should be_folded }
 
     it('if x = 5 then x := 3')                      { example.should be_folded }
-    it('if x = 5 then x := 3 else x := 5')          { example.should be_folded } # buggy thing (we shouldn't recognize '; else')
+    it('if x = 5 then x := 3 else x := 5')          { example.should be_folded }
 
     it('if x = 5 then begin x := 3 end')                      { example.should be_folded }
     it('if x = 5 then begin x := 3; y := 4 end else x := 1')  { example.should be_folded }
