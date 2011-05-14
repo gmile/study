@@ -32,17 +32,6 @@ class CNFTable
     { :value => [:integer, :real, :variable] }
   end
 
-  def self.block_statement
-    {
-      :block_statement => [
-        [:n_begin,         :statement     ],
-        [:n_begin,         :statement_list],
-        [:n_begin,         :n_end         ],
-        [:block_statement, :n_end         ]
-      ]
-    }
-  end
-
   def self.program_title_block
     {
       :program_title_block    => [
@@ -95,6 +84,27 @@ class CNFTable
     }
   end
 
+  def self.assignement_statement
+    {
+      :assignement_statement => [
+        [:n_variable,            :n_assignement],
+        [:assignement_statement, :value_fold   ],
+        [:assignement_statement, :value        ]
+      ]
+    }
+  end
+
+  def self.block_statement
+    {
+      :block_statement => [
+        [:n_begin,         :statement     ],
+        [:n_begin,         :statement_list],
+        [:n_begin,         :n_end         ],
+        [:block_statement, :n_end         ]
+      ]
+    }
+  end
+
   def self.for_statement
     {
       :for_statement => [
@@ -106,16 +116,6 @@ class CNFTable
         [:for_statement, :n_downto     ],
         [:for_statement, :n_do         ],
         [:for_statement, :statement    ]
-      ]
-    }
-  end
-
-  def self.assignement_statement
-    {
-      :assignement_statement => [
-        [:n_variable,            :n_assignement],
-        [:assignement_statement, :value_fold   ],
-        [:assignement_statement, :value        ]
       ]
     }
   end
