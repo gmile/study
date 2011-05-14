@@ -16,9 +16,10 @@ class CNFTable
       .merge(self.identifier_list)
       .merge(self.algebra_expression)
       .merge(self.assignement_statement)
-      .merge(self.statement_block)
+      .merge(self.block_statement)
       .merge(self.statement_list)
-      .merge(self.if_then_statement)
+      .merge(self.statement)
+      .merge(self.if_then_else_statement)
   end
 
   def self.operation
@@ -29,12 +30,13 @@ class CNFTable
     { :value => [:integer, :real, :variable] }
   end
 
-  def self.statement_block
+  def self.block_statement
     {
-      :statement_block => [
+      :block_statement => [
+        [:n_begin,         :statement     ],
         [:n_begin,         :statement_list],
         [:n_begin,         :n_end         ],
-        [:statement_block, :n_end         ]
+        [:block_statement, :n_end         ]
       ]
     }
   end
@@ -68,14 +70,22 @@ class CNFTable
     }
   end
 
-  # add statements to this list !
   def self.statement_list
     {
       :statement_list => [
-        # no explicit statements here! refactor to use :statement instead
-        [:assignement_statement, :n_semicolon          ],
-        [:statement_list,        :statement_list       ],
-        [:statement_list,        :assignement_statement]
+        [:statement,      :statement     ],
+        [:statement_list, :statement     ],
+        [:statement_list, :statement_list],
+      ]
+    }
+  end
+
+  def self.statement
+    {
+      :statement => [
+        [:assignement_statement, :n_semicolon],
+        [:block_statement,       :n_semicolon],
+        [:block_statement,       :n_semicolon]
       ]
     }
   end
@@ -90,18 +100,24 @@ class CNFTable
     }
   end
 
-  def self.if_then_statement
+  def self.if_then_else_statement
     {
-      :if_then_statement => [
-        [:n_if,              :basic_boolean_expression   ],
-        [:n_if,              :basic_boolean_expression_n ],
-        [:n_if,              :basic_boolean_expression_w ],
-        [:n_if,              :combined_boolean_expression],
-        [:if_then_statement, :n_then                     ],
-        [:if_then_statement, :statement_block            ]
-       #[:if_then_statement, :statement                  ] add when statement's ready
+      :if_then_else_statement => [
+        [:n_if,                   :basic_boolean_expression   ],
+        [:n_if,                   :basic_boolean_expression_n ],
+        [:n_if,                   :basic_boolean_expression_w ],
+        [:n_if,                   :combined_boolean_expression],
+        [:if_then_else_statement, :then_statement             ]
       ]
-    }
+    }.merge({
+      :then_statement => [
+        [:n_then,         :statement     ],
+        [:then_statement, :else_statement]
+      ],
+      :else_statement => [
+        [:n_else, :statement]
+      ]
+    })
   end
 
   def self.algebra_expression

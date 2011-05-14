@@ -40,12 +40,16 @@ describe Cyk do
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
-  context 'statement_list' do
+  context 'statement' do
     it('x := y;')                                   { example.should be_folded }
-    it('x := y; a := b; c := d; i := j')            { example.should be_folded }
   end
 
-  context 'statement_block' do
+  context 'statement_list' do
+    it('x := y; x := y;')                           { example.should be_folded }
+    it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
+  end
+
+  context 'block_statement' do
     it('begin end')                                 { example.should be_folded }
     it('begin x := y + z + 5; end')                 { example.should be_folded }
     it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
@@ -62,10 +66,27 @@ describe Cyk do
       it 'some_bool := 3 < 5;'
     end
 
-    context 'if_then_statement' do
-      it('if x = 5 then begin x := 3; end')         { example.should be_folded }
-      it('if x = 5 then begin x := 3; y := 5; end') { example.should be_folded }
-      it('if x = 5 and y = true then begin end')    { example.should be_folded }
+    context 'if_then_else_statement' do
+      it('if x = 5 then x := 3; ')                        { example.should be_folded }
+      it('if x = 5 then begin x := 3; end;')              { example.should be_folded }
+      it('if x = 5 then x := 3; else x := 5;')            { example.should be_folded } # buggy thing (we shouldn't recognize '; else')
+      it('if x = 5 then begin x := 3; end; else x := 5;') { example.should be_folded }
+    end
+
+    context 'case_statement' do
+    end
+
+    context 'while_do_statement' do
+      it('while x < 5 do x := x + 1;')
+    end
+
+    context 'repeat_until_statement' do
+      it('repeat x := x + 1; until x = 10;')
+    end
+
+    context 'for_statement' do
+      it('for x := 1 to 10 y := x - 1;')
+      it('for x := 1 downto 10 y := x - 1;')
     end
   end
 
