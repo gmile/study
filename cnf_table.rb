@@ -94,14 +94,16 @@ class CNFTable
   def self.for_statement
     {
       :for_statement => [
-        [:n_for,         :for_statement],
-        [:n_variable,    :for_statement],
-        [:n_assignement, :for_statement],
-        [:value,         :for_statement],
-        [:n_to,          :for_statement],
-        [:n_downto,      :for_statement],
-        [:value,         :for_statement],
-        [:n_do,          :statement]
+        [:n_for,         :n_variable   ],
+        [:for_statement, :n_assignement],
+        [:for_statement, :value        ],
+        [:for_statement, :value_fold   ],
+        [:for_statement, :n_to         ],
+        [:for_statement, :n_downto     ],
+        [:for_statement, :value        ],
+        [:for_statement, :value_fold   ],
+        [:for_statement, :n_do         ],
+        [:for_statement, :statement    ]
       ]
     }
   end
