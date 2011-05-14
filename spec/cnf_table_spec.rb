@@ -85,7 +85,7 @@ describe Cyk do
       it('repeat x := x + 1; until true;')
     end
 
-    context 'for_statement' do
+    context 'statement' do
       it('for x := 1 to 10 do x := x - 1;')         { example.should be_folded }
       it('for x := 1 downto 10 do y := x - 1;')     { example.should be_folded }
     end
