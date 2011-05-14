@@ -40,55 +40,36 @@ describe Cyk do
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
   end
 
-  context 'statement' do
-    it('x := y;')                                   { example.should be_folded }
-  end
-
-  context 'statement_list' do
+  context 'real_statement_list' do
     it('x := y; x := y;')                           { example.should be_folded }
     it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
   end
 
-  context 'block_statement' do
-    it('begin end')                                 { example.should be_folded }
+  context 'real_statement' do
+    it('begin x := y + z + 5 end')                  { example.should be_folded }
     it('begin x := y + z + 5; end')                 { example.should be_folded }
     it('begin x := y + z + 5; x := 1; y := 4; end') { example.should be_folded }
-    it('begin x := y + z + 5 end')
-  end
 
-  context 'Statements' do
-    context 'assignement_statement' do
-      it('x := y')                                  { example.should be_folded }
-      it('x := y + z')                              { example.should be_folded }
-      it('x := y + z + 5')                          { example.should be_folded }
+    it('x := y')                                    { example.should be_folded }
+    it('x := y + z')                                { example.should be_folded }
+    it('x := y + z + 5')                            { example.should be_folded }
+    it 'x := y - 3 * (1 - 2)'
+    it 'some_bool := 3 < 5;'
 
-      it 'x := y - 3 * (1 - 2)'
-      it 'some_bool := 3 < 5;'
-    end
+    it('for x := 1 to 10 do x := x - 1')            { example.should be_folded }
+    it('for x := 1 downto 10 do y := x - 1')        { example.should be_folded }
 
-    context 'if_then_else_statement' do
-      it('if x = 5 then x := 3;')                         { example.should be_folded }
-      it('if x = 5 then begin x := 3; end;')              { example.should be_folded }
-      it('if x = 5 then x := 3; else x := 5;')            { example.should be_folded } # buggy thing (we shouldn't recognize '; else')
-      it('if x = 5 then begin x := 3; end; else x := 5;') { example.should be_folded }
-    end
+    it('if x = 5 then x := 3')                      { example.should be_folded }
+    it('if x = 5 then x := 3 else x := 5')          { example.should be_folded } # buggy thing (we shouldn't recognize '; else')
 
-    context 'case_statement' do
-    end
+    it('if x = 5 then begin x := 3 end')                      { example.should be_folded }
+    it('if x = 5 then begin x := 3; y := 4 end else x := 1')  { example.should be_folded }
 
-    context 'statement' do
-      it('while x < 5 do x := x + 1;;')             { example.should be_folded }
-    end
+    it('while x < 5 do x := x + 1')               { example.should be_folded }
+    it('while x < 5 do begin x := x + 1 end')     { example.should be_folded }
 
-    context 'repeat_until_statement' do
-      it('repeat x := x + 1; until x = 10;')
-      it('repeat x := x + 1; until true;')
-    end
-
-    context 'statement' do
-      it('for x := 1 to 10 do x := x - 1;')         { example.should be_folded }
-      it('for x := 1 downto 10 do y := x - 1;')     { example.should be_folded }
-    end
+    it('repeat x := x + 1; until x = 10;')
+    it('repeat x := x + 1; until true;')
   end
 
   context 'Boolean expressions' do

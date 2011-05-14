@@ -22,6 +22,7 @@ class CNFTable
       .merge(self.if_then_else_statement)
       .merge(self.for_statement)
       .merge(self.while_statement)
+      .merge(self.real_statement)
   end
 
   def self.operation
@@ -63,10 +64,11 @@ class CNFTable
 
   def self.statement_list
     {
-      :statement_list => [
-        [:statement,      :statement     ],
-        [:statement_list, :statement     ],
-        [:statement_list, :statement_list],
+      :real_statement_list => [
+        [:real_statement,      :n_semicolon        ],
+        [:real_statement_list, :n_semicolon        ],
+        [:real_statement_list, :real_statement     ],
+        [:real_statement_list, :real_statement_list]
       ]
     }
   end
@@ -74,75 +76,87 @@ class CNFTable
   def self.statement
     {
       :statement => [
-        [:for_statement,          :n_semicolon],
-        [:if_then_else_statement, :n_semicolon],
-        [:while_statement,        :n_semicolon],
-        [:assignement_statement,  :n_semicolon],
-        [:block_statement,        :n_semicolon],
-        [:block_statement,        :n_semicolon]
+        [:for_statement_tail,         :n_semicolon],
+        [:if_then_else_statement_tail,:n_semicolon],
+        [:while_statement_tail,            :n_semicolon],
+        [:assignement_statement_tail, :n_semicolon],
+        [:block_statement_tail,       :n_semicolon]
+      ]
+    }
+  end
+
+  def self.real_statement
+    {
+      :real_statement => [
+        [:n_variable, :assignement_statement_tail ],
+        [:n_begin,    :block_statement_tail       ],
+        [:n_if,       :if_then_else_statement_tail],
+        [:n_while,    :while_statement_tail       ],
+        [:n_for,      :for_statement_tail         ]
       ]
     }
   end
 
   def self.assignement_statement
     {
-      :assignement_statement => [
-        [:n_variable,            :n_assignement],
-        [:assignement_statement, :value_fold   ],
-        [:assignement_statement, :value        ]
+      :assignement_statement_tail => [
+        [:n_assignement, :value_fold],
+        [:n_assignement, :value     ]
       ]
     }
   end
 
   def self.block_statement
     {
-      :block_statement => [
-        [:n_begin,         :statement     ],
-        [:n_begin,         :statement_list],
-        [:n_begin,         :n_end         ],
-        [:block_statement, :n_end         ]
+      :block_statement_tail => [
+        [:real_statement,      :n_end],
+        [:real_statement_list, :n_end]
       ]
     }
   end
 
   def self.for_statement
     {
-      :for_statement => [
-        [:n_for,         :n_variable   ],
-        [:for_statement, :n_assignement],
-        [:for_statement, :value        ],
-        [:for_statement, :value_fold   ],
-        [:for_statement, :n_to         ],
-        [:for_statement, :n_downto     ],
-        [:for_statement, :n_do         ],
-        [:for_statement, :statement    ]
+      :for_statement_tail => [
+        [:n_variable,    :for_statement_tail],
+        [:n_assignement, :for_statement_tail],
+        [:value,         :for_statement_tail],
+        [:value_fold,    :for_statement_tail],
+        [:n_to,          :for_statement_tail],
+        [:n_downto,      :for_statement_tail],
+        [:n_do,          :real_statement    ]
       ]
     }
   end
 
   def self.if_then_else_statement
     {
-      :if_then_else_statement => [
-        [:n_if,                   :basic_boolean_expression   ],
-        [:n_if,                   :basic_boolean_expression_n ],
-        [:n_if,                   :basic_boolean_expression_w ],
-        [:n_if,                   :combined_boolean_expression],
-        [:if_then_else_statement, :n_then                     ],
-        [:if_then_else_statement, :statement                  ],
-        [:if_then_else_statement, :n_else                     ],
+      :if_then_else_statement_tail => [
+        [:basic_boolean_expression,    :then],
+        [:basic_boolean_expression_n,  :then],
+        [:basic_boolean_expression_w,  :then],
+        [:combined_boolean_expression, :then]
+      ],
+      :then => [
+        [:n_then, :real_statement],
+        [:then,   :else]
+      ],
+      :else => [
+        [:n_else,    :real_statement]
       ]
     }
   end
 
   def self.while_statement
     {
-      :while_statement => [
-        [:n_while,         :basic_boolean_expression   ],
-        [:while_statement, :basic_boolean_expression_n ],
-        [:while_statement, :basic_boolean_expression_w ],
-        [:while_statement, :combined_boolean_expression],
-        [:while_statement, :n_do                       ],
-        [:while_statement, :statement                  ]
+      :while_statement_tail => [
+        [:basic_boolean_expression,    :do],
+        [:basic_boolean_expression_n,  :do],
+        [:basic_boolean_expression_w,  :do],
+        [:combined_boolean_expression, :do]
+      ],
+      :do => [
+        [:n_do, :real_statement]
       ]
     }
   end
