@@ -18,7 +18,6 @@ class CNFTable
       .merge(self.assignement_statement)
       .merge(self.block_statement)
       .merge(self.statement_list)
-      .merge(self.statement)
       .merge(self.if_then_else_statement)
       .merge(self.for_statement)
       .merge(self.while_statement)
@@ -69,18 +68,6 @@ class CNFTable
         [:real_statement_list, :n_semicolon        ],
         [:real_statement_list, :real_statement     ],
         [:real_statement_list, :real_statement_list]
-      ]
-    }
-  end
-
-  def self.statement
-    {
-      :statement => [
-        [:for_statement_tail,         :n_semicolon],
-        [:if_then_else_statement_tail,:n_semicolon],
-        [:while_statement_tail,            :n_semicolon],
-        [:assignement_statement_tail, :n_semicolon],
-        [:block_statement_tail,       :n_semicolon]
       ]
     }
   end
