@@ -82,6 +82,7 @@ describe Cyk do
 
     context 'repeat_until_statement' do
       it('repeat x := x + 1; until x = 10;')
+      it('repeat x := x + 1; until true;')
     end
 
     context 'for_statement' do
