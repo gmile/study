@@ -14,7 +14,7 @@ class CNFTable
       .merge(self.program_title_block)
       .merge(self.uses_block)
       .merge(self.identifier_list)
-      .merge(self.algebra_expression)
+      .merge(self.value_fold)
       .merge(self.assignement_statement)
       .merge(self.block_statement)
       .merge(self.statement_list)
@@ -136,7 +136,7 @@ class CNFTable
     })
   end
 
-  def self.algebra_expression
+  def self.value_fold
     {
       :value_fold => [
         [:value_fold, :value    ],
