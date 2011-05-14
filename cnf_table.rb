@@ -100,8 +100,6 @@ class CNFTable
         [:for_statement, :value_fold   ],
         [:for_statement, :n_to         ],
         [:for_statement, :n_downto     ],
-        [:for_statement, :value        ],
-        [:for_statement, :value_fold   ],
         [:for_statement, :n_do         ],
         [:for_statement, :statement    ]
       ]
