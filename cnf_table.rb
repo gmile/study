@@ -21,6 +21,7 @@ class CNFTable
       .merge(self.statement)
       .merge(self.if_then_else_statement)
       .merge(self.for_statement)
+      .merge(self.while_statement)
   end
 
   def self.operation
@@ -126,6 +127,19 @@ class CNFTable
         [:if_then_else_statement, :n_then                     ],
         [:if_then_else_statement, :statement                  ],
         [:if_then_else_statement, :n_else                     ],
+      ]
+    }
+  end
+
+  def self.while_statement
+    {
+      :while_statement => [
+        [:n_while,         :basic_boolean_expression   ],
+        [:while_statement, :basic_boolean_expression_n ],
+        [:while_statement, :basic_boolean_expression_w ],
+        [:while_statement, :combined_boolean_expression],
+        [:while_statement, :n_do                       ],
+        [:while_statement, :statement                  ]
       ]
     }
   end

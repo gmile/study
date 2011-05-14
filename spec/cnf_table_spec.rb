@@ -76,8 +76,8 @@ describe Cyk do
     context 'case_statement' do
     end
 
-    context 'while_do_statement' do
-      it('while x < 5 do x := x + 1;')
+    context 'statement' do
+      it('while x < 5 do x := x + 1;;')             { example.should be_folded }
     end
 
     context 'repeat_until_statement' do
