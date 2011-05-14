@@ -2,7 +2,7 @@ require_relative 'cyk'
 require_relative 'cnf_table'
 require_relative 'lexical_analyser'
 
-string = 'a + b'
+string = ARGV[0]
 
 x = Cyk.new(Parser.new(string).output.map {|token| token.type }, CNFTable.table)
 x.valid?
