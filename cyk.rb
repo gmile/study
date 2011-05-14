@@ -17,7 +17,6 @@ class Cyk
     @table         = table
     @string        = string
 
-    @terminals     = @table.values.flatten.select { |value| !value.is_a?(Array) }
     @nterminals    = @table.keys
     @r             = @table.size
 
