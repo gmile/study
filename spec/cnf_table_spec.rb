@@ -83,6 +83,9 @@ describe Cyk do
 
     it('if x = 5 then begin x := 3 end')                      { example.should be_folded }
     it('if x = 5 then begin x := 3; y := 4 end else x := 1')  { example.should be_folded }
+    it('if true or false then x := 3')              { example.should be_folded }
+    it('if true then x := 3')
+    it('if (x or y) then x := 3')
 
     it('while x < 5 do x := x + 1')                 { example.should be_folded }
     it('while x < 5 do begin x := x + 1 end')       { example.should be_folded }
@@ -129,15 +132,5 @@ describe Cyk do
     context 'basic_boolean_expression_n' do
       it('not x = 5')                               { example.should be_folded }
     end
-  end
-
-  context 'Conditional block' do
-    it('if (x)')
-    it('if (x or y)')
-    it('if (x or y)')
-    it('if (true) x := 10; end')
-    it('if (x = true and y == false) x := 10; else end')
-    it('if (x = true and y == false) x := 10 else z := 12 end')
-    it('if (x = true and y == false) x := 10 else z := 12; end')
   end
 end
