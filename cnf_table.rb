@@ -27,6 +27,8 @@ class CNFTable
       .merge(self.type)
       .merge(self.var_definition_block)
       .merge(self.const_definition_block)
+      .merge(self.block_sequence)
+      .merge(self.program)
   end
 
   def self.operation
@@ -35,6 +37,39 @@ class CNFTable
 
   def self.value
     { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
+  end
+
+  def self.program
+    {
+      :program => [
+        [:program_title_block, :program],
+        [:block,                :n_dot ],
+        [:code_block,           :n_dot ]
+      ]
+    }
+  end
+
+  def self.block_sequence
+    {
+      :c_block => [
+        [:const_block, :var_block],
+#        [:const_block,     :func_proc_block]
+#        [:c_block,     :func_proc_block]
+      ],
+      :v_block => [
+#        [:var_block, :func_proc_block],
+      ],
+      :block => [
+        [:c_block,     :code_block],
+#        [:v_block,     :code_block],
+        [:var_block,   :code_block],
+        [:const_block, :code_block]
+#        [:func_proc_block, :code_block]
+      ],
+      :code_block => [
+        [:n_begin, :block_statement_tail]
+      ]
+    }
   end
 
   def self.type

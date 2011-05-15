@@ -21,6 +21,13 @@ end
 describe Cyk do
   let!(:table) { CNFTable.table }
 
+  context 'program' do
+    it('program test; const x = 5; var y : integer; begin y := x end.') { example.should be_folded }
+    it('program test; begin y := x end.')                               { example.should be_folded }
+    it('const x = 5; var y : integer; begin y := x end.')               { example.should be_folded }
+    it('var y : integer; begin y := x end.')                            { example.should be_folded }
+  end
+
   context 'program_title_block' do
     it('program foo;')                              { example.should be_folded }
   end
