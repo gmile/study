@@ -40,9 +40,7 @@ class CNFTable
   def self.type
     {
       :type => [:ordinar, :real, :boolean, :string, [:n_array, :array_type]],
-      :array_type => [
-        [:array_range, :of_type]
-      ],
+      :array_type => [[:array_range, :of_type]],
       :range => [
         [:n_integer,  :range],
         [:n_variable, :range],
@@ -53,18 +51,16 @@ class CNFTable
         [:n_sq_left_bracket, :range             ],
         [:array_range,       :n_sq_right_bracket]
       ],
-      :of_type => [
-        [:n_of, :type]
-      ]
+      :of_type => [[:n_of, :type]]
     }
   end
 
   def self.subscription_value
     {
       :subs_value => [
-        [:n_sq_left_bracket, :value      ],
-        [:n_sq_left_bracket, :value_fold ],
-        [:subs_value, :n_sq_right_bracket]
+        [:n_sq_left_bracket, :value             ],
+        [:n_sq_left_bracket, :value_fold        ],
+        [:subs_value,        :n_sq_right_bracket]
       ]
     }
   end
@@ -91,7 +87,9 @@ class CNFTable
   def self.var_definition_block
     {
       :var_block => [
-        [:n_var,              :var_block  ],
+        [:n_var, :var_tail],
+      ],
+      :var_tail => [
         [:var_with_type,      :n_semicolon],
         [:var_with_type_list, :n_semicolon]
       ],
@@ -111,19 +109,19 @@ class CNFTable
   def self.const_definition_block
     {
       :const_block => [
-        [:n_const,       :const_tail],
+        [:n_const, :const_tail],
       ],
       :const_tail => [
         [:constant,      :n_semicolon],
         [:constant_list, :n_semicolon]
       ],
       :constant => [
-        [:n_variable,      :n_equal      ],
-        [:identifier_list, :n_equal      ],
-        [:constant,        :const_value  ]
+        [:n_variable,      :n_equal    ],
+        [:identifier_list, :n_equal    ],
+        [:constant,        :const_value]
       ],
       :constant_list => [
-        [:n_semicolon,   :constant   ],
+        [:n_semicolon,   :constant     ],
         [:constant,      :constant_list],
         [:constant_list, :constant_list]
       ],
@@ -211,9 +209,7 @@ class CNFTable
         [:n_then, :statement],
         [:then,   :else]
       ],
-      :else => [
-        [:n_else, :statement]
-      ]
+      :else => [[:n_else, :statement]]
     }
   end
 
@@ -241,9 +237,7 @@ class CNFTable
         [:basic_boolean_expression_w,  :do],
         [:combined_boolean_expression, :do]
       ],
-      :do => [
-        [:n_do, :statement]
-      ]
+      :do => [[:n_do, :statement]]
     }
   end
 
