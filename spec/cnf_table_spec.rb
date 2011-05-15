@@ -44,9 +44,14 @@ describe Cyk do
   end
 
   context 'var_with_type_list' do
-    it('a : string; x : integer')                     { example.should be_folded }
-    it('a, b, c : string; x , y : integer')           { example.should be_folded }
-    it('A : array[1..10] of integer; x, y : integer') { example.should be_folded }
+    it('a : string; x : integer')                   { example.should be_folded }
+    it('a, b, c : string; x , y : integer')         { example.should be_folded }
+    it('A : array[1..10] of integer; x, y : string') { example.should be_folded }
+  end
+
+  context 'var_block' do
+    it('var x, y: array[1..10] of real;')           { example.should be_folded }
+    it('var x, y, z: real; a, b: integer;')         { example.should be_folded }
   end
 
   context 'value_fold' do

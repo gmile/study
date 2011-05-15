@@ -89,14 +89,19 @@ class CNFTable
 
   def self.var_definition_block
     {
+      :var_block => [
+        [:n_var,              :var_block  ],
+        [:var_with_type,      :n_semicolon],
+        [:var_with_type_list, :n_semicolon]
+      ],
       :var_with_type => [
         [:identifier_list, :var_with_type],
         [:n_variable,      :var_with_type],
         [:n_colon,         :type         ]
       ],
       :var_with_type_list => [
-        [:n_semicolon,   :var_with_type     ],
-        [:var_with_type, :var_with_type_list],
+        [:n_semicolon,        :var_with_type     ],
+        [:var_with_type,      :var_with_type_list],
         [:var_with_type_list, :var_with_type_list]
       ]
     }
