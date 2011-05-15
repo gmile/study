@@ -87,9 +87,11 @@ class CNFTable
   def self.identifier_list
     {
       :identifier_list => [
-        [:identifier_list, :n_variable],
-        [:identifier_list, :n_coma    ],
-        [:n_variable,      :n_coma    ]
+        [:n_variable, :add_identifier],
+      ],
+      :add_identifier => [
+        [:n_coma,         :n_variable    ],
+        [:add_identifier, :add_identifier]
       ]
     }
   end
