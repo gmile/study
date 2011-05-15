@@ -2,6 +2,10 @@ Todo
  - Multiline comments!
  - Boolean result (?)
  - Rename 'variable' -> 'identifier'
+ - Optimize table lookup:
+   once fetched the whole table, filter out only minimal possible number of non-terminals,
+   which can be used to describe a given string (sentance)
+ - A lot more (see pending tests)
 
 Done:
  - '.' (dot) as reserved word for program end
