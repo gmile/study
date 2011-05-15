@@ -38,6 +38,7 @@ describe Cyk do
     it('x + 1.2')                                   { example.should be_folded }
     it('x + 1.2 + 73')                              { example.should be_folded }
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
+    it('x + 1.2 + array[13] + y')                   { example.should be_folded }
   end
 
   context 'value' do
