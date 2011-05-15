@@ -130,7 +130,8 @@ module Builder
       :colon     => ':',
       :semicolon => ';',
       :coma      => ',',
-      :range     => '..'
+      :range     => '..',
+      :dot       => '.'
     }
 
     def self.build(options)
@@ -139,7 +140,7 @@ module Builder
     end
 
     def self.regexp
-      '['+@values.reject {|k,v| k == :range }.values.join+']' + '|' + Regexp.new(Regexp.escape(@values[:range])).to_s
+      '['+@values.reject {|k,v| [:range, :dot].include?(k) }.values.join+']' + '|' + Regexp.escape(@values[:range]).to_s + '|' + Regexp.new(Regexp.escape(@values[:dot])+'$').to_s
     end
   end
 
@@ -200,15 +201,13 @@ module Builder
       'with',        'xor',            'or'
     ]
 
-    @program_end_regex = '|{\.\}z'
-
     def self.build(options)
       options[:type] = options[:lexeme].to_sym
       Tokens::ReservedWord.new(options)
     end
 
     def self.regexp
-      Regexp.new(@values.map{ |i| '\b'+i+'\b' }.join('|') + @program_end_regex)
+      Regexp.new(@values.map{ |i| '\b'+i+'\b' }.join('|'))
     end
   end
 

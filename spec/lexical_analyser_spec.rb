@@ -150,6 +150,14 @@ describe Parser do
     ]
   end
 
+  it 'should parse dot' do
+    parser.input = 'a.'
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable, 'a'],
+      [:dot,      '.']
+    ]
+  end
+
   context 'Validity' do
     it "should not be valid: 123456 + 1.789" do
       parser.input = "123456 + 1.789"
