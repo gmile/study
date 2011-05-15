@@ -53,7 +53,7 @@ class CNFTable
     {
       :c_block => [
         [:const_block, :var_block],
-#        [:const_block,     :func_proc_block]
+#        [:const_block, :func_proc_block]
 #        [:c_block,     :func_proc_block]
       ],
       :v_block => [
