@@ -49,6 +49,15 @@ describe Cyk do
     it('[12+x]')                                    { example.should be_folded }
   end
 
+  context 'parameters' do
+    it('(a)')
+    it('(12)')
+    it('(12+3, a)')
+    it('(a, b, c)')
+    it('(12+a+3, a)')
+    it("(a, b, 'string')")
+  end
+
   context 'statement_list' do
     it('x := y; x := y;')                           { example.should be_folded }
     it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
