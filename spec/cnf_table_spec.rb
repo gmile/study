@@ -31,6 +31,24 @@ describe Cyk do
     it('uses fuu, bar, baz;')                       { example.should be_folded }
   end
 
+  context 'var_with_type' do
+    it('a : integer')                               { example.should be_folded }
+    it('b : longint')                               { example.should be_folded }
+    it('c : byte')                                  { example.should be_folded }
+    it('d : word')                                  { example.should be_folded }
+    it('e : real')                                  { example.should be_folded }
+    it('f : boolean')                               { example.should be_folded }
+    it('g : string')                                { example.should be_folded }
+    it('a, b, c : integer')                         { example.should be_folded }
+  end
+
+  context 'var_with_type_list' do
+    it('a : string; x : integer')                   { example.should be_folded }
+    it('a, b, c : string; x , y : integer')         { example.should be_folded }
+    it('A : array[1..10] of integer; x , y : integer')
+    it('A : array[1..const] of string')
+  end
+
   context 'value_fold' do
     it('x + 1.2')                                   { example.should be_folded }
     it('x + 1.2 + 73')                              { example.should be_folded }

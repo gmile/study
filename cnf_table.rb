@@ -24,6 +24,8 @@ class CNFTable
       .merge(self.repeat_statement)
       .merge(self.statement)
       .merge(self.subscription_value)
+      .merge(self.type)
+      .merge(self.var_definition_block)
   end
 
   def self.operation
@@ -32,6 +34,10 @@ class CNFTable
 
   def self.value
     { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
+  end
+
+  def self.type
+    { :type => [:ordinar, :real, :boolean, :string] }
   end
 
   def self.subscription_value
@@ -55,10 +61,25 @@ class CNFTable
 
   def self.uses_block
     {
-      :uses_fold => [
+      :uses_block => [
         [:n_uses,     :n_variable     ],
         [:n_uses,     :identifier_list],
-        [:uses_fold,  :n_semicolon    ]
+        [:uses_block, :n_semicolon    ]
+      ]
+    }
+  end
+
+  def self.var_definition_block
+    {
+      :var_with_type => [
+        [:identifier_list, :var_with_type],
+        [:n_variable,      :var_with_type],
+        [:n_colon,         :type         ]
+      ],
+      :var_with_type_list => [
+        [:n_semicolon,   :var_with_type     ],
+        [:var_with_type, :var_with_type_list],
+        [:var_with_type_list, :var_with_type_list]
       ]
     }
   end
