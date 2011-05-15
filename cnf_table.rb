@@ -26,6 +26,7 @@ class CNFTable
       .merge(self.subscription_value)
       .merge(self.type)
       .merge(self.var_definition_block)
+      .merge(self.const_definition_block)
   end
 
   def self.operation
@@ -104,6 +105,29 @@ class CNFTable
         [:var_with_type,      :var_with_type_list],
         [:var_with_type_list, :var_with_type_list]
       ]
+    }
+  end
+
+  def self.const_definition_block
+    {
+      :const_block => [
+        [:n_const,       :const_tail],
+      ],
+      :const_tail => [
+        [:constant,      :n_semicolon],
+        [:constant_list, :n_semicolon]
+      ],
+      :constant => [
+        [:n_variable,      :n_equal      ],
+        [:identifier_list, :n_equal      ],
+        [:constant,        :const_value  ]
+      ],
+      :constant_list => [
+        [:n_semicolon,   :constant   ],
+        [:constant,      :constant_list],
+        [:constant_list, :constant_list]
+      ],
+      :const_value => [:integer, :real, :string]
     }
   end
 

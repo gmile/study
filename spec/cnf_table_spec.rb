@@ -54,6 +54,13 @@ describe Cyk do
     it('var x, y, z: real; a, b: integer;')         { example.should be_folded }
   end
 
+  context 'const_block' do
+    it('const x = 5;')                              { example.should be_folded }
+    it('const x = 5; y = 2;')                       { example.should be_folded }
+    it('const x, y = 5;')                           { example.should be_folded }
+    it('const x, y = 5; z = 3;')                    { example.should be_folded }
+  end
+
   context 'value_fold' do
     it('x + 1.2')                                   { example.should be_folded }
     it('x + 1.2 + 73')                              { example.should be_folded }
