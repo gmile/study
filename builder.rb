@@ -129,7 +129,8 @@ module Builder
     @values = {
       :colon     => ':',
       :semicolon => ';',
-      :coma      => ','
+      :coma      => ',',
+      :range     => '..'
     }
 
     def self.build(options)
@@ -138,7 +139,7 @@ module Builder
     end
 
     def self.regexp
-      '['+@values.values.join+']'
+      '['+@values.reject {|k,v| k == :range }.values.join+']' + '|' + Regexp.new(Regexp.escape(@values[:range])).to_s
     end
   end
 
@@ -199,7 +200,7 @@ module Builder
       'with',        'xor',            'or'
     ]
 
-    @program_end_regex = '|\.\z'
+    @program_end_regex = '|{\.\}z'
 
     def self.build(options)
       options[:type] = options[:lexeme].to_sym

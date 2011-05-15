@@ -15,6 +15,18 @@ describe Parser do
     ]
   end
 
+  it "should parse: x[0..1]" do
+    parser.input = 'x[0..1]'
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:variable,         'x' ],
+      [:sq_left_bracket,  '[' ],
+      [:integer,          '0' ],
+      [:range,            '..'],
+      [:integer,          '1' ],
+      [:sq_right_bracket, ']' ]
+    ]
+  end
+
   it "should parse strings with real values: x := 2.3 - 4.5" do
     parser.input = "x := 2.3 - 4.5"
     parser.output.map { |token| [token.type, token.lexeme] }.should == [
