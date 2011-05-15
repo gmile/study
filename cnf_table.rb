@@ -30,7 +30,7 @@ class CNFTable
   end
 
   def self.value
-    { :value => [:integer, :real, :variable] }
+    { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
   end
 
   def self.subscription_value

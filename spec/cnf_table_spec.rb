@@ -41,7 +41,7 @@ describe Cyk do
   end
 
   context 'value' do
-    it('a[b+10]')
+    it('my_array[i+10]')                            { example.should be_folded }
   end
 
   context 'subs_value' do
