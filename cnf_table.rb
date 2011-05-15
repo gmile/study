@@ -21,6 +21,7 @@ class CNFTable
       .merge(self.if_then_else_statement)
       .merge(self.for_statement)
       .merge(self.while_statement)
+      .merge(self.repeat_statement)
       .merge(self.statement)
       .merge(self.subscription_value)
   end
@@ -90,6 +91,7 @@ class CNFTable
         [:n_begin,    :block_statement_tail       ],
         [:n_if,       :if_then_else_statement_tail],
         [:n_while,    :while_statement_tail       ],
+        [:n_repeat,   :repeat_statement_tail      ],
         [:n_for,      :for_statement_tail         ]
       ]
     }
@@ -141,6 +143,22 @@ class CNFTable
       ],
       :else => [
         [:n_else, :statement]
+      ]
+    }
+  end
+
+  def self.repeat_statement
+    {
+      :repeat_statement_tail => [
+        [:statement,      :until],
+        [:statement_list, :until]
+      ],
+      :until => [
+        [:n_until, :boolean_operand            ],
+        [:n_until, :basic_boolean_expression   ],
+        [:n_until, :basic_boolean_expression_n ],
+        [:n_until, :basic_boolean_expression_w ],
+        [:n_until, :combined_boolean_expression]
       ]
     }
   end

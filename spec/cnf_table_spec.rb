@@ -87,8 +87,8 @@ describe Cyk do
     it('while x < 5 do x := x + 1')                 { example.should be_folded }
     it('while x < 5 do begin x := x + 1 end')       { example.should be_folded }
 
-    it('repeat x := x + 1; until x = 10;')
-    it('repeat x := x + 1; until true;')
+    it('repeat x := x + 1; until x = 10')           { example.should be_folded }
+    it('repeat x := x + 1; until true')             { example.should be_folded }
   end
 
   context 'Boolean expressions' do
