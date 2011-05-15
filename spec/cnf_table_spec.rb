@@ -25,7 +25,7 @@ describe Cyk do
     it('program foo;')                              { example.should be_folded }
   end
 
-  context 'uses_fold' do
+  context 'uses_block' do
     it('uses fuu;')                                 { example.should be_folded }
     it('uses fuu, bar;')                            { example.should be_folded }
     it('uses fuu, bar, baz;')                       { example.should be_folded }
