@@ -37,7 +37,25 @@ class CNFTable
   end
 
   def self.type
-    { :type => [:ordinar, :real, :boolean, :string] }
+    {
+      :type => [:ordinar, :real, :boolean, :string, [:n_array, :array_type]],
+      :array_type => [
+        [:array_range, :of_type]
+      ],
+      :range => [
+        [:n_integer,  :range],
+        [:n_variable, :range],
+        [:n_range,    :n_integer ],
+        [:n_range,    :n_variable]
+      ],
+      :array_range => [
+        [:n_sq_left_bracket, :range             ],
+        [:array_range,       :n_sq_right_bracket]
+      ],
+      :of_type => [
+        [:n_of, :type]
+      ]
+    }
   end
 
   def self.subscription_value

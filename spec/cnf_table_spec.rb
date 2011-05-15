@@ -39,14 +39,14 @@ describe Cyk do
     it('e : real')                                  { example.should be_folded }
     it('f : boolean')                               { example.should be_folded }
     it('g : string')                                { example.should be_folded }
+    it('A : array[1..cnst] of string')              { example.should be_folded }
     it('a, b, c : integer')                         { example.should be_folded }
   end
 
   context 'var_with_type_list' do
-    it('a : string; x : integer')                   { example.should be_folded }
-    it('a, b, c : string; x , y : integer')         { example.should be_folded }
-    it('A : array[1..10] of integer; x , y : integer')
-    it('A : array[1..const] of string')
+    it('a : string; x : integer')                     { example.should be_folded }
+    it('a, b, c : string; x , y : integer')           { example.should be_folded }
+    it('A : array[1..10] of integer; x, y : integer') { example.should be_folded }
   end
 
   context 'value_fold' do
