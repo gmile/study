@@ -54,6 +54,7 @@ describe Cyk do
     it('x + 1.2 + 73')                              { example.should be_folded }
     it('x + 1.2 + 73 + y')                          { example.should be_folded }
     it('x + 1.2 + A[13] + y')                       { example.should be_folded }
+    it('x + my_func(5, var_1)')
   end
 
   context 'value' do
