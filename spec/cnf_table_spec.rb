@@ -13,11 +13,8 @@ RSpec::Matchers.define :be_folded do
   end
 
   failure_message_for_should do |example|
-    if @cyk.root
-      "#{example.example_group.description.to_sym} expected, but #{@cyk.root.node} found"
-    else
-      "#{example.example_group.description.to_sym} expected, but it was unable to build tree"
-    end
+    message = "#{example.example_group.description.to_sym} expected, but "
+    message << @cyk.root ? "#{@cyk.root.node} found" : "it was unable to build tree"
   end
 end
 
