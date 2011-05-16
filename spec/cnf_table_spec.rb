@@ -130,8 +130,8 @@ describe Cyk do
     it('if x = 5 then x := 3')                      { example.should be_folded }
     it('if x = 5 then x := 3 else x := 5')          { example.should be_folded }
 
-    it('if x = 5 then begin x := 3 end')                      { example.should be_folded }
-    it('if x = 5 then begin x := 3; y := 4 end else x := 1')  { example.should be_folded }
+    it('if x = 5 then begin x := 3 end')                     { example.should be_folded }
+    it('if x = 5 then begin x := 3; y := 4 end else x := 1') { example.should be_folded }
     it('if true or false then x := 3')              { example.should be_folded }
     it('if true then x := 3')
     it('if (x or y) then x := 3')
