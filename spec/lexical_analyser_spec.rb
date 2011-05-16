@@ -65,14 +65,14 @@ describe Parser do
     ]
   end
 
-  it "should parse: x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'" do
-    parser.input = "x_ := 2 mod 0 + (10 + coma/12) * pjotr + 'asdsad'"
+  it "should parse: x_ := 2 + 10 + (10 + coma/12) * pjotr + 'asdsad'" do
+    parser.input = "x_ := 2 + 10 + (10 + coma/12) * pjotr + 'asdsad'"
     parser.output.map { |token| [token.type, token.lexeme] }.should == [
       [:variable,      'x_'      ],
       [:assignement,   ':='      ],
       [:integer,       '2'       ],
-      [:mod,           'mod'     ],
-      [:integer,       '0'       ],
+      [:add,           '+'       ],
+      [:integer,       '10'      ],
       [:add,           '+'       ],
       [:left_bracket,  '('       ],
       [:integer,       '10'      ],

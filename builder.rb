@@ -181,24 +181,24 @@ module Builder
 
   class ReservedWordBuilder < Builder
     @values = [
-      'absolute',    'and',            'array',
-      'asm',         'begin',          'case',
-      'constructor', 'const',          'destructor',
-      'div',         'downto',         'do',
-      'else',        'end',            'file',
-      'for',         'function',       'goto',
-      'if',          'implementation', 'inherited',
-      'inline',      'interface',      'in',
-      'label',       'mod',            'nil',
-      'not',         'object',         'of',
-      'on',          'operator',       'packed',
-      'procedure',   'program',        'record',
-      'reintroduce', 'repeat',         'self',
-      'set',         'shl',            'shr',
+                     'and',            'array',
+                     'begin',
+                     'const',
+                     'downto',         'do',
+      'else',        'end',
+      'for',         'function',
+      'if',
+
+
+      'not',                           'of',
+
+      'procedure',   'program',
+                     'repeat',
+
       'string',      'then',           'to',
-      'type',        'unit',           'until',
+      'type',                          'until',
       'uses',        'var',            'while',
-      'with',        'xor',            'or'
+                                       'or'
     ]
 
     def self.build(options)
