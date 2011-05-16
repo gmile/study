@@ -1,8 +1,9 @@
 require 'set'
-require 'ostruct'
 
 require_relative 'cnf_table'
 require_relative 'errors'
+
+Node = Struct.new(:node, :children)
 
 class Cyk
   include Errors::Cyk
@@ -140,14 +141,8 @@ class Cyk
             x, y, z = i-1, j-1, k-1
 
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
-              @matrix[y][x][a] = true
-              @parse_tree[y][x][a] = OpenStruct.new({
-                :node     => prod[0],
-                :children => [
-                  @parse_tree[y][z][b],
-                  @parse_tree[y+k][x-k][c]
-                ]
-              })
+              @matrix[y][x][a]     = true
+              @parse_tree[y][x][a] = Node.new(prod[0], [@parse_tree[y][z][b], @parse_tree[y+k][x-k][c]])
             end
           end
         end
