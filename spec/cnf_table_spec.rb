@@ -24,6 +24,7 @@ describe Cyk do
   context 'program' do
     it('program test; const x = 5; var y : integer; begin y := x end.') { example.should be_folded }
     it('program test; begin y := x end.')                               { example.should be_folded }
+    it('begin y := x end.')                                             { example.should be_folded }
     it('const x = 5; var y : integer; begin y := x end.')               { example.should be_folded }
     it('var y : integer; begin y := x end.')                            { example.should be_folded }
 
