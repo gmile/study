@@ -141,7 +141,6 @@ class Cyk
 
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
               @matrix[y][x][a] = true
-
               @parse_tree[y][x][a] = OpenStruct.new({
                 :node     => prod[0],
                 :children => [
