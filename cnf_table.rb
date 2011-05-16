@@ -57,18 +57,18 @@ class CNFTable
     {
       :c_block => [
         [:const_block, :var_block],
-#        [:const_block, :func_proc_block]
-#        [:c_block,     :func_proc_block]
+        [:const_block, :func_proc_block],
+        [:c_block,     :func_proc_block]
       ],
       :v_block => [
-#        [:var_block, :func_proc_block],
+        [:var_block, :func_proc_block],
       ],
       :block => [
         [:c_block,     :code_block],
-#        [:v_block,     :code_block],
+        [:v_block,     :code_block],
         [:var_block,   :code_block],
-        [:const_block, :code_block]
-#        [:func_proc_block, :code_block]
+        [:const_block, :code_block],
+        [:func_proc_block, :code_block]
       ],
       :code_block => [
         [:n_begin, :block_statement_tail]
@@ -84,7 +84,7 @@ class CNFTable
       ],
       :func_proc => [
         [:n_procedure, :proc_ending],
-        [:n_function, :func_ending],
+        [:n_function,  :func_ending]
       ],
       :func_proc_list => [
         [:n_semicolon, :func_proc     ],

@@ -28,10 +28,10 @@ describe Cyk do
     it('const x = 5; var y : integer; begin y := x end.')               { example.should be_folded }
     it('var y : integer; begin y := x end.')                            { example.should be_folded }
 
-    it 'const_block var_block func_proc_block code_block'
-    it 'const_block func_proc_block code_block'
-    it 'var_block func_proc_block code_block'
-    it 'func_proc_block code_block'
+    it('const y = 3; var x : real; function x(a,b:integer) : integer; begin x := 3 end; begin x := 3 end.') { example.should be_folded }
+    it('const y = 3; function x(a,b:integer) : integer; begin x := 3 end; begin x := 3 end.')               { example.should be_folded }
+    it('var x : integer; function x(a,b:integer) : integer; begin x := 3 end; begin x := 3 end.')           { example.should be_folded }
+    it('function x(a,b:integer) : integer; begin x := 3 end; begin x := 3 end.')                            { example.should be_folded }
   end
 
   context 'program_title_block' do
