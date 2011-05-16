@@ -29,6 +29,9 @@ class CNFTable
       .merge(self.const_definition_block)
       .merge(self.block_sequence)
       .merge(self.program)
+      .merge(self.func_proc_params)
+      .merge(self.func_proc_block)
+      .merge(self.procedure)
   end
 
   def self.operation
@@ -68,6 +71,46 @@ class CNFTable
       ],
       :code_block => [
         [:n_begin, :block_statement_tail]
+      ]
+    }
+  end
+
+  def self.func_proc_block
+    {
+      :func_proc_block => [
+        [:func_proc,      :n_semicolon],
+        [:func_proc_list, :n_semicolon]
+      ],
+      :func_proc => [
+        [:n_procedure, :proc_ending],
+      ],
+      :func_proc_list => [
+        [:n_semicolon, :func_proc     ],
+        [:func_proc,   :func_proc_list],
+        [:func_proc,   :func_proc_list]
+      ]
+    }
+  end
+
+  def self.func_proc_params
+    {
+      :func_proc_params => [
+        [:n_left_bracket,     :func_proc_params],
+        [:var_with_type,      :n_right_bracket ],
+        [:var_with_type_list, :n_right_bracket ]
+      ]
+    }
+  end
+
+  def self.procedure
+    {
+      :proc_ending => [
+        [:n_variable,       :proc_ending     ],
+        [:func_proc_params, :proc_func_ending]
+      ],
+      :proc_func_ending => [
+        [:n_semicolon, :block     ],
+        [:n_semicolon, :code_block]
       ]
     }
   end
