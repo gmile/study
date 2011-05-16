@@ -43,6 +43,14 @@ describe Cyk do
     it('uses fuu, bar, baz;')                       { example.should be_folded }
   end
 
+  context 'func_proc' do
+    it('procedure test( x: integer; y: string ); begin x := y end') { example.should be_folded }
+    it('procedure test( x: integer ); begin x := 3 end')            { example.should be_folded }
+
+    it('function test( x: integer; y: string ) : integer; begin x := y end') { example.should be_folded }
+    it('function test( x: integer ) : real; begin x := 3 end')               { example.should be_folded }
+  end
+
   context 'var_with_type' do
     it('a : integer')                               { example.should be_folded }
     it('b : longint')                               { example.should be_folded }

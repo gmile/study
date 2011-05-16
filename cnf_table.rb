@@ -32,6 +32,7 @@ class CNFTable
       .merge(self.func_proc_params)
       .merge(self.func_proc_block)
       .merge(self.procedure)
+      .merge(self.function)
   end
 
   def self.operation
@@ -83,6 +84,7 @@ class CNFTable
       ],
       :func_proc => [
         [:n_procedure, :proc_ending],
+        [:n_function, :func_ending],
       ],
       :func_proc_list => [
         [:n_semicolon, :func_proc     ],
@@ -98,6 +100,16 @@ class CNFTable
         [:n_left_bracket,     :func_proc_params],
         [:var_with_type,      :n_right_bracket ],
         [:var_with_type_list, :n_right_bracket ]
+      ]
+    }
+  end
+
+  def self.function
+    {
+      :func_ending => [
+        [:n_variable,       :func_ending     ],
+        [:func_proc_params, :func_ending     ],
+        [:var_with_type,    :proc_func_ending]
       ]
     }
   end
