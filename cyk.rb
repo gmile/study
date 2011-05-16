@@ -61,6 +61,10 @@ class Cyk
     r
   end
 
+  def complexity
+    @n*@n*@r
+  end
+
   private
 
   def generate_tree root
