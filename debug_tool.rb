@@ -5,7 +5,9 @@ require_relative 'lexical_analyser'
 string = ARGV[0]
 
 x = Cyk.new(Parser.new(string).output.map {|token| token.type }, CNFTable.table)
-x.valid?
+puts x.valid?
+puts x.instance_variable_get(:@r)
+puts x.instance_variable_get(:@n)
 
 combined_matrix   = x.combine
 max_string_length = combined_matrix.map { |row| row.map { |set| set.to_a.join(', ').size }.max }.max
