@@ -1,15 +1,22 @@
 @x = 10
-y = 20
-z = 30
 
-@n_array     = Array.new(@x) { Array.new(y) { nil } }
-@plain_array = Array.new(@x*y) { nil }
+class MyArray < Array
+  def initialize n, size
+    @size = size
+    super(n)
+  end
 
-def get a, b, c
-  @n_array[a][b] = 'test'
-  @plain_array[a*@x + b] = 'test'
+  def [](a, b, c)
+    super (a*@size + b)*c
+  end
 
-  @n_array[a][b] == @plain_array[a*@x + b]
+  def []=(a, b, c, value)
+    super (a*@size + b)*c, value
+  end
 end
 
-puts get(0,0,0)
+@n_array     = Array.new(@x) { Array.new(y) { Array.new(z) { nil } } }
+@plain_array = MyArray.new(@x*y*z, @x) { nil }
+
+@plain_array[1,2,3] = 'value'
+puts @plain_array[1,2,3]
