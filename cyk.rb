@@ -4,7 +4,8 @@ require 'progress_bar'
 require_relative 'cnf_table'
 require_relative 'errors'
 
-Node = Struct.new(:node, :children)
+Node  = Struct.new(:node, :children)
+NTerm = Struct.new(:nterm, :index)
 
 class Cyk
   include Errors::Cyk
@@ -71,7 +72,7 @@ class Cyk
   private
 
   def generate_tree root
-    root.is_a?(Symbol) ? root : [root.node, root.children.map { |c| generate_tree c }]
+    root.is_a?(Symbol) ? root : [root.node.nterm, root.children.map { |c| generate_tree c }]
   end
 
   def validate_input
@@ -90,9 +91,13 @@ class Cyk
     productions = Set.new
 
     table.each do |nterminal, prods|
-      right_sides = prods.select { |p| p.is_a?(Array) }
+      right_sides = prods.select { |p| p.is_a?(Array) }.map do |p|
+        a = NTerm.new(p.first, @nterminals.index(p.first))
+        b = NTerm.new(p.last, @nterminals.index(p.last))
+        [a, b]
+      end
 
-      right_sides.each { |p| productions << [nterminal] + p } unless right_sides.empty?
+      right_sides.each { |p| productions << [NTerm.new(nterminal, @nterminals.index(nterminal))] + p } unless right_sides.empty?
     end
 
     productions
@@ -138,9 +143,9 @@ class Cyk
       for j in 1..@n-i+1 do
         for k in 1..i-1 do
           for prod in @productions
-            a = @nterminals.index(prod[0])
-            b = @nterminals.index(prod[1])
-            c = @nterminals.index(prod[2])
+            a = prod[0].index
+            b = prod[1].index
+            c = prod[2].index
 
             x, y, z = i-1, j-1, k-1
 
