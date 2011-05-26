@@ -16,7 +16,7 @@ describe Cyk do
 
     it 'should prove that sentance can be generated over a given alphabet' do
       cyk = Cyk.new(string, table)
-      cyk.valid?.should be_true
+      cyk.perform_check.should be_true
       cyk.start_symbols.should == Set.new([:r4, :r5])
     end
 
@@ -28,7 +28,7 @@ describe Cyk do
       }
 
       cyk = Cyk.new(string, table.merge(redundant_rules))
-      cyk.valid?.should be_true
+      cyk.perform_check.should be_true
       cyk.start_symbols.should == Set.new([:r4, :r5, :r6])
     end
   end
@@ -48,13 +48,13 @@ describe Cyk do
     it '"Vars with coma" pattern' do
       string = [:a, :b, :c, :b, :d]
 
-      Cyk.new(string, table).valid?.should be_true
+      Cyk.new(string, table).perform_check.should be_true
     end
 
     it '"Single var" pattern' do
       string = [:a, :b, :d]
 
-      Cyk.new(string, table).valid?.should be_true
+      Cyk.new(string, table).perform_check.should be_true
     end
   end
 
@@ -70,7 +70,7 @@ describe Cyk do
       :r4 => [[:r3, :r1]]
     }
 
-    Cyk.new(string, table).valid?.should be_true
+    Cyk.new(string, table).perform_check.should be_true
   end
 
   it 'should parse a real piece of program with reccurent produtions' do
@@ -88,7 +88,7 @@ describe Cyk do
       :e5 => [[:e4, :e3]  ]
     }
 
-    Cyk.new(string, table).valid?.should be_true
+    Cyk.new(string, table).perform_check.should be_true
   end
 
   context 'types of rules' do
@@ -102,7 +102,7 @@ describe Cyk do
       }
 
       cyk = Cyk.new(string, table)
-      cyk.valid?.should be_true
+      cyk.perform_check.should be_true
       cyk.instance_variable_get(:@known_terminals).should == [:a, :b, :c]
     end
 
@@ -113,7 +113,7 @@ describe Cyk do
         :e3 => [[:e2, :e1]]
       }
 
-      Cyk.new(string, table).valid?.should be_true
+      Cyk.new(string, table).perform_check.should be_true
     end
 
     it 'should parse with: A -> [a, b, c] types of rules' do
@@ -123,7 +123,7 @@ describe Cyk do
         :e3 => [[:e2, :t1]]
       }
 
-      Cyk.new(string, table).valid?.should be_true
+      Cyk.new(string, table).perform_check.should be_true
     end
 
     it 'should parse with: A -> [a, a] types of rules' do
@@ -136,7 +136,7 @@ describe Cyk do
       }
 
       cyk = Cyk.new(string, table)
-      cyk.valid?.should be_true
+      cyk.perform_check.should be_true
       cyk.instance_variable_get(:@known_terminals).should == [:a]
     end
 
@@ -149,7 +149,7 @@ describe Cyk do
         :e3 => [[:e2, :e1]]
       }
 
-      Cyk.new(string, table).valid?.should be_true
+      Cyk.new(string, table).perform_check.should be_true
     end
   end
 
@@ -163,7 +163,7 @@ describe Cyk do
       }
 
       cyk = Cyk.new(string, table)
-      cyk.valid?
+      cyk.perform_check
       cyk.tree.should == [:e2, [:e1, [:e2, [:e1, :e1]]]]
     end
 
@@ -174,7 +174,7 @@ describe Cyk do
       }
 
       cyk = Cyk.new(string, table)
-      cyk.valid?
+      cyk.perform_check
       cyk.tree.should == [:e2, [[:e2, [:e1, :e1]], :e1]]
     end
   end

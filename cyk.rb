@@ -31,7 +31,7 @@ class Cyk
     validate_input
   end
 
-  def valid?
+  def perform_check
     prepare_matrix
     calculate
     validate
