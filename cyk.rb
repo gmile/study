@@ -120,7 +120,7 @@ class Cyk
     for i in 0..@n-1 do
       basic_productions = @nterminals.select { |key| @table[key].include?(@string[i]) }.map {|key| @nterminals.index(key) }
       basic_productions.each do |p|
-        @matrix[i][0][p] = true
+        @matrix[i][0][p]     = true
         @parse_tree[i][0][p] = @nterminals[p]
       end
     end
