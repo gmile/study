@@ -100,7 +100,7 @@ class Cyk
   end
 
   def start_symbols_from table
-    Set.new(table.select { |rule, value| value.any? { |item| item.is_a?(Array) } }.map { |rule, value| rule })
+    Set.new(table.select { |_, value| value.any? { |item| item.is_a?(Array) } }.map { |rule, _| rule })
   end
 
   def validate
