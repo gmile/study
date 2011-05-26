@@ -1,5 +1,4 @@
 require 'set'
-require 'progress_bar'
 
 require_relative 'cnf_table'
 require_relative 'errors'
@@ -31,7 +30,6 @@ class Cyk
     @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil   } } }
 
     @root          = nil
-    @progress_bar  = ProgressBar.new(@n-1) if options[:enable_progress]
     validate_input
   end
 
@@ -138,8 +136,6 @@ class Cyk
 
   def calculate
     for i in 2..@n do
-      @progress_bar.increment! if @progress_bar
-
       for j in 1..@n-i+1 do
         for k in 1..i-1 do
           for prod in @productions
