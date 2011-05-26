@@ -100,13 +100,7 @@ class Cyk
   end
 
   def start_symbols_from table
-    start_symbols = Set.new
-
-    for rule in table
-      start_symbols << rule[0] if rule[1].any? { |item| item.is_a?(Array) }
-    end
-
-    start_symbols
+    Set.new(table.select { |rule, value| value.any? { |item| item.is_a?(Array) } }.map { |rule, value| rule })
   end
 
   def validate
