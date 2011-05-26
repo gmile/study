@@ -37,12 +37,6 @@ class Cyk
     validate
   end
 
-  def tree
-    self.root unless @root
-
-    generate_tree @root
-  end
-
   def combine
     r = Array.new(@n) { Array.new(@n) { Set.new } }
     matrix = @parse_tree
@@ -59,6 +53,20 @@ class Cyk
     end
 
     r
+  end
+
+  def show_tree
+    show(@root)
+  end
+
+  def show item, depth = 0
+    unless item.is_a?(Symbol)
+      puts "#{' '*4*depth}|-- #{item.node.nterm}"
+
+      item.children.each { |child| show(child, depth+1) }
+    else
+      puts "#{' '*4*depth}|-- #{item}"
+    end
   end
 
   def complexity
