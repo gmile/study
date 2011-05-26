@@ -10,9 +10,7 @@ class Cyk
   include Errors::Cyk
 
   attr_reader :start_symbols, :root
-  # @param [Hash] options the options to create a message with.
-  # @option options [Array] :string Input string, slplitted into an array
-  # @option options [Hash] :table Table of rules
+
   def initialize string, table, options = {}
     # TODO: raise errors if @string isn't of String class (same for Array)
 
