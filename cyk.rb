@@ -11,7 +11,7 @@ class Cyk
 
   attr_reader :start_symbols, :root
 
-  def initialize string, table, options = {}
+  def initialize string, table
     # TODO: raise errors if @string isn't of String class (same for Array)
 
     @table         = table
