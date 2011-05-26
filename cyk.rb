@@ -59,13 +59,15 @@ class Cyk
     show(@root)
   end
 
-  def show item, depth = 0
+  def show item, depth = 0, symbol = '|'
     unless item.is_a?(Symbol)
-      puts "#{' '*4*depth}|-- #{item.node.nterm}"
+      puts "#{' '*4*depth}#{symbol}-- #{item.node.nterm}"
 
-      item.children.each { |child| show(child, depth+1) }
+      show(item.children.first, depth+1)
+      last = item.children.last
+      last.is_a?(Symbol) ? show(last, depth+1, '`') : show(last, depth+1)
     else
-      puts "#{' '*4*depth}|-- #{item}"
+      puts "#{' '*4*depth}#{symbol}-- #{item}"
     end
   end
 
