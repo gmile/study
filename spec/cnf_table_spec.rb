@@ -9,12 +9,12 @@ RSpec::Matchers.define :be_folded do
     @cyk             = Cyk.new(input_string, table)
 
     @cyk.perform_check.should be_true
-    @cyk.root.node.nterm == expected_folding
+    @cyk.roots.map { |root| root }.include? expected_folding
   end
 
   failure_message_for_should do |example|
     message = "#{example.example_group.description.to_sym} expected, but "
-    message << (@cyk.root ? "#{@cyk.root.node} found" : "it was unable to build tree")
+    message << (@cyk.roots ? "[#{@cyk.roots.join(', ')}] found" : "it was unable to build tree")
   end
 end
 

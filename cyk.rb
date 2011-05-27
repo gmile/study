@@ -9,7 +9,7 @@ NTerm = Struct.new(:nterm, :index)
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols, :root
+  attr_reader :start_symbols, :roots
 
   def initialize string, table
     # TODO: raise errors if @string isn't of String class (same for Array)
@@ -56,7 +56,7 @@ class Cyk
   end
 
   def show_tree
-    show(@root)
+    @roots.each { |root| show(root) }
   end
 
   def show item, depth = 0, symbol = '|'
@@ -73,6 +73,10 @@ class Cyk
 
   def complexity
     @n*@n*@r
+  end
+
+  def tree
+    @roots.map { |root| generate_tree(root) }
   end
 
   private
@@ -114,16 +118,9 @@ class Cyk
   end
 
   def validate
-    @start_symbols.each do |symbol|
-      i = @nterminals.index(symbol)
+    @roots = @start_symbols.select { |symbol| @matrix[0][@n-1][@nterminals.index(symbol)] }
 
-      if @matrix[0][@n-1][i]
-        @root = @parse_tree[0][@n-1][i]
-        return true
-      end
-    end
-
-    false
+    @roots.empty? ? false : true
   end
 
   def prepare_matrix
