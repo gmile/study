@@ -8,11 +8,11 @@ class Parser
   attr_reader :output
 
   FILTERS = {
+    :mystring            => Builder::MystringBuilder.regexp,
     :reserved_word       => Builder::ReservedWordBuilder.regexp,
     :comment             => Builder::CommentBuilder.regexp,
     :bracket             => Builder::BracketBuilder.regexp,
     :algebraic_operation => Builder::AlgebraicOperationBuilder.regexp,
-    :mystring            => Builder::MystringBuilder.regexp,
     :assignement         => Builder::AssignementBuilder.regexp,
     :punctuation         => Builder::PunctuationBuilder.regexp,
     :boolean_operation   => Builder::BooleanOperationBuilder.regexp,

@@ -15,6 +15,15 @@ describe Parser do
     ]
   end
 
+  it 'should not consider reserved words inside strings' do
+    parser.input = "'well' + 'done'"
+    parser.output.map { |token| [token.type, token.lexeme] }.should == [
+      [:string, "'well'"],
+      [:add,    '+'     ],
+      [:string, "'done'"]
+    ]
+  end
+
   it "should parse: x[0..1]" do
     parser.input = 'x[0..1]'
     parser.output.map { |token| [token.type, token.lexeme] }.should == [
