@@ -33,7 +33,7 @@ class CNFTable
       .merge(self.func_proc_block)
       .merge(self.procedure)
       .merge(self.function)
-      .merge(self.func_proc_call)
+      .merge(self.parameters)
   end
 
   def self.operation
@@ -41,7 +41,7 @@ class CNFTable
   end
 
   def self.value
-    { :value => [:integer, :real, :variable, [:n_variable, :subs_value]] }
+    { :value => [:integer, :real, :variable, :string, [:n_variable, :subs_value], [:n_variable, :parameters]] }
   end
 
   def self.program
@@ -105,11 +105,8 @@ class CNFTable
     }
   end
 
-  def self.func_proc_call
+  def self.parameters
     {
-      :func_proc_call => [
-        [:n_variable, :parameters]
-      ],
       :parameters => [
         [:n_left_bracket, :parameters     ],
         [:value,          :n_coma         ],

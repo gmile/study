@@ -99,12 +99,6 @@ describe Cyk do
     it('[12+x]')                                    { example.should be_folded }
   end
 
-  context 'func_proc_call' do
-    it('my_func(1)')                                { example.should be_folded }
-    it('my_func(a,b,c)')                            { example.should be_folded }
-    it('my_func')
-  end
-
   context 'parameters' do
     it('(a)')                                       { example.should be_folded }
     it('(12)')                                      { example.should be_folded }
@@ -117,6 +111,19 @@ describe Cyk do
   context 'statement_list' do
     it('x := y; x := y;')                           { example.should be_folded }
     it('x := y; a := b; c := d; i := j;')           { example.should be_folded }
+  end
+
+  context 'value_fold' do
+    it('x+3')                                       { example.should be_folded }
+  end
+
+  context 'value' do
+    it('3')                                         { example.should be_folded }
+    it('3.1')                                       { example.should be_folded }
+    it('my_func(1)')                                { example.should be_folded }
+    it('my_func(a,b,c)')                            { example.should be_folded }
+    it('some_string')                               { example.should be_folded }
+    it('my_func')
   end
 
   context 'statement' do
