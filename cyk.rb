@@ -3,7 +3,7 @@ require 'set'
 require_relative 'cnf_table'
 require_relative 'errors'
 
-Node  = Struct.new(:node, :children) # rename node -> nterm
+Node  = Struct.new(:nterm, :children)
 NTerm = Struct.new(:name, :index)
 
 class Cyk

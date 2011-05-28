@@ -156,6 +156,10 @@ describe Cyk do
   context 'Build tree from: a b c' do
     let(:string) { [:a, :b, :c] }
 
+    def simplify node
+      node.is_a?(Symbol) ? node : [node.nterm.name, node.children.map { |child| simplify(child) }]
+    end
+
     it 'forward strategy' do
       table = {
         :e1 => [:a, :b, :c],
@@ -164,7 +168,7 @@ describe Cyk do
 
       cyk = Cyk.new(string, table)
       cyk.perform_check
-      cyk.tree.should == [:e2, [:e1, [:e2, [:e1, :e1]]]]
+      cyk.roots.map { |r| simplify(r) }.should include([:e2, [:e1, [:e2, [:e1, :e1]]]])
     end
 
     it 'backward strategy' do
@@ -175,7 +179,7 @@ describe Cyk do
 
       cyk = Cyk.new(string, table)
       cyk.perform_check
-      cyk.tree.should == [:e2, [[:e2, [:e1, :e1]], :e1]]
+      cyk.roots.map { |r| simplify(r) }.should include([:e2, [[:e2, [:e1, :e1]], :e1]])
     end
   end
 

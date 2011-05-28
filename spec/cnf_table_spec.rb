@@ -9,7 +9,7 @@ RSpec::Matchers.define :be_folded do
     @cyk             = Cyk.new(input_string, table)
 
     @cyk.perform_check.should be_true
-    @cyk.roots.map { |root| root.node.name }.include? expected_folding
+    @cyk.roots.map { |root| root.nterm.name }.include? expected_folding
   end
 
   failure_message_for_should do |example|
