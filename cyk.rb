@@ -41,7 +41,7 @@ class Cyk
   private
 
   def set_roots
-    @roots = @parse_tree[0][@n-1].compact.select { |s| @start_symbols.include?(s.node.name) }
+    @roots = @parse_tree[0][@n-1].compact.select { |s| @start_symbols.include?(s.nterm.name) }
   end
 
   def validate_input
