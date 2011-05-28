@@ -118,11 +118,11 @@ describe Cyk do
   end
 
   context 'value' do
-    it('3')                                         { example.should be_folded }
-    it('3.1')                                       { example.should be_folded }
+    it('3')
+    it('3.1')
     it('my_func(1)')                                { example.should be_folded }
     it('my_func(a,b,c)')                            { example.should be_folded }
-    it('some_string')                               { example.should be_folded }
+    it('some_string')
     it('my_func')
   end
 
