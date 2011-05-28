@@ -3,8 +3,8 @@ require 'set'
 require_relative 'cnf_table'
 require_relative 'errors'
 
-Node  = Struct.new(:node, :children)
-NTerm = Struct.new(:nterm, :index)
+Node  = Struct.new(:node, :children) # rename node -> nterm
+NTerm = Struct.new(:name, :index)
 
 class Cyk
   include Errors::Cyk
@@ -35,54 +35,13 @@ class Cyk
     prepare_matrix
     calculate
     validate
-  end
-
-  def combine
-    r = Array.new(@n) { Array.new(@n) { Set.new } }
-    matrix = @parse_tree
-
-    for m in 0..@r-1
-      for row in 0..@n-1
-        for col in 0..@n-1
-          unless matrix[col][row][m].nil?
-            client = matrix[col][row][m]
-            r[row][col].merge [client.is_a?(Symbol) ? client : client.node]
-          end
-        end
-      end
-    end
-
-    r
-  end
-
-  def show_tree
-    @roots.each { |root| show(root) }
-  end
-
-  def show item, depth = 0, symbol = '|'
-    unless item.is_a?(Symbol)
-      puts "#{' '*4*depth}#{symbol}-- #{item.node.nterm}"
-
-      show(item.children.first, depth+1)
-      last = item.children.last
-      last.is_a?(Symbol) ? show(last, depth+1, '`') : show(last, depth+1)
-    else
-      puts "#{' '*4*depth}#{symbol}-- #{item}"
-    end
-  end
-
-  def complexity
-    @n*@n*@r
-  end
-
-  def tree
-    @roots.map { |root| generate_tree(root) }
+    set_roots
   end
 
   private
 
-  def generate_tree root
-    root.is_a?(Symbol) ? root : [root.node.nterm, root.children.map { |c| generate_tree c }]
+  def set_roots
+    @roots = @parse_tree[0][@n-1].compact.select { |s| @start_symbols.include?(s.node.name) }
   end
 
   def validate_input
@@ -118,9 +77,7 @@ class Cyk
   end
 
   def validate
-    @roots = @start_symbols.select { |symbol| @matrix[0][@n-1][@nterminals.index(symbol)] }
-
-    @roots.empty? ? false : true
+    @start_symbols.select { |symbol| @matrix[0][@n-1][@nterminals.index(symbol)] }.empty? ? false : true
   end
 
   def prepare_matrix
