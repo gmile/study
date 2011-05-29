@@ -32,7 +32,6 @@ class Cyk
 
     @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil } } }
 
-    @root          = nil
     validate_input
   end
 
