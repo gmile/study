@@ -7,6 +7,8 @@ Todo:
    which can be used to describe a given string (sentance)
  - Cut out :commment items after parsing stage
  - A lot more (see pending tests)
+ - reduce amount of NTerm creations from 4 to 1 (cyk.rb)
+ - raise errors if @string isn't of String class (same for Array) (cyk.rb)
 
 Table:
  - Merge 'value' and 'value_fold'

@@ -13,8 +13,6 @@ class Cyk
   attr_reader :start_symbols, :roots
 
   def initialize string, table
-    # TODO: raise errors if @string isn't of String class (same for Array)
-
     @table         = table
     @string        = string
 
