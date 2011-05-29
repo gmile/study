@@ -157,7 +157,7 @@ describe Cyk do
     let(:string) { [:a, :b, :c] }
 
     def simplify node
-      node.is_a?(Symbol) ? node : [node.nterm.name, node.children.map { |child| simplify(child) }]
+      node.is_a?(NTerm) ? node.name : [node.nterm.name, node.children.map { |child| simplify(child) }]
     end
 
     it 'forward strategy' do
