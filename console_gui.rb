@@ -29,9 +29,8 @@ class GUI
     unless item.is_a?(NTerm)
       puts "#{' '*4*depth}#{symbol}-- #{item.nterm.name}"
 
-      show(item.children.first, depth+1)
-      last = item.children.last
-      last.is_a?(NTerm) ? show(last, depth+1, '`') : show(last, depth+1)
+      show(item.children.first, depth+1, '|')
+      show(item.children.last, depth+1, '`')
     else
       puts "#{' '*4*depth}#{symbol}-- #{item.name}"
     end
