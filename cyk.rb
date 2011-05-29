@@ -2,8 +2,9 @@ require 'set'
 
 require_relative 'cnf_table'
 require_relative 'errors'
+require_relative 'node'
 
-Node  = Struct.new(:nterm, :children)
+#Node  = Struct.new(:nterm, :children)
 NTerm = Struct.new(:name, :index)
 
 class Cyk
