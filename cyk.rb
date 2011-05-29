@@ -24,8 +24,7 @@ class Cyk
     @start_symbols = start_symbols_from(@table)
     @n             = @string.size
 
-    @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { false } } }
-    @parse_tree    = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil   } } }
+    @matrix        = Array.new(@n) { Array.new(@n) { Array.new(@r) { nil } } }
 
     @root          = nil
     validate_input
@@ -41,7 +40,7 @@ class Cyk
   private
 
   def set_roots
-    @roots = @parse_tree[0][@n-1].compact.select { |s| @start_symbols.include?(s.nterm.name) }
+    @roots = @matrix[0][@n-1].compact.select { |s| @start_symbols.include?(s.nterm.name) }
   end
 
   def validate_input
@@ -84,8 +83,7 @@ class Cyk
     for i in 0..@n-1 do
       basic_productions = @nterminals.select { |key| @table[key].include?(@string[i]) }.map {|key| @nterminals.index(key) }
       basic_productions.each do |p|
-        @matrix[i][0][p]     = true
-        @parse_tree[i][0][p] = @nterminals[p]
+        @matrix[i][0][p] = @nterminals[p]
       end
     end
   end
@@ -102,8 +100,7 @@ class Cyk
             x, y, z = i-1, j-1, k-1
 
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
-              @matrix[y][x][a]     = true
-              @parse_tree[y][x][a] = Node.new(prod[0], [@parse_tree[y][z][b], @parse_tree[y+k][x-k][c]])
+              @matrix[y][x][a] = Node.new(prod[0], [@matrix[y][z][b], @matrix[y+k][x-k][c]])
             end
           end
         end
