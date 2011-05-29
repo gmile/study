@@ -1,14 +1,17 @@
 require_relative 'cyk'
 require_relative 'cnf_table'
 require_relative 'lexical_analyser'
+require_relative 'console_gui'
 
 string = ARGV[0]
 
 x = Cyk.new(Parser.new(string).output.map {|token| token.type }, CNFTable.table)
-puts x.valid?
-puts x.instance_variable_get(:@r)
-puts x.instance_variable_get(:@n)
+x.perform_check
+GUI.show_tree(x.roots)
 
+puts x.roots.first.find(:func_ending).inspect
+
+=begin
 combined_matrix   = x.combine
 max_string_length = combined_matrix.map { |row| row.map { |set| set.to_a.join(', ').size }.max }.max
 
@@ -19,3 +22,4 @@ for row in combined_matrix
   end
   puts "\n"
 end
+=end
