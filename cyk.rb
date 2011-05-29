@@ -5,16 +5,23 @@ require_relative 'errors'
 require_relative 'node'
 
 #Node  = Struct.new(:nterm, :children)
-NTerm = Struct.new(:name, :index)
+NTerm = Struct.new(:name, :index, :token)
 
 class Cyk
   include Errors::Cyk
 
-  attr_reader :start_symbols, :roots
+  attr_reader :start_symbols, :roots, :string_full
 
   def initialize string, table
     @table         = table
-    @string        = string
+
+    @string_full = nil
+    @string = if string.first.is_a?(String) || string.first.is_a?(Symbol)
+      string
+    else
+      @string_full = string
+      string.map { |lexem| lexem.type }
+    end
 
     @nterminals    = @table.keys
     @r             = @table.size
@@ -82,7 +89,11 @@ class Cyk
     for i in 0..@n-1 do
       basic_productions = @nterminals.select { |key| @table[key].include?(@string[i]) }.map {|key| @nterminals.index(key) }
       basic_productions.each do |p|
-        @matrix[i][0][p] = NTerm.new(@nterminals[p], p)
+        if @string_full.nil?
+          @matrix[i][0][p] = NTerm.new(@nterminals[p], p)
+        else
+          @matrix[i][0][p] = NTerm.new(@nterminals[p], p, @string_full[i])
+        end
       end
     end
   end
