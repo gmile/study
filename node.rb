@@ -7,8 +7,8 @@ class Node
   end
 
   def find nterm
-    found = children.select { |child| child.nterm == nterm }
+    found = children.select { |child| (child.is_a?(Node) ? child.nterm : child) == nterm }
 
-    found.empty? ? children.map { |child| child.find(symbol) } : nterm
+    found.empty? ? children.select { |child| child.is_a?(Node) }.map { |child| child.find(nterm) }.flatten : nterm
   end
 end
