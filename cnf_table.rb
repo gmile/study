@@ -222,10 +222,12 @@ class CNFTable
         [:constant,      :n_semicolon],
         [:constant_list, :n_semicolon]
       ],
+      :const_start => [
+        [:n_variable,      :n_equal],
+        [:identifier_list, :n_equal]
+      ],
       :constant => [
-        [:n_variable,      :n_equal    ],
-        [:identifier_list, :n_equal    ],
-        [:constant,        :const_value]
+        [:const_start, :const_value]
       ],
       :constant_list => [
         [:n_semicolon,   :constant     ],
