@@ -2,14 +2,25 @@ require_relative 'cyk'
 require_relative 'cnf_table'
 require_relative 'lexical_analyser'
 require_relative 'console_gui'
+require_relative 'table_builder'
 
 string = ARGV[0]
 
-x = Cyk.new(Parser.new(string).output.map {|token| token.type }, CNFTable.table)
+x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
-GUI.show_tree(x.roots)
+# works
+#x.string_full.each { |x| puts x.inspect }
+#GUI.show_tree(x.roots)
+#GUI.show_tree(x.roots.find(:constant))
+#GUI.show_tree(x.roots.first.find(:constant))
+#puts x
 
-puts x.roots.first.find(:func_ending).inspect
+# works
+#x = TableBuilder.new(ARGV[0])
+#x.try
+#puts x.block_array.inspect
+
+#puts x.roots.first.find(:func_ending).inspect
 
 =begin
 combined_matrix   = x.combine

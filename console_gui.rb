@@ -1,3 +1,5 @@
+require 'rainbow'
+
 class GUI
   def self.generate_tree root
     root.is_a?(Symbol) ? root : [root.node.nterm, root.children.map { |c| generate_tree c }]
@@ -26,13 +28,15 @@ class GUI
   end
 
   def self.show item, depth = 0, symbol = '|'
+    string = (' '*4*depth + symbol + '-- ').color('#333333')
+
     unless item.is_a?(NTerm)
-      puts "#{' '*4*depth}#{symbol}-- #{item.nterm.name}"
+      puts string << item.nterm.name.to_s.color("333333") + " " + item.class.to_s
 
       show(item.children.first, depth+1, '|')
-      show(item.children.last, depth+1, '`')
+      show(item.children.last,  depth+1, '`')
     else
-      puts "#{' '*4*depth}#{symbol}-- #{item.name}"
+      puts string << item.name.to_s.color("333333") + " " + item.class.to_s + " " + item.token.lexeme + " [#{item.token.x}, #{item.token.y}]".color('#999999')
     end
   end
 

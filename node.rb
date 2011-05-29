@@ -10,6 +10,8 @@ class Node
   def find string
     found = children.select { |child| (child.is_a?(Node) ? child.nterm.name : child.name) == string }
 
-    found.empty? ? children.select { |child| child.is_a?(Node) }.map { |child| child.find(string) }.flatten : found
+    puts "---" if self.nterm.name == :block
+
+    (children.select { |child| child.is_a?(Node) && child.nterm.name != string }.map { |child| child.find(string) } + found).flatten
   end
 end
