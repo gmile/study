@@ -124,8 +124,9 @@ class CNFTable
   def self.function
     {
       :func_ending => [
-        [:n_variable,       :func_ending_1   ]
+        [:func_name,       :func_ending_1   ]
       ],
+      :func_name => [:variable],
       :func_ending_1 => [
         [:func_proc_params, :func_ending_2   ]
       ],
@@ -137,8 +138,9 @@ class CNFTable
 
   def self.procedure
     {
+      :proc_name => [:variable],
       :proc_ending => [
-        [:n_variable,       :proc_ending     ],
+        [:proc_name,       :proc_ending     ],
         [:func_proc_params, :proc_func_ending]
       ],
       :proc_func_ending => [
@@ -197,6 +199,7 @@ class CNFTable
 
   def self.var_definition_block
     {
+      :var_name => [:variable],
       :var_block => [
         [:n_var, :var_tail],
       ],
@@ -205,14 +208,21 @@ class CNFTable
         [:var_with_type_list, :n_semicolon]
       ],
       :var_with_type => [
-        [:identifier_list, :var_with_type],
-        [:n_variable,      :var_with_type],
+        [:var_list, :var_with_type],
+        [:var_name,        :var_with_type],
         [:n_colon,         :type         ]
       ],
       :var_with_type_list => [
         [:n_semicolon,        :var_with_type     ],
         [:var_with_type,      :var_with_type_list],
         [:var_with_type_list, :var_with_type_list]
+      ],
+      :var_list => [
+        [:var_name,   :var_list_1],
+      ],
+      :var_list_1 => [
+        [:n_coma,     :var_name  ],
+        [:var_list_1, :var_list_1]
       ]
     }
   end
@@ -226,8 +236,9 @@ class CNFTable
         [:constant,      :n_semicolon],
         [:constant_list, :n_semicolon]
       ],
+      :const_name => [:variable],
       :const_start => [
-        [:n_variable,      :n_equal],
+        [:const_name,      :n_equal],
         [:identifier_list, :n_equal]
       ],
       :constant => [
@@ -245,7 +256,7 @@ class CNFTable
   def self.identifier_list
     {
       :identifier_list => [
-        [:n_variable, :add_identifier],
+        [:n_variable, :add_identifier]
       ],
       :add_identifier => [
         [:n_coma,         :n_variable    ],
