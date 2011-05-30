@@ -8,10 +8,10 @@ class Node
   end
 
   def find string
-    unless string == :func
+    unless string == :func_name
       finder(string).flatten.compact
     else
-      find_func_proc :func_proc
+      finder_2(string).flatten.compact
     end
   end
 
@@ -27,10 +27,15 @@ class Node
     end
   end
 
-  def find_func_proc string
+  def finder_2 string
     found = (nterm.name == string ? [self] : [])
 
-    return found unless found.empty?
-    children.select { |c| c.is_a?(Node) }.map { |c| c.find_func_proc(string) }
+    found + children.map do |child|
+      if child.is_a?(Node)
+        child.finder_2(string) if child.nterm.name != :func_ending_1
+      elsif child.name == string
+        child
+      end
+    end
   end
 end

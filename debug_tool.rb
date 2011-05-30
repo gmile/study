@@ -15,15 +15,26 @@ def find string
   @root.find(string).map { |c| c.find(:n_variable) }.flatten
 end
 
-fc = find :const_block
-fv = find :var_block
-ff = find :func
+def easy_find string
+  @root.find(string).flatten #.map { |c| c.find(:n_variable) }.flatten
+end
 
-puts ff
+fc = easy_find :const_name
+fv = easy_find :var_name
+ff = easy_find :func_name
+#ff = easy_find :proc_name
+
+puts ff.size
+
+puts "Block 1: " 
+puts "  constants: " + fc.map { |x| x.token.lexeme }.join(', ')
+puts "  variables: " + fv.map { |x| x.token.lexeme }.join(', ')
+puts "  functions: " + ff.map { |x| x.token.lexeme }.join(', ')
+
 
 GUI.show_tree(x.roots)
-GUI.show_tree(fc)
-GUI.show_tree(fv)
+#GUI.show_tree(fc)
+#GUI.show_tree(fv)
 #GUI.show_tree(ff)
 
 # works
