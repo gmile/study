@@ -110,6 +110,15 @@ class Cyk
 
             if @matrix[y][z][b] and @matrix[y+k][x-k][c]
               @matrix[y][x][a] = Node.new(prod[0], [@matrix[y][z][b], @matrix[y+k][x-k][c]])
+
+              #
+              # we should say goodbye to node and form the following tree
+              # :nterm => {
+              #   :nterm_1 => Token,
+              #   :nterm_2 => { ... }
+              # }
+              #
+
             end
           end
         end
