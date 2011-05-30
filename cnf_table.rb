@@ -124,8 +124,12 @@ class CNFTable
   def self.function
     {
       :func_ending => [
-        [:n_variable,       :func_ending     ],
-        [:func_proc_params, :func_ending     ],
+        [:n_variable,       :func_ending_1   ]
+      ],
+      :func_ending_1 => [
+        [:func_proc_params, :func_ending_2   ]
+      ],
+      :func_ending_2 => [
         [:var_with_type,    :proc_func_ending]
       ]
     }
