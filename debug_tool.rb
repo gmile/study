@@ -8,12 +8,23 @@ string = ARGV[0]
 
 x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
-# works
-#x.string_full.each { |x| puts x.inspect }
-#GUI.show_tree(x.roots)
-#GUI.show_tree(x.roots.find(:constant))
-#GUI.show_tree(x.roots.first.find(:constant))
-#puts x
+
+@root = x.roots.first
+
+def find string
+  @root.find(string).map { |c| c.find(:n_variable) }.flatten
+end
+
+fc = find :const_block
+fv = find :var_block
+ff = find :func
+
+puts ff
+
+GUI.show_tree(x.roots)
+GUI.show_tree(fc)
+GUI.show_tree(fv)
+#GUI.show_tree(ff)
 
 # works
 #x = TableBuilder.new(ARGV[0])
