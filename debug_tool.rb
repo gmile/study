@@ -4,6 +4,22 @@ require_relative 'lexical_analyser'
 require_relative 'console_gui'
 require_relative 'table_builder'
 
+def template
+  {
+    :block_info => {
+      :parent => nil,
+      :self   => nil,
+      :lines  => {
+        :first => nil,
+        :last  => nil
+      }
+    },
+    :constants => [],
+    :variables => [],
+    :functions => []
+  }
+end
+
 string = <<PASCAL
   program test;
 
