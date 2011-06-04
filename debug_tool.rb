@@ -54,7 +54,7 @@ PASCAL
 x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
 
-some_array = [template]
+@some_array = some_array = [template]
 
 root = x.roots.first
 root.set_block 0, nil, some_array
@@ -81,5 +81,27 @@ def pretty_print blocks
     puts
   end
 end
+
+def lookup_by_block block_number, var_name
+ (@some_array[block_number][:constants] + @some_array[block_number][:variables] + @some_array[block_number][:functions]).map { |x| x.token.lexeme }.include?(var_name)
+end
+
+def lookup_by_bn block_number, var_name
+  if lookup_by_block(block_number, var_name) || lookup_by_block(@some_array[block_number][:block_info][:parent], var_name)
+    "present in #{block_number}"
+  else
+    'never declared'
+  end
+end
+
+puts lookup_by_bn(1, 'a')
+
+def lookup_by_line line_number, var_name
+  block_number = @some_array.select { |x| (x[:block_info][:lines][:first]..x[:block_info][:lines][:last]).include?(line_number) }.last[:block_info][:self]
+
+  lookup_by_bn block_number, var_name
+end
+
+puts lookup_by_line(18, 'n')
 
 pretty_print some_array
