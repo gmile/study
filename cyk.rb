@@ -5,8 +5,6 @@ require_relative 'errors'
 require_relative 'node'
 require_relative 'nterm'
 
-#NTerm = Struct.new(:name, :index, :token)
-
 class Cyk
   include Errors::Cyk
 
