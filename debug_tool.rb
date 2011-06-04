@@ -54,33 +54,42 @@ PASCAL
 x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
 
-some_array = [[]]
+some_array = [template]
 
 root = x.roots.first
 root.set_block 0, nil, some_array
 
 GUI.show_tree(x.roots)
 
-root.extract.each do |item|
-  some_array[item.options[:current_block]] << item
+
+
+x = root.extract.each do |item|
+  some_array[item.options[:current_block]][:block_info][:parent] = item.options[:parent_block]
+  some_array[item.options[:current_block]][:block_info][:self]   = item.options[:current_block]
+  some_array[item.options[:current_block]][:constants] << item if item.name == :const_name
+  some_array[item.options[:current_block]][:variables] << item if item.name == :var_name
+  some_array[item.options[:current_block]][:functions] << item if item.name == :func_name
 end
 
+some_array.first[:block_info][:lines] = root.options[:lines]
+
+=begin
 some_array.map! do |item|
   {
     :block_info => {
       :parent => item.first.options[:parent_block],
-      :self => item.first.options[:current_block],
-      :lines => nil
+      :self   => item.first.options[:current_block],
+      :lines  => nil
     },
     :constants => item.select { |x| x.name == :const_name },
     :variables => item.select { |x| x.name == :var_name   },
     :functions => item.select { |x| x.name == :func_name  }
   }
 end
-
+=end
 def pretty_print blocks
   blocks.each_with_index do |block, index|
-    puts "Block #{index}"
+    puts "Block #{index} [#{block[:block_info][:lines][:first]} - #{block[:block_info][:lines][:last]}]"
     puts " - parent: #{block[:block_info][:parent]}"
     puts " - constants: #{block[:constants].map { |x| x.token.lexeme }.join(', ')}"
     puts " - variables: #{block[:variables].map { |x| x.token.lexeme }.join(', ')}"
@@ -88,5 +97,6 @@ def pretty_print blocks
     puts
   end
 end
+
 
 pretty_print some_array
