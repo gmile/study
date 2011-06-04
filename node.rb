@@ -36,19 +36,24 @@ class Node
   end
 
   def set_block current_block, parent_block, blocks_array
-    self.options[:current_block] = current_block
-    self.options[:parent_block] = parent_block
+    nterm_children = self.children.select { |child| !child.is_a?(Node) }
+    rest           = self.children - nterm_children
 
-    node_children = self.children.select { |child| child.is_a?(Node) }
+    unless nterm_children.empty?
+      nterm_children.each do |child|
+        child.options[:current_block] = current_block
+        child.options[:parent_block]  = parent_block
+      end
+    end
 
     if [:func_ending, :proc_ending].include?(self.nterm.name)
       blocks_array << []
 
-      node_children.each do |child|
+      rest.each do |child|
         child.set_block blocks_array.size, current_block, blocks_array
       end
     else
-      node_children.each do |child|
+      rest.each do |child|
         child.set_block current_block, parent_block, blocks_array
       end
     end

@@ -31,12 +31,12 @@ class GUI
     string = (' '*4*depth + symbol + '-- ').color('#333333')
 
     unless item.is_a?(NTerm)
-      puts string << item.nterm.name.to_s.color("333333") + " " + item.class.to_s + " [#{item.options[:current_block]} #{item.options[:parent_block]}]"
+      puts string << item.nterm.name.to_s.color("333333") + " " + item.class.to_s
 
       show(item.children.first, depth+1, '|')
       show(item.children.last,  depth+1, '`')
     else
-      puts string << item.name.to_s.color("333333") + " " + item.class.to_s + " " + item.token.lexeme.color(:green) + " [#{item.token.x}, #{item.token.y}]".color('#999999')
+      puts string << item.name.to_s.color("333333") + " " + item.class.to_s + " " + item.token.lexeme.color(:green) + " [#{item.token.x}, #{item.token.y}]".color('#999999') + " [#{item.options[:current_block]} #{item.options[:parent_block]}]"
     end
   end
 

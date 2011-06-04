@@ -73,6 +73,8 @@ end
 some_array = [[]]
 
 @root.set_block 1, 0, some_array
+GUI.show_tree(x.roots)
+puts some_array.inspect
 #puts @root.children.first.options.inspect
 
 #uts some_array.inspect
