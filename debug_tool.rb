@@ -38,6 +38,11 @@ string = <<PASCAL
     my_func := 5;
   end;
 
+  function my_func_x(a : integer) : integer;
+  begin
+    my_func := 5;
+  end;
+
   begin
     for i := 1 to 10 do
     begin
