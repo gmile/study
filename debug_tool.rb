@@ -61,8 +61,6 @@ root.set_block 0, nil, some_array
 
 GUI.show_tree(x.roots)
 
-
-
 x = root.extract.each do |item|
   some_array[item.options[:current_block]][:block_info][:parent] = item.options[:parent_block]
   some_array[item.options[:current_block]][:block_info][:self]   = item.options[:current_block]
@@ -73,20 +71,6 @@ end
 
 some_array.first[:block_info][:lines] = root.options[:lines]
 
-=begin
-some_array.map! do |item|
-  {
-    :block_info => {
-      :parent => item.first.options[:parent_block],
-      :self   => item.first.options[:current_block],
-      :lines  => nil
-    },
-    :constants => item.select { |x| x.name == :const_name },
-    :variables => item.select { |x| x.name == :var_name   },
-    :functions => item.select { |x| x.name == :func_name  }
-  }
-end
-=end
 def pretty_print blocks
   blocks.each_with_index do |block, index|
     puts "Block #{index} [#{block[:block_info][:lines][:first]} - #{block[:block_info][:lines][:last]}]"
@@ -97,6 +81,5 @@ def pretty_print blocks
     puts
   end
 end
-
 
 pretty_print some_array
