@@ -31,7 +31,7 @@ class GUI
     string = (' '*4*depth + symbol + '-- ').color('#333333')
 
     unless item.is_a?(NTerm)
-      puts string << item.nterm.name.to_s.color("333333") + " " + item.class.to_s
+      puts string << item.nterm.name.to_s.color("333333") + " " + item.class.to_s + " [#{item.options[:current_block]} #{item.options[:parent_block]}]"
 
       show(item.children.first, depth+1, '|')
       show(item.children.last,  depth+1, '`')

@@ -4,12 +4,63 @@ require_relative 'lexical_analyser'
 require_relative 'console_gui'
 require_relative 'table_builder'
 
-string = ARGV[0]
+string = <<PASCAL
+  program test;
+
+  const
+    n = 10;
+    m = 15;
+
+  var
+    i, j : integer;
+    a : array[1..10] of real;
+    x : real;
+    s : string;
+
+  function my_func(a : integer) : integer;
+  begin
+    my_func := 5;
+  end;
+
+  begin
+    for i := 1 to 10 do
+    begin
+      x := 3
+    end
+  end.
+PASCAL
+
+string = <<PASCAL
+  const
+    y = 3;
+  var
+    x : real;
+
+  function x(a,b:integer) : integer;
+    function x(a,b:integer) : integer;
+    begin
+      x := 3
+    end;
+  begin
+    x := 3
+  end;
+
+  function x(a,b:integer) : integer;
+  begin
+    x := 3
+  end;
+
+  begin
+    x := 3
+  end.
+PASCAL
 
 x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
 
 @root = x.roots.first
+
+#puts @root.inspect
 
 def find string
   @root.find(string).map { |c| c.find(:n_variable) }.flatten
@@ -19,20 +70,31 @@ def easy_find string
   @root.find(string).flatten #.map { |c| c.find(:n_variable) }.flatten
 end
 
-fc = easy_find :const_name
-fv = easy_find :var_name
-ff = easy_find :func_name
+some_array = [[]]
+
+@root.set_block 1, 0, some_array
+#puts @root.children.first.options.inspect
+
+#uts some_array.inspect
+
+#fc = easy_find :const_name
+#fv = easy_find :var_name
+#ff = easy_find :func_name
 #ff = easy_find :proc_name
 
-puts ff.size
-
-puts "Block 1: " 
-puts "  constants: " + fc.map { |x| x.token.lexeme }.join(', ')
-puts "  variables: " + fv.map { |x| x.token.lexeme }.join(', ')
-puts "  functions: " + ff.map { |x| x.token.lexeme }.join(', ')
-
+#puts ff.size
+#puts fc
+#puts fv
+#puts ff
 
 GUI.show_tree(x.roots)
+
+#puts "Block 1: "
+#puts "  constants: " + fc.map { |x| x.token.lexeme }.join(', ')
+#puts "  variables: " + fv.map { |x| x.token.lexeme }.join(', ')
+#puts "  functions: " + ff.map { |x| x.token.lexeme }.join(', ')
+
+
 #GUI.show_tree(fc)
 #GUI.show_tree(fv)
 #GUI.show_tree(ff)
