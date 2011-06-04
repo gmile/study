@@ -50,12 +50,20 @@ class Node
       blocks_array << []
 
       rest.each do |child|
-        child.set_block blocks_array.size, current_block, blocks_array
+        child.set_block blocks_array.size-1, current_block, blocks_array
       end
     else
       rest.each do |child|
         child.set_block current_block, parent_block, blocks_array
       end
     end
+  end
+
+  def extract
+    nterm_children = self.children.select { |child| !child.is_a?(Node) }
+    rest           = self.children - nterm_children
+
+    found = nterm_children.select { |child| [:var_name, :const_name, :func_name].include?(child.name) }
+    (found + rest.select { |child| child.is_a?(Node) }.map { |child| child.extract }).flatten
   end
 end

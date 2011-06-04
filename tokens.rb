@@ -1,12 +1,13 @@
 module Tokens
   class Token
-    attr_reader :type, :lexeme, :x, :y
+    attr_reader :type, :lexeme, :x, :y, :options
 
     def initialize options
       @type   = options[:type]
       @lexeme = options[:lexeme]
       @x      = options[:x]
       @y      = options[:y]
+      @options = {}
     end
   end
 

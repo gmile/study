@@ -30,93 +30,42 @@ string = <<PASCAL
   end.
 PASCAL
 
-string = <<PASCAL
-  const
-    y = 3;
-  var
-    x : real;
-
-  function x(a,b:integer) : integer;
-    function x(a,b:integer) : integer;
-    begin
-      x := 3
-    end;
-  begin
-    x := 3
-  end;
-
-  function x(a,b:integer) : integer;
-  begin
-    x := 3
-  end;
-
-  begin
-    x := 3
-  end.
-PASCAL
-
 x = Cyk.new(Parser.new(string).output, CNFTable.table)
 x.perform_check
 
-@root = x.roots.first
-
-#puts @root.inspect
-
-def find string
-  @root.find(string).map { |c| c.find(:n_variable) }.flatten
-end
-
-def easy_find string
-  @root.find(string).flatten #.map { |c| c.find(:n_variable) }.flatten
-end
-
 some_array = [[]]
 
-@root.set_block 1, 0, some_array
-GUI.show_tree(x.roots)
-puts some_array.inspect
-#puts @root.children.first.options.inspect
-
-#uts some_array.inspect
-
-#fc = easy_find :const_name
-#fv = easy_find :var_name
-#ff = easy_find :func_name
-#ff = easy_find :proc_name
-
-#puts ff.size
-#puts fc
-#puts fv
-#puts ff
+root = x.roots.first
+root.set_block 0, nil, some_array
 
 GUI.show_tree(x.roots)
 
-#puts "Block 1: "
-#puts "  constants: " + fc.map { |x| x.token.lexeme }.join(', ')
-#puts "  variables: " + fv.map { |x| x.token.lexeme }.join(', ')
-#puts "  functions: " + ff.map { |x| x.token.lexeme }.join(', ')
-
-
-#GUI.show_tree(fc)
-#GUI.show_tree(fv)
-#GUI.show_tree(ff)
-
-# works
-#x = TableBuilder.new(ARGV[0])
-#x.try
-#puts x.block_array.inspect
-
-#puts x.roots.first.find(:func_ending).inspect
-
-=begin
-combined_matrix   = x.combine
-max_string_length = combined_matrix.map { |row| row.map { |set| set.to_a.join(', ').size }.max }.max
-
-for row in combined_matrix
-  for col in row
-    string = col.size.zero? ? '...' : col.to_a.join(', ')
-    print string.ljust(max_string_length + 2)
-  end
-  puts "\n"
+root.extract.each do |item|
+  some_array[item.options[:current_block]] << item
 end
-=end
+
+some_array.map! do |item|
+  {
+    :block_info => {
+      :parent => item.first.options[:parent_block],
+      :self => item.first.options[:current_block],
+      :lines => nil
+    },
+    :constants => item.select { |x| x.name == :const_name },
+    :variables => item.select { |x| x.name == :var_name   },
+    :functions => item.select { |x| x.name == :func_name  }
+  }
+end
+
+def pretty_print blocks
+  blocks.each_with_index do |block, index|
+    puts "Block #{index}"
+    puts " - parent: #{block[:block_info][:parent]}"
+    puts " - constants: #{block[:constants].map { |x| x.token.lexeme }.join(', ')}"
+    puts " - variables: #{block[:variables].map { |x| x.token.lexeme }.join(', ')}"
+    puts " - functions: #{block[:functions].map { |x| x.token.lexeme }.join(', ')}"
+    puts
+  end
+end
+
+pretty_print some_array
