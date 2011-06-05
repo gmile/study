@@ -94,14 +94,4 @@ def lookup_by_bn block_number, var_name
   end
 end
 
-puts lookup_by_bn(1, 'a')
-
-def lookup_by_line line_number, var_name
-  block_number = @some_array.select { |x| (x[:block_info][:lines][:first]..x[:block_info][:lines][:last]).include?(line_number) }.last[:block_info][:self]
-
-  lookup_by_bn block_number, var_name
-end
-
-puts lookup_by_line(18, 'n')
-
 pretty_print some_array
