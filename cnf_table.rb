@@ -140,7 +140,7 @@ class CNFTable
     {
       :proc_name => [:variable],
       :proc_ending => [
-        [:proc_name,       :proc_ending     ],
+        [:proc_name,        :proc_ending     ],
         [:func_proc_params, :proc_func_ending]
       ],
       :proc_func_ending => [
@@ -181,9 +181,10 @@ class CNFTable
   def self.program_title_block
     {
       :program_title_block    => [
-        [:n_program,           :n_variable ],
+        [:n_program,           :title ],
         [:program_title_block, :n_semicolon]
-      ]
+      ],
+      :title => [:variable]
     }
   end
 
