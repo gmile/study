@@ -52,7 +52,9 @@ class Node
       },
       :constants => [],
       :variables => [],
-      :functions => []
+      :functions => [],
+      :procedures => [],
+      :used      => []
     }
   end
 
@@ -60,7 +62,7 @@ class Node
     nterm_children = self.children.select { |child| !child.is_a?(Node) }
     rest           = self.children - nterm_children
 
-    found = nterm_children.select { |child| [:var_name, :const_name, :func_name, :proc_name].include?(child.name) }
+    found = nterm_children.select { |child| [:var_name, :const_name, :func_name, :proc_name].include?(child.name) || child.token.type == :variable }
     (found + rest.select { |child| child.is_a?(Node) }.map { |child| child.extract }).flatten
   end
 end
