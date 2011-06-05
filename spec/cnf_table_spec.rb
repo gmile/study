@@ -5,7 +5,7 @@ require 'rspec/expectations'
 
 RSpec::Matchers.define :be_folded do
   match do |example|
-    input_string     = Parser.new(example.description).output.map { |token| token.type }
+    input_string     = Parser.new(example.description).output
     expected_folding = example.example_group.description.to_sym
     @cyk             = Cyk.new(input_string, table)
 
