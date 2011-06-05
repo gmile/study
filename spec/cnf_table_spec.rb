@@ -1,4 +1,5 @@
 require_relative '../cnf_table'
+require_relative '../lexical_analyser'
 require_relative '../cyk'
 require 'rspec/expectations'
 
